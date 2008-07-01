@@ -12,7 +12,7 @@ class BrecordsController < ApplicationController
       sortname = params[:sortname] || "brectype,brecname,brecalt,brecver"
       sortorder = params[:sortorder] || "desc"
 
-      start = ((page-1) * rp).to_i
+      #start = ((page-1) * rp).to_i
       query = "%"+query+"%"
 
       # No search terms provided
@@ -23,15 +23,15 @@ class BrecordsController < ApplicationController
           :select =>"id,brectype, brecname, brecalt, brecver, bdesc",
           :conditions => ["brectype = 'PART'"]
         count = Brecord.count :all,
-        	:conditions=>["brectype = 'PART'"]
+          :conditions=>["brectype = 'PART'"]
       else
         @brecords = Brecord.paginate :page => page,
           :select =>"id,brectype, brecname, brecalt, brecver, bdesc",
-      	  :order => sortname+' '+sortorder,
-      	  :per_page =>rp,
-      	  :conditions=>["brectype = 'PART' AND "+qtype+" like ?", query]
-      	count = Brecord.count :all,
-      	  :conditions=>["brectype = 'PART' AND "+qtype+" like ?", query]
+          :order => sortname+' '+sortorder,
+          :per_page =>rp,
+          :conditions=>["brectype = 'PART' AND "+qtype+" like ?", query]
+        count = Brecord.count :all,
+          :conditions=>["brectype = 'PART' AND "+qtype+" like ?", query]
       end
 
       # Construct a hash from the ActiveRecord result
