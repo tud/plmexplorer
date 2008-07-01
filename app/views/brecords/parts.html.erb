@@ -1,0 +1,33 @@
+<h1>
+	<strong>Sherpa</strong> on Rails<span id="byline"> by Tud & Taurus</span></h1>
+<table id="flex1"></table>
+<script type="text/javascript">
+  $("#flex1").flexigrid
+    (
+    {
+    url: 'http://localhost:3000/brecords/grid_parts',
+    dataType: 'json',
+    colModel : [
+		{display: 'Tipo', name : 'brectype', width : 90, sortable : true, align: 'left'},
+		{display: 'Cage', name : 'cage_code', width : 50, sortable : true, align: 'left'},
+		{display: 'Nome', name : 'recname', width : 80, sortable : true, align: 'left'},
+		{display: 'Revisione', name : 'brecalt', width : 30, sortable : true, align: 'left'},
+		{display: 'Ver', name : 'brecver', width : 15, sortable : true, align: 'left'},
+		{display: 'Descrizione', name : 'bdesc', width : 340, sortable : true, align: 'left'}
+    ],
+    searchitems : [
+		{display: 'Name', name : 'BRECNAME', isdefault: true},
+		{display: 'Descrizione', name : 'BDESC'}
+    ],
+    sortname: "brectype,brecname,brecver,brecalt",
+    sortorder: "desc",
+    usepager: true,
+    title: 'Parts',
+    useRp: true,
+    rp: 30,
+    showTableToggleBtn: true,
+    width: 700,
+    height: 200
+    }
+  );
+</script>
