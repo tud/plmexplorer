@@ -20,7 +20,7 @@ class BrecordsController < ApplicationController
         @brecords = Brecord.paginate :page => page,
           :order => sortname+' '+sortorder,
           :per_page => rp,
-          :select =>"brectype, brecname, brecalt, brecver, bdesc",
+          :select =>"id,brectype, brecname, brecalt, brecver, bdesc",
           :conditions => ["brectype = 'PART'"]
         count = Brecord.count :all,
         	:conditions=>["brectype = 'PART'"]
@@ -28,11 +28,10 @@ class BrecordsController < ApplicationController
 
       # User provided search terms
       if(query != "%%")
-        @brecords = Brecord.find :all,
-          :select =>"brectype, brecname, brecalt, brecver, bdesc",
+        @brecords = Brecord.paginate :page => page,
+          :select =>"id,brectype, brecname, brecalt, brecver, bdesc",
       	  :order => sortname+' '+sortorder,
-      	  :limit =>rp,
-      	  :offset =>start,
+      	  :per_page =>rp,
       	  :conditions=>["brectype = 'PART' AND "+qtype+" like ?", query]
       	count = Brecord.count :all,
       	  :conditions=>["brectype = 'PART' AND "+qtype+" like ?", query]
