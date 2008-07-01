@@ -8,7 +8,7 @@ class Brecord < ActiveRecord::Base
   end
   
   def recname
-    brecname.to(idx = brecname.index('&')-1) || brecname
+    brecname.to(brecname.index('&')-1) || brecname
   end
   
 end
