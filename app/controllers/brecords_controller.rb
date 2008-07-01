@@ -9,7 +9,7 @@ class BrecordsController < ApplicationController
       rp = (params[:rp] || 30).to_i
       query = params[:query] || ""
       qtype = params[:qtype] || ""
-      sortname = params[:sortname] || "brectype,brecname,brecver,brecalt"
+      sortname = params[:sortname] || "brectype,brecname,brecalt,brecver"
       sortorder = params[:sortorder] || "desc"
 
       start = ((page-1) * rp).to_i
@@ -24,10 +24,7 @@ class BrecordsController < ApplicationController
           :conditions => ["brectype = 'PART'"]
         count = Brecord.count :all,
         	:conditions=>["brectype = 'PART'"]
-      end
-
-      # User provided search terms
-      if(query != "%%")
+      else
         @brecords = Brecord.paginate :page => page,
           :select =>"id,brectype, brecname, brecalt, brecver, bdesc",
       	  :order => sortname+' '+sortorder,
