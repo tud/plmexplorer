@@ -26,11 +26,11 @@ class BrecordsController < ApplicationController
         count = Brecord.count :all,
           :conditions=>["brectype = 'PART'"]
       else
-        @brecords = Brecord.paginate :all,
-          :select =>"id,brectype, brecname, brecalt, brecver, bdesc",
+        @brecords = Brecord.find :all,
           :order => sortname+' '+sortorder,
-          :offset => start,
           :limit => rp,
+          :offset => start,
+          :select =>"id, brectype, brecname, brecalt, brecver, bdesc",
           :conditions=>["brectype = 'PART' AND "+qtype+" like ?", query]
         count = Brecord.count :all,
           :conditions=>["brectype = 'PART' AND "+qtype+" like ?", query]
