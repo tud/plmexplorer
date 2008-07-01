@@ -12,23 +12,25 @@ class BrecordsController < ApplicationController
       sortname = params[:sortname] || "brectype,brecname,brecalt,brecver"
       sortorder = params[:sortorder] || "desc"
 
-      #start = ((page-1) * rp).to_i
+      start = ((page-1) * rp).to_i
       query = "%"+query+"%"
 
       # No search terms provided
       if(query == "%%")
-        @brecords = Brecord.paginate :page => page,
+        @brecords = Brecord.find :all,
+          :offset => start,
+          :limit => rp,
           :order => sortname+' '+sortorder,
-          :per_page => rp,
           :select =>"id,brectype, brecname, brecalt, brecver, bdesc",
           :conditions => ["brectype = 'PART'"]
         count = Brecord.count :all,
           :conditions=>["brectype = 'PART'"]
       else
-        @brecords = Brecord.paginate :page => page,
+        @brecords = Brecord.paginate :all,
           :select =>"id,brectype, brecname, brecalt, brecver, bdesc",
           :order => sortname+' '+sortorder,
-          :per_page =>rp,
+          :offset => start,
+          :limit => rp,
           :conditions=>["brectype = 'PART' AND "+qtype+" like ?", query]
         count = Brecord.count :all,
           :conditions=>["brectype = 'PART' AND "+qtype+" like ?", query]
@@ -42,8 +44,8 @@ class BrecordsController < ApplicationController
       return_data[:rows] = @brecords.collect{|u| {
         :cell=>[
           u.brectype,
-          u.cage_code,
           u.recname,
+          u.cage_code,
           u.brecalt,
           u.brecver,
           u.bdesc]}}
