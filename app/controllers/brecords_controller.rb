@@ -45,12 +45,12 @@ class BrecordsController < ApplicationController
 
       return_data[:rows] = @brecords.collect{|u| {
         :cell=>[
-          u.BRECTYPE,
+          u.brectype,
           u.cage_code,
           u.recname,
-          u.BRECALT,
-          u.BRECVER,
-          u.BDESC]}}
+          u.brecalt,
+          u.brecver,
+          u.bdesc]}}
 
       # Convert the hash to a json object
       render :text=>return_data.to_json, :layout=>false
