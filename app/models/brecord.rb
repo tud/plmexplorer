@@ -4,20 +4,20 @@ class Brecord < ActiveRecord::Base
   has_many :brefs, :foreign_key => 'bobjid', :order => 'brectype,brecname,brecalt'
   
   def cage_code
-    idx = self[:brecname].index('&')
+    idx = brecname.index('&')
     if (idx)
-      self[:brecname].from(idx+1)
+      brecname.from(idx+1)
     else
-      self[:brecname]
+      ""
     end
   end
   
   def recname
-    idx = self[:brecname].index('&')
+    idx = brecname.index('&')
     if (idx)
-      self[:brecname].to(idx-1)
+      brecname.to(idx-1)
     else
-      self[:brecname]
+      brecname
     end
   end
   
