@@ -17,24 +17,19 @@ class BrecordsController < ApplicationController
 
       # No search terms provided
       if(query == "%%")
-        @brecords = Brecord.find :all,
-          :offset => start,
-          :limit => rp,
-          :order => sortname+' '+sortorder,
-          :select =>"id,brectype, brecname, brecalt, brecver, bdesc",
-          :conditions => ["brectype = 'PART'"]
-        count = Brecord.count :all,
-          :conditions=>["brectype = 'PART'"]
+        conditions = ["brectype = 'PART'"]
       else
-        @brecords = Brecord.find :all,
-          :order => sortname+' '+sortorder,
-          :limit => rp,
-          :offset => start,
-          :select =>"id, brectype, brecname, brecalt, brecver, bdesc",
-          :conditions=>["brectype = 'PART' AND "+qtype+" like ?", query]
-        count = Brecord.count :all,
-          :conditions=>["brectype = 'PART' AND "+qtype+" like ?", query]
+        conditions = ["brectype = 'PART' AND "+qtype+" like ?", query]
       end
+
+      @brecords = Brecord.find :all,
+        :order => sortname+' '+sortorder,
+        :limit => rp,
+        :offset => start,
+        :select =>"id, brectype, brecname, brecalt, brecver, bdesc",
+        :conditions => conditions
+      count = Brecord.count :all,
+        :conditions => conditions
 
       # Construct a hash from the ActiveRecord result
       return_data = Hash.new()
@@ -44,7 +39,7 @@ class BrecordsController < ApplicationController
       return_data[:rows] = @brecords.collect{|u| {
         :cell=>[
           u.brectype,
-          u.recname,
+          u.number,
           u.cage_code,
           u.brecalt,
           u.brecver,

@@ -3,22 +3,12 @@ class Brecord < ActiveRecord::Base
   has_many :bfiles, :foreign_key => 'bobjid', :order => 'balias'
   has_many :brefs, :foreign_key => 'bobjid', :order => 'brectype,brecname,brecalt'
   
-  def cage_code
-    idx = brecname.index('&')
-    if (idx)
-      brecname.from(idx+1)
-    else
-      ""
-    end
+  def number
+    brecname.split('&')[0]
   end
   
-  def recname
-    idx = brecname.index('&')
-    if (idx)
-      brecname.to(idx-1)
-    else
-      brecname
-    end
+  def cage_code
+    brecname.split('&')[1].to_s
   end
   
 end
