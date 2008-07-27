@@ -3,12 +3,17 @@ class Brecord < ActiveRecord::Base
   has_many :bfiles, :foreign_key => 'bobjid', :order => 'balias'
   has_many :brefs, :foreign_key => 'bobjid', :order => 'brectype,brecname,brecalt'
   
+  named_scope :parts, :conditions => {:brectype => 'PART'}
+  named_scope :pim_users, :conditions => {:brectype => 'PIM_USER'}
+  named_scope :documents, :conditions => {:brectype => 'DOCUMENT'}
+  named_scope :software, :conditions => {:brectype => 'SOFTWARE'}
+  
   def number
-    brecname.split('&')[0]
+    self[:brecname].split('&')[0]
   end
   
   def cage_code
-    brecname.split('&')[1].to_s
+    self[:brecname].split('&')[1].to_s
   end
   
 end

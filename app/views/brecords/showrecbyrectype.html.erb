@@ -1,0 +1,45 @@
+<% content_for(:head) do %>
+	<%= stylesheet_link_tag 'grid_tud.css', :cache => true %>
+	<%= stylesheet_link_tag '../javascripts/themes/basic/grid.css', :cache => true %>
+	<%= stylesheet_link_tag '../javascripts/themes/jqModal.css', :cache => true %>
+	<%= javascript_include_tag 'jquery.jqGrid.js', :cache => true %>
+	<%= javascript_include_tag 'js/jqModal.js', :cache => true %>
+	<%= javascript_include_tag 'js/jqDnR.js', :cache => true %>
+<% end %>
+
+<% content_for(:search) do %>
+	<table id="searchGrid" class="scroll"></table>  
+	<div id="searchPager" class="scroll" style="text-align:center;"></div>
+	
+	<script type="text/javascript">
+	jQuery(document).ready(function(){ 
+		jQuery("#searchGrid").jqGrid({ 
+			url:'http://localhost:3000/brecords/grid_records', 
+			datatype: 'json', 
+			mtype: 'GET', 
+			colNames:['Name', 'Cage', 'Rev', 'Ver', 'Description'], 
+			colModel :[   
+				{name:'brecname', index:'brecname', width:80},
+				{name:'brecname', index:'brecname', width:50,  align:'right'},  
+				{name:'brecalt',  index:'brecalt',  width:30,  align:'right'},  
+				{name:'brecver',  index:'brecver',  width:27,  align:'right'},  
+				{name:'bdesc',    index:'bdesc',    width:300, sortable:false} ], 
+			rowNum: 20, 
+			rowList: [10,20,30,50,100], 
+			sortname: 'brecname', 
+			sortorder: 'asc', 
+			viewrecords: true, 
+			imgpath: '/javascripts/themes/basic/images', 
+			caption: '<%=h @rectype%>',
+			height: 247,
+			width: 800,
+			pager: 'searchPager',
+			postData: {rectype: '<%=h @rectype%>'}
+		}).navGrid('#searchPager',
+			{refresh: true, edit: false, add: false, del: false, search: true});
+	});
+	</script>
+<% end %>
+
+<% content_for(:content) do %>
+<% end %>
