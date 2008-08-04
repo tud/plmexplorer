@@ -96,7 +96,8 @@ class BrecordsController < ApplicationController
     return_data[:rows] = @brecords.collect{|u| {
       :id => u.id,
       :cell => [
-        u.number,
+        u.id,
+        u.name,
         u.cage_code,
         u.brecalt,
         u.brecver,

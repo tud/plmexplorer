@@ -1,0 +1,57 @@
+<%= stylesheet_link_tag 'themes/flora/flora.all.css', :cache => true %>
+<%= javascript_include_tag 'ui/ui.tabs.js', :cache => true %>
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		$('#tabsRec > ul').tabs({ fx: { height: 'toggle', opacity: 'toggle' }});
+	});
+</script>
+<br/>
+<div id="tabsRec">
+	<ul> 
+		<li><a href="#tab_base"><span>Base</span></a></li> 
+		<li><a href="#tab_udas"><span>Uda</span></a></li> 
+		<li><a href="#tab_refs"><span>References</span></a></li> 
+	</ul>
+	<div id="tab_base" class="ui-tabs-hide">
+		<form method="post" name="record" id="record" action="" title=''>
+			<fieldset>
+				<legend>Record Data</legend>
+				<table>
+					<tbody>
+						<tr>
+							<td>Id:</td>
+							<td><input type="text" name="id" readonly=true/></td>
+						</tr>
+						<tr>
+							<td>Name:</td>
+							<td><input type="text" name="name" readonly=true/></td>
+						</tr>
+						<tr>
+							<td>Cage:</td>
+							<td><input type="text" name="cage" readonly=true/></td>
+						</tr>
+						<tr>
+							<td>Revision:</td>
+							<td><input type="text" name="brecalt" readonly=true/></td>
+						</tr>
+						<tr>
+							<td>Version:</td>
+							<td><input type="text" name="brecver" readonly=true/></td>
+						</tr>
+						<tr>
+							<td>Description:</td>
+							<td><input type="text" name="bdesc" readonly=true size="80"/></td>
+						</tr>
+					</tbody>
+				</table>
+			</fieldset>
+		</form>
+	</div>
+	<div id="tab_udas" class="ui-tabs-hide">
+		UDA
+	</div>
+	<div id="tab_refs" class="ui-tabs-hide">
+		REFERENCE
+	</div>
+</div>
+
