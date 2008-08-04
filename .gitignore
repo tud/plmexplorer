@@ -3,7 +3,7 @@ log/[^.]*
 tmp/**/*
 config/database.yml
 db/*.sqlite3
-.DS\_Store
+.DS_Store
 *.sw?
 ~*.*
 *.tmp
