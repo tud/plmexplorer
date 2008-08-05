@@ -1,0 +1,5 @@
+development:
+  adapter: oracle_enhanced
+  database: pdm_otomelara
+  username: rails
+  password: rails
