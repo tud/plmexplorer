@@ -15,6 +15,8 @@ jQuery
 	plugins:
 	- jQuery Grid 3.21 http://www.trirand.com/blog/
 	- jQuery UI 1.5.2 http://ui.jquery.com/
+	- Superfish Menu 1.4.8 http://users.tpg.com.au/j_birch/plugins/superfish/
+	- bgIframe 2.1 http://brandonaaron.net/jquery/plugins/bgiframe/docs/
 
 Blueprint CSS
 	- 0.71 http://code.google.com/p/blueprintcss/
