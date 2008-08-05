@@ -1,7 +1,10 @@
 class BrecordsController < ApplicationController
-  protect_from_forgery :secret => '2kdjnaLI8', :only => [:update, :delete, :create]
   
-  def showrecbyrectype
+  def index
+    @rectype = ""
+  end
+  
+  def show
     @rectype = params[:rectype].upcase
   end
   
@@ -50,27 +53,7 @@ class BrecordsController < ApplicationController
     else
       conditions = "brectype = '" + rectype+"'"  
     end
-#
-#    page = (params[:page] || 1).to_i
-#    rp = (params[:rp] || 30).to_i
-#    query = params[:query] || ""
-#    qtype = params[:qtype] || ""
-#    sortname = params[:sortname] || "brectype,brecname,brecalt,brecver"
-#    sortorder = params[:sortorder] || "desc"
-#    rectype = params[:rectype] || "PART"
-#    puts params
-#
-#    start = ((page-1) * rp).to_i
-#    query = "%"+query+"%"
-#
-#    # No search terms provided
-#    if(query == "%%")
-#     conditions = "brectype = '" + rectype+"'"
-#    else
-#      conditions = ["brectype = '"+rectype+"' AND "+qtype+" like ?", query]
-#    end
-#    puts conditions
-#
+
     @brecords = Brecord.find :all,
       :order => sidx+' '+sord,
       :limit => limit,

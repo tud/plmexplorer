@@ -1,25 +1,25 @@
 <ul class="sf-menu">
 	<li class="current">
-		<a href="#a">Search</a>
+		<a href="#">Search</a>
 		<ul>
-			<li><a href="/rectype/part">Part</a></li>
-			<li><a href="/rectype/document">Document</a></li>
-			<li><a href="/rectype/software">Software</a></li>
-			<li><a href="/rectype/workauth">Workauth</a></li>
+			<li><%= link_to 'Part',     :controller => 'brecords', :action => 'show', :rectype => 'part'     %></li>
+			<li><%= link_to 'Document', :controller => 'brecords', :action => 'show', :rectype => 'document' %></li>
+			<li><%= link_to 'Software', :controller => 'brecords', :action => 'show', :rectype => 'software' %></li>
+			<li><%= link_to 'Workauth', :controller => 'brecords', :action => 'show', :rectype => 'workauth' %></li>
 		</ul>
 	</li>
 	<li>
-		<a href="#b">Reports</a>
+		<a href="#">Reports</a>
 		<ul>
-			<li><a href="#ba">Report 1</a></li>
-			<li><a href="#bb">Report 2</a></li>
-			<li><a href="#bc">Report 3</a></li>
+			<li><a href="#">Report 1</a></li>
+			<li><a href="#">Report 2</a></li>
+			<li><a href="#">Report 3</a></li>
 		</ul>
 	</li>
 	<li>
-		<a href="#c">Help</a>
+		<a href="#">Help</a>
 		<ul>
-			<li><a href="#ca">About</a></li>
+			<li><a href="#">About</a></li>
 		</ul>
 	</li>
 </ul>

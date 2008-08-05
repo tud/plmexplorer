@@ -1,1 +1,6 @@
-.ui-tabs-hide { display: none; }
+.ui-tabs-hide {
+	display: none;
+}
+#searchPager {
+	text-align:center;
+}
