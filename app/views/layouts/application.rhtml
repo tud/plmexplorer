@@ -11,18 +11,16 @@
 		<%= javascript_include_tag :defaults, :cache => true %>
 		<%= javascript_include_tag 'hoverIntent.js', :cache => true %>
 		<%= javascript_include_tag 'superfish.js', :cache => true %>
-		<title>Sherpa on Rails - by Tud &amp; Taurus</title>
+		<title>PLM on Rails</title>
 		<%= yield :head %>
 	</head>
 	<body>
 		<div class="container showgrid">
-			<div id="search" class="prepend-1 span-22 suffix-1 last">
+			<div id="search" class="span-24 last">
 				<%= yield :search %>
 			</div>
-			<div id="header" class="span-24 last">
-				<h1>
-					<strong>Sherpa</strong> on Rails<span id="byline"> by Tud &amp; Taurus</span>
-				</h1>
+			<div id="header" class="prepend-9 span-15 last">
+				<h1><strong>PLM</strong> on Rails</h1>
 			</div>
 			<div id="menu" class="span-23 suffix-1 last">
 				<%= render :partial => 'shared/menu'%>
@@ -30,7 +28,7 @@
 			<div class="span-24 last">
 				<%= yield :content%>
 			</div>
-			<div id="footer" class="span-24 last">Footer</div>
+			<div id="footer" class="span-24 last">PLM on Rails<span class="quiet"> by Tud &amp; Taurus</span> - &copy; 2008</div>
 		</div>
 	</body>
 </html>

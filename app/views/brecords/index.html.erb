@@ -9,7 +9,7 @@
 
 <% content_for(:search) do %>
 	<table id="searchGrid" class="scroll"></table>  
-	<div id="searchPager" class="scroll" style="text-align:center;"></div>
+	<div id="searchPager" class="scroll"></div>
 	
 	<script type="text/javascript">
 	var lastSel; 
@@ -32,9 +32,9 @@
 			sortorder: 'asc', 
 			viewrecords: true, 
 			imgpath: '/javascripts/themes/basic/images', 
-			caption: 'Search result -- <%=h @rectype%>',
+			caption: 'Search result',
 			height: '100%',
-			width: 846,
+			width: 925,
 			pager: 'searchPager',
 			hiddengrid: true,
 			postData: {rectype: '<%=h @rectype%>'}
