@@ -7,6 +7,10 @@ body {
 #header h1 {
 	color: #FFFFFF;
 }
+#header {
+	z-index: 1;
+	position:  relative;
+}
 #menu {
 	margin-top: 0px;
 }
