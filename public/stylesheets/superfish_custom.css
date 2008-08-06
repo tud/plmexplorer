@@ -19,3 +19,6 @@
 	background:		#3D83CC;
 	outline:		0;
 }
+.sf-menu li li:hover {
+	font-weight:bold;
+}
