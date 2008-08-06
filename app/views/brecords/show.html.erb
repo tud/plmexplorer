@@ -39,7 +39,7 @@
 			sortorder: 'asc', 
 			viewrecords: true, 
 			imgpath: '/javascripts/themes/basic/images', 
-			caption: 'Search result -- <%=h @rectype%>',
+			caption: 'Find result table -- <%=h @rectype%>',
 			height: '100%',
 			width: 925,
 			pager: 'searchPager',
@@ -49,8 +49,8 @@
 					var gtf = jQuery('#searchGrid').GridToForm(id, "#record");
 					lastSel=id;
 					jQuery('#record').effect("highlight", {}, 1000);
-					alert('id');
-				 	$("#tab_base").load("script.php"); 
+					//alert('id');
+				 	//$("#tab_base").load("script.php"); 
 				} 
 			},
 			postData: {rectype: '<%=h @rectype%>'}
