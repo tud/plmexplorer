@@ -4,4 +4,6 @@ jQuery(document).ready(function(){
 	jQuery('#header').corner("20px");
 	jQuery('#content').corner("20px");
 	jQuery('#footer').corner("10px");
+	
+	jQuery('img[@src$=png]').ifixpng();
 });
