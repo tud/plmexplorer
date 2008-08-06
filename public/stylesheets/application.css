@@ -1,6 +1,25 @@
-.ui-tabs-hide {
-	display: none;
+body {
+	background-color: #222222;
+}
+#header, #menu, #footer, #topsearch, #bottomsearch, #search {
+	background-color: #3D83CC;
+}
+#header h1 {
+	color: #FFFFFF;
+}
+#menu {
+	margin-top: 0px;
+}
+#content {
+	background-color: #FFFFFF;
+	padding-bottom: 15px;
+}
+#footer {
+	color: #FFFFFF;
 }
 #searchPager {
-	text-align:center;
+	text-align: center;
+}
+#badge {
+	position: absolute;
 }

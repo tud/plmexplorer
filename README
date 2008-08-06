@@ -1,8 +1,9 @@
 == PLM on Rails ==
 Visualizzatore dati PLM
 
-== Versione 0.1
-visualizzatore dati Sherpa
+== History
+	0.1
+		visualizzatore dati Sherpa
 
 == Software utilizzato
 Ruby on Rails
@@ -17,6 +18,7 @@ jQuery
 	- jQuery UI 1.5.2 http://ui.jquery.com/
 	- Superfish Menu 1.4.8 http://users.tpg.com.au/j_birch/plugins/superfish/
 	- bgIframe 2.1 http://brandonaaron.net/jquery/plugins/bgiframe/docs/
+	- jQuery Corner http://malsup.com/jquery/corner/
 
 Blueprint CSS
 	- 0.71 http://code.google.com/p/blueprintcss/

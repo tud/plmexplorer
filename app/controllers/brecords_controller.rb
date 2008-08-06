@@ -3,24 +3,24 @@ class BrecordsController < ApplicationController
   def index
     @rectype = ""
   end
-  
+
   def show
     @rectype = params[:rectype].upcase
   end
-  
+
   def grid_records
     page = (params[:page] || 1).to_i
     limit = (params[:rows]).to_i
     sidx = params[:sidx]
     sord = params[:sord] || "desc"
     rectype = params[:rectype] || "PART"
-    
+
     start = ((page-1) * limit).to_i
     #start = (limit*(page-limit)).to_i
     if (start < 0)
       start = 0
     end
-    
+
     isSearch     = params[:_search]
     searchField  = params[:searchField]
     searchOper   = params[:searchOper]

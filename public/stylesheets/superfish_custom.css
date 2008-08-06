@@ -1,0 +1,21 @@
+.sf-menu a {
+	border-left:	1px solid #3D83CC;
+	border-top:		0px solid #3D83CC;
+}
+.sf-menu a, .sf-menu a:visited  { /* visited pseudo selector so IE6 applies text colour*/
+	color:			#FFFFFF;
+}
+.sf-menu li {
+	background:		#3D83CC;
+}
+.sf-menu li li {
+	background:		#3D83CC;
+}
+.sf-menu li li li {
+	background:		#3D83CC;
+}
+.sf-menu li:hover, .sf-menu li.sfHover,
+.sf-menu a:focus, .sf-menu a:hover, .sf-menu a:active {
+	background:		#3D83CC;
+	outline:		0;
+}

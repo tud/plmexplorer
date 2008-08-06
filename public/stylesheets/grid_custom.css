@@ -1,0 +1,7 @@
+.GridHeader table {margin:0;}
+.GridHeader td, tr {padding:0;}
+table.scroll {margin-bottom:0;}
+table.navtable {margin-bottom:0; width: auto;}
+.jqmWindow table {margin: 0; width: 300px;}
+.jqmWindow td, tr {padding:0;}
+.HeaderLeft {background-image: none;}
