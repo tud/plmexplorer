@@ -49,7 +49,8 @@
 					var gtf = jQuery('#searchGrid').GridToForm(id, "#record");
 					lastSel=id;
 					jQuery('#record').effect("highlight", {}, 1000);
-				 
+					alert('id');
+				 	$("#tab_base").load("script.php"); 
 				} 
 			},
 			postData: {rectype: '<%=h @rectype%>'}
