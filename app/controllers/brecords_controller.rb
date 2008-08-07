@@ -87,7 +87,18 @@ class BrecordsController < ApplicationController
         u.bdesc]}}
 
       # Convert the hash to a json object
-      render :text=>return_data.to_json, :layout=>false
+      render :text => return_data.to_json, :layout=>false
     end
   
+  def load_record_base
+    @record = Brecord.find(params[:id])
+  end
+  
+  def load_record_udas
+    @udas = Brecord.find(params[:id]).budas
+  end
+  
+  def load_record_refs
+    @refs = Brecord.find(params[:id]).brefs
+  end
 end

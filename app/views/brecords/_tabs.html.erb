@@ -6,68 +6,52 @@
 	});
 </script>
 <br/>
+<div id="record_title"></div>
+<br/>
 <div id="tabsRec">
-	<ul> 
-		<li><a href="#tab_base"><span>Base</span></a></li> 
-		<li><a href="#tab_udas"><span>Uda</span></a></li> 
-		<li><a href="#tab_refs"><span>References</span></a></li>
-		<li><a href="#tab_refs1"><span>References</span></a></li> 
-		<li><a href="#tab_refs2"><span>References</span></a></li> 
-		<li><a href="#tab_refs3"><span>References</span></a></li> 
-		<li><a href="#tab_refs4"><span>References</span></a></li> 
+	<ul>
+		<li><a href="#tab_base"><span>Info</span></a></li>
+		<li><%= link_to '<span>Attributes</span>', :controller => 'brecords' %></li>
+		<li><%= link_to '<span>References</span>', :controller => 'brecords' %></li> 
 	</ul>
 	<div id="tab_base" class="ui-tabs-hide">
-		<form name="record" id="record" action="" method="post">
+		<form name="record_base" id="record_base" action="" method="post">
+			<input type="hidden" id="record_id" />
 			<fieldset>
-				<legend>Record Info</legend>
+				<legend></legend>
 				<table>
 					<tbody>
 						<tr>
-							<td><label for="f1">Id:</label></td>
-							<td><input type="text" name="id" readonly=true/></td>
+							<td><label for="f1">Type:</label></td>
+							<td><input type="text" id="record_type" readonly=true /></td>
 						</tr>
 						<tr>
 							<td><label for="f2">Name:</label></td>
-							<td><input type="text" name="name" readonly=true/></td>
+							<td><input type="text" id="record_name" readonly=true /></td>
 						</tr>
 						<tr>
 							<td><label for="f3">Cage:</label></td>
-							<td><input type="text" name="cage" readonly=true/></td>
+							<td><input type="text" id="record_cage" readonly=true /></td>
 						</tr>
 						<tr>
 							<td><label for="f4">Revision:</label></td>
-							<td><input type="text" name="brecalt" readonly=true/></td>
+							<td><input type="text" id="record_brecalt" readonly=true /></td>
 						</tr>
 						<tr>
 							<td><label for="f5">Version:</label></td>
-							<td><input type="text" name="brecver" readonly=true/></td>
+							<td><input type="text" id="record_brecver" readonly=true /></td>
 						</tr>
 						<tr>
-							<td><label for="f6">Description:</label></td>
-							<td><input type="text" name="bdesc" readonly=true size="80"/></td>
+							<td><label for="f6">Status:</label></td>
+							<td><input type="text" id="record_breclevel" readonly=true/></td>
+						</tr>
+						<tr>
+							<td><label for="f7">Description:</label></td>
+							<td><input type="text" id="record_bdesc" readonly=true size="80"/></td>
 						</tr>
 					</tbody>
 				</table>
 			</fieldset>
 		</form>
 	</div>
-	<div id="tab_udas" class="ui-tabs-hide">
-		UDA
-	</div>
-	<div id="tab_refs" class="ui-tabs-hide">
-		REFERENCE
-	</div>
-	<div id="tab_refs1" class="ui-tabs-hide">
-		REFERENCE
-	</div>
-	<div id="tab_refs2" class="ui-tabs-hide">
-		REFERENCE
-	</div>
-	<div id="tab_refs3" class="ui-tabs-hide">
-		REFERENCE
-	</div>
-	<div id="tab_refs4" class="ui-tabs-hide">
-		REFERENCE
-	</div>
 </div>
-

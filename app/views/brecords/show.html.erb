@@ -11,7 +11,7 @@
 <% end %>
 
 <% content_for(:search) do %>
-	<table id="searchGrid" class="scroll"></table>  
+	<table id="searchGrid" class="scroll"></table>
 	<div id="searchPager" class="scroll"></div>
 	
 	<script type="text/javascript">
@@ -20,25 +20,25 @@
 		hideCageCol = true;
 	}
 	var lastSel;
-	jQuery(document).ready(function(){ 
-		var searchGrid = jQuery('#searchGrid').jqGrid({ 
-			url: '/brecords/grid_records', 
-			datatype: 'json', 
-			mtype: 'GET', 
-			colNames: ['Id', 'Name', 'Cage', 'Rev', 'Ver', 'Description'], 
+	jQuery(document).ready(function(){
+		var searchGrid = jQuery('#searchGrid').jqGrid({
+			url: '/brecords/grid_records',
+			datatype: 'json',
+			mtype: 'GET',
+			colNames: ['Id', 'Name', 'Cage', 'Rev', 'Ver', 'Description'],
 			colModel :[
 				{name:'id',       index:'id', hidden:true},
 				{name:'name',     index:'brecname', width:80},
-				{name:'cage',     index:'brecname', width:50,  align:'right', hidden: hideCageCol},  
-				{name:'brecalt',  index:'brecalt',  width:30,  align:'right'},  
-				{name:'brecver',  index:'brecver',  width:27,  align:'right'},  
-				{name:'bdesc',    index:'bdesc',    width:300, sortable:false} ], 
-			rowNum: 10, 
-			rowList: [10,20,30,50,100], 
-			sortname: 'brecname', 
-			sortorder: 'asc', 
-			viewrecords: true, 
-			imgpath: '/javascripts/themes/basic/images', 
+				{name:'cage',     index:'brecname', width:50,  align:'right', hidden: hideCageCol},
+				{name:'brecalt',  index:'brecalt',  width:30,  align:'right'},
+				{name:'brecver',  index:'brecver',  width:27,  align:'right'},
+				{name:'bdesc',    index:'bdesc',    width:300, sortable:false} ],
+			rowNum: 10,
+			rowList: [10,20,30,50,100],
+			sortname: 'brecname',
+			sortorder: 'asc',
+			viewrecords: true,
+			imgpath: '/javascripts/themes/basic/images',
 			caption: 'Find result table -- <%=h @rectype%>',
 			height: '100%',
 			width: 925,
@@ -46,26 +46,30 @@
 			ondblClickRow: function(id) {
 				if (id && id!==lastSel) {
 					jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
-					var gtf = jQuery('#searchGrid').GridToForm(id, "#record");
+					//var gtf = jQuery('#searchGrid').GridToForm(id, "#record");
 					lastSel=id;
-					jQuery('#record').effect("highlight", {}, 1000);
-					//alert('id');
-				 	//$("#tab_base").load("script.php"); 
-				} 
+					jQuery.ajax({
+						type: "POST",
+						url: ("/brecords/load_record_base?id="+id),
+						dataType: "script"
+					});
+				}
 			},
 			postData: {rectype: '<%=h @rectype%>'}
-		}).navGrid('#searchPager', {refresh: true, edit: false, add: false, del: false, search: true})
-			.navButtonAdd('#searchPager',
-				{ caption:"Load",
-					onClickButton:function() {
-						var gsr = jQuery('#searchGrid').getGridParam('selrow');
-						if (gsr) {
-							var gtf = jQuery("#searchGrid").GridToForm(gsr,"#record");
-						} else {
-							alert("Please select Row");
-						}
+		})
+		.navGrid('#searchPager', {refresh: true, edit: false, add: false, del: false, search: true})
+		.navButtonAdd('#searchPager',
+			{ caption:"Load",
+				onClickButton:function() {
+					var gsr = jQuery('#searchGrid').getGridParam('selrow');
+					if (gsr) {
+						var gtf = jQuery("#searchGrid").GridToForm(gsr,"#record");
+					} else {
+						alert("Please select Row");
 					}
-				})
+				}
+			}
+		)
 	});
 	</script>
 <% end %>

@@ -4,12 +4,13 @@ body {
 #header, #menu, #footer, #topsearch, #bottomsearch, #search {
 	background-color: #3D83CC;
 }
-#header h1 {
-	color: #FFFFFF;
-}
 #header {
 	z-index: 100;
 	position:  relative;
+}
+#header h1 {
+	color: #FFBC0B;
+	padding-top: 10px;
 }
 #menu {
 	margin-top: 0px;
@@ -26,4 +27,14 @@ body {
 }
 #badge {
 	position: absolute;
+}
+#record_title {
+	font-weight: bold;
+	background-color: #3D83CC;
+	color: #FFFFFF;
+	padding: 5px 0px 5px 20px;
+	display:  none;
+}
+#record_base {
+	display: none;
 }
