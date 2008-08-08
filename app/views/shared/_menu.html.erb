@@ -1,36 +1,57 @@
 <ul class="sf-menu large">
 	<li class="current">
-		<a href="#">Search</a>
+		<a href="#"><span class="ss_sprite ss_find">&nbsp;</span>Find</a>
 		<ul>
-			<li><%= link_to 'Part',     :controller => 'brecords', :action => 'show', :rectype => 'part'     %></li>
-			<li><%= link_to 'Document', :controller => 'brecords', :action => 'show', :rectype => 'document' %></li>
-			<li><%= link_to 'Software', :controller => 'brecords', :action => 'show', :rectype => 'software' %></li>
-			<li><%= link_to 'Workauth', :controller => 'brecords', :action => 'show', :rectype => 'workauth' %></li>
+			<li><%= link_to '<span class="ss_sprite ss_page_white_gear">&nbsp;</span>Part',     :controller => 'brecords', :action => 'show', :rectype => 'part'     %></li>
+			<li><%= link_to '<span class="ss_sprite ss_page_white_word">&nbsp;</span>Document', :controller => 'brecords', :action => 'show', :rectype => 'document' %></li>
+			<li><%= link_to '<span class="ss_sprite ss_page_white_code">&nbsp;</span>Software', :controller => 'brecords', :action => 'show', :rectype => 'software' %></li>
+			<li><%= link_to '<span class="ss_sprite ss_page_white_lightning">&nbsp;</span>Workauth', :controller => 'brecords', :action => 'show', :rectype => 'workauth' %></li>
 		</ul>
 	</li>
 	<li>
-		<a href="#">Reports</a>
+		<a href="#"><span class="ss_sprite ss_printer">&nbsp;</span>Reports</a>
 		<ul>
-			<li><a href="#">Report 1</a></li>
-			<li><a href="#">Report 2</a></li>
-			<li><a href="#">Report 3</a></li>
+			<li><a href="#"><span class="ss_sprite ss_report">&nbsp;</span>Report 1</a></li>
+			<li><a href="#"><span class="ss_sprite ss_report">&nbsp;</span>Report 2</a></li>
+			<li><a href="#"><span class="ss_sprite ss_report">&nbsp;</span>Report 3</a></li>
 		</ul>
 	</li>
 	<li>
-		<a href="#">Help</a>
+		<a href="#"><span class="ss_sprite ss_help">&nbsp;</span>Help</a>
 		<ul>
-			<li><a href="#">About</a></li>
+			<li id="about"><a href="#"><span class="ss_sprite ss_information">&nbsp;</span>About</a></li>
 		</ul>
 	</li>
 </ul>
+<div id="dialogAbout" class="flora" title="PLM on Rails">
+	Fantastico programma partorito dalle due menti deviate
+	di Sergio Gallelli e Stefano Manieri<br/><br/>
+	&copy; 2008 - tutti i diritti riservati<br/>
+	ed anche i rovesci<br/><br/>
+	FORZA INTER!
+</div>
+
 <script type="text/javascript"> 
-    $(document).ready(function() { 
-        $('ul.sf-menu').superfish({ 
-            delay:       1000,                            // one second delay on mouseout 
-            animation:   {opacity:'show',height:'show'},  // fade-in and slide-down animation 
-            speed:       'fast',                          // faster animation speed 
-            autoArrows:  false,                           // disable generation of arrow mark-up 
-            dropShadows: false                            // disable drop shadows 
-        }).find('ul').bgIframe({opacity:false}); 
-    }); 
+	$(document).ready(function() { 
+		$('ul.sf-menu').superfish({ 
+			delay:       1000,                            // one second delay on mouseout 
+			animation:   {opacity:'show',height:'show'},  // fade-in and slide-down animation 
+			speed:       'fast',                          // faster animation speed 
+			autoArrows:  false,                           // disable generation of arrow mark-up 
+			dropShadows: false                            // disable drop shadows 
+		}).find('ul').bgIframe({opacity:false});
+		
+		$('#dialogAbout').dialog({
+			autoOpen: false,
+			modal: true,
+			overlay: {
+				opacity: 0.5,
+				background: "black"
+			}
+		});
+		
+		$('#about').click(function() {
+			$('#dialogAbout').dialog("open");
+		});
+	}); 
 </script>

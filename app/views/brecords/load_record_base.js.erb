@@ -1,0 +1,18 @@
+jQuery('#record_id').val('<%= escape_javascript h @record.id %>')
+jQuery('#record_type').val('<%= escape_javascript h @record.brectype %>')
+jQuery('#record_name').val('<%= escape_javascript h @record.name %>')
+jQuery('#record_cage').val('<%= escape_javascript h @record.cage_code %>')
+jQuery('#record_brecalt').val('<%= escape_javascript h @record.brecalt %>')
+jQuery('#record_brecver').val('<%= escape_javascript h @record.brecver %>')
+jQuery('#record_breclevel').val('<%= escape_javascript h @record.breclevel %>')
+jQuery('#record_bdesc').val("<%= escape_javascript h @record.bdesc %>")
+
+jQuery('#record_title').html("<%= escape_javascript h @record.title %>")
+jQuery('#record_title').show()
+jQuery('#record_title').corner("10px")
+
+jQuery('#tabsRec > ul').tabs("select", 0)
+jQuery('#tabsRec > ul').tabs("url", 1 , '/brecords/load_record_udas?id=<%= @record.id %>')
+jQuery('#tabsRec > ul').tabs("url", 2 , '/brecords/load_record_refs?id=<%= @record.id %>')
+
+jQuery('#record_base').effect("highlight", {}, 1000);
