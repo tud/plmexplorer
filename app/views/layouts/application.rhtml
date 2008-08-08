@@ -30,18 +30,18 @@
 	</head>
 	<body>
 		<div class="container">
-			<div id="topsearch" class="prepend-23 span-1 last">&nbsp;<img id="badge" src="/images/badge.png" class="push-1"/></div>
-			<div id="search" class="span-24 last">
-				<%= yield :search %>
-			</div>
-			<div id="bottomsearch" class="span-24 last">&nbsp;</div>
-			<div class="span-24 last">&nbsp;</div>
 			<div id="header" class="prepend-9 span-15 last">
-				<h1><strong>PLM</strong> on Rails</h1>
+				<h1><strong>PLM</strong> on Rails<img id="badge" src="/images/badge.png"/></h1>
 				<div id="menu" class="span-15 last">
 					<%= render :partial => 'shared/menu'%>
 				</div>
 			</div>
+			<div class="span-24 last">&nbsp;</div>
+			<div id="topsearch" class="span-24 last">&nbsp;</div>
+			<div id="search" class="span-24 last">
+				<%= yield :search %>
+			</div>
+			<div id="bottomsearch" class="span-24 last">&nbsp;</div>
 			<div class="span-24 last">&nbsp;</div>
 			<div id="content" class="prepend-1 span-22 append-1 last">
 				<%= yield :content%>

@@ -10,7 +10,6 @@ body {
 }
 #header h1 {
 	color: #FFBC0B;
-	padding-top: 10px;
 	padding-left: 30px;
 }
 #menu {
@@ -25,9 +24,6 @@ body {
 }
 #searchPager {
 	text-align: center;
-}
-#badge {
-	position: absolute;
 }
 #record_title {
 	font-weight: bold;
