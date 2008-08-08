@@ -53,7 +53,7 @@
 				 	$("#tab_base").load("script.php"); 
 				} 
 			},
-			postData: {rectype: '<%=h @rectype%>'}
+			postData: {clause: '<%=escape_javascript @clause%>'}
 		}).navGrid('#searchPager', {refresh: true, edit: false, add: false, del: false, search: true})
 			.navButtonAdd('#searchPager',
 				{ caption:"Load",
@@ -72,4 +72,5 @@
 
 <% content_for(:content) do %>
 	<%=render :partial => 'tabs'%>
+	<%=render :partial => 'find'%>
 <% end %>
