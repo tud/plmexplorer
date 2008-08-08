@@ -50,7 +50,7 @@
 					lastSel=id;
 					jQuery.ajax({
 						type: "POST",
-						url: ("/brecords/load_record_base?id="+id),
+						url: ("<%= url_for(:action => 'load_record_base', :controller => 'brecords') %>?id="+id),
 						dataType: "script"
 					});
 				}

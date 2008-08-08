@@ -11,6 +11,7 @@ body {
 #header h1 {
 	color: #FFBC0B;
 	padding-top: 10px;
+	padding-left: 30px;
 }
 #menu {
 	margin-top: 0px;
@@ -37,4 +38,7 @@ body {
 }
 #record_base {
 	display: none;
+}
+.ss_sprite {
+	padding-left: 18px;
 }
