@@ -17,6 +17,7 @@
 		<%= stylesheet_link_tag 'superfish_custom.css', :cache => true %>
 		<%= stylesheet_link_tag 'application.css', :cache => true %>
 		<%= stylesheet_link_tag 'dialog_custom.css', :cache => true %>
+		<%= stylesheet_link_tag 'tabs_custom.css', :cache => true %>
 
 		<%= javascript_include_tag :defaults, :cache => true %>
 		<%= javascript_include_tag 'hoverIntent.js', :cache => true %>
@@ -31,7 +32,7 @@
 	<body>
 		<div class="container">
 			<div id="header" class="prepend-9 span-15 last">
-				<h1><strong>PLM</strong> on Rails<img id="badge" src="/images/badge.png"/></h1>
+				<h1><strong>PLM</strong> on Rails<img id="badge" src="/images/badge.png" alt="PLM on Rails"/></h1>
 				<div id="menu" class="span-15 last">
 					<%= render :partial => 'shared/menu'%>
 				</div>

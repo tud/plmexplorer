@@ -5,6 +5,7 @@ table.navtable {margin-bottom:0; width: auto;}
 .jqmWindow table {margin: 0; width: 300px;}
 .jqmWindow td, tr {padding:0;}
 .HeaderLeft {background-image: none;}
+
 div.loading {
 	background: #FFBC0B;
 }

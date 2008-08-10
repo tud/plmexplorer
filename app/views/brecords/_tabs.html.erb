@@ -1,4 +1,3 @@
-<%= stylesheet_link_tag 'tabs_custom.css', :cache => true %>
 <%= javascript_include_tag 'ui/ui.tabs.js', :cache => true %>
 <script type="text/javascript">
 	jQuery(document).ready(function(){
@@ -11,46 +10,46 @@
 <div id="tabsRec">
 	<ul>
 		<li><a href="#tab_base"><span>Info</span></a></li>
-		<li><%= link_to '<span>Attributes</span>', :controller => 'brecords' %></li>
-		<li><%= link_to '<span>References</span>', :controller => 'brecords' %></li> 
+		<li><%= link_to '<span>References</span>', :controller => 'brecords' %></li>
+		<li><%= link_to '<span>History</span>', :controller => 'brecords' %></li>
 	</ul>
 	<div id="tab_base" class="ui-tabs-hide">
-		<form name="record_base" id="record_base" action="" method="post">
-			<input type="hidden" id="record_id" />
+		<form id="record_base" action="" method="post">
 			<fieldset>
 				<legend></legend>
-				<table>
-					<tbody>
-						<tr>
-							<td><label for="f1">Type:</label></td>
-							<td><input type="text" id="record_type" readonly=true /></td>
-						</tr>
-						<tr>
-							<td><label for="f2">Name:</label></td>
-							<td><input type="text" id="record_name" readonly=true /></td>
-						</tr>
-						<tr>
-							<td><label for="f3">Cage:</label></td>
-							<td><input type="text" id="record_cage" readonly=true /></td>
-						</tr>
-						<tr>
-							<td><label for="f4">Revision:</label></td>
-							<td><input type="text" id="record_brecalt" readonly=true /></td>
-						</tr>
-						<tr>
-							<td><label for="f5">Version:</label></td>
-							<td><input type="text" id="record_brecver" readonly=true /></td>
-						</tr>
-						<tr>
-							<td><label for="f6">Status:</label></td>
-							<td><input type="text" id="record_breclevel" readonly=true/></td>
-						</tr>
-						<tr>
-							<td><label for="f7">Description:</label></td>
-							<td><input type="text" id="record_bdesc" readonly=true size="80"/></td>
-						</tr>
-					</tbody>
-				</table>
+				<input type="hidden" id="view_record_id" />
+				<div>
+					<label for="f1">Type:</label>
+					<input type="text" id="view_record_type" readonly="readonly" />
+				</div>
+				<div>
+					<label for="f2">Name:</label>
+					<input type="text" id="view_record_name" readonly="readonly" />
+				</div>
+				<div>
+					<label for="f3">Bus. ID:</label>
+					<input type="text" id=view_"record_cage" readonly="readonly" />
+				</div>
+				<div>
+					<label for="f4">Rev.:</label>
+					<input type="text" id="view_record_brecalt" readonly="readonly" />
+				</div>
+				<div>
+					<label for="f6">Status:</label>
+					<input type="text" id="view_record_breclevel" readonly="readonly" />
+				</div>
+				<div>
+					<label for="f7">Description:</label>
+					<input type="text" id="view_record_bdesc" readonly="readonly" size="80"/>
+				</div>
+				<div>
+					<label for="f7">Project:</label>
+					<input type="text" id="view_record_bproject" readonly="readonly" />
+				</div>
+				<div>
+					<label for="f7">Owner:</label>
+					<input type="text" id="view_record_bowner" readonly="readonly" />
+				</div>
 			</fieldset>
 		</form>
 	</div>

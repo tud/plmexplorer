@@ -2,6 +2,7 @@
 	<%= stylesheet_link_tag '../javascripts/themes/basic/grid.css', :cache => true %>
 	<%= stylesheet_link_tag '../javascripts/themes/jqModal.css', :cache => true %>
 	<%= stylesheet_link_tag 'grid_custom.css', :cache => true %>
+
 	<%= javascript_include_tag 'jquery.jqGrid.js', :cache => true %>
 	<%= javascript_include_tag 'js/jqModal.js', :cache => true %>
 	<%= javascript_include_tag 'js/jqDnR.js', :cache => true %>
@@ -13,7 +14,7 @@
 <% content_for(:search) do %>
 	<table id="searchGrid" class="scroll"></table>
 	<div id="searchPager" class="scroll"></div>
-	
+
 	<script type="text/javascript">
 	var hideCageCol = false;
 	if ("<%=h @rectype%>" == "WORKAUTH") {
@@ -25,14 +26,14 @@
 			url: '/brecords/grid_records',
 			datatype: 'json',
 			mtype: 'GET',
-			colNames: ['Id', 'Name', 'Cage', 'Rev', 'Ver', 'Description'],
+			colNames: ['Id', 'Name', 'Bus. ID', 'Rev', 'Status', 'Description'],
 			colModel :[
-				{name:'id',       index:'id', hidden:true},
-				{name:'name',     index:'brecname', width:80},
-				{name:'cage',     index:'brecname', width:50,  align:'right', hidden: hideCageCol},
-				{name:'brecalt',  index:'brecalt',  width:30,  align:'right'},
-				{name:'brecver',  index:'brecver',  width:27,  align:'right'},
-				{name:'bdesc',    index:'bdesc',    width:300, sortable:false} ],
+				{name:'id',        index:'id',        hidden:true},
+				{name:'name',      index:'brecname',  width:80},
+				{name:'busid',     index:'brecname',  width:50,  align:'right', hidden: hideCageCol},
+				{name:'brecalt',   index:'brecalt',   width:30,  align:'right'},
+				{name:'breclevel', index:'breclevel', width:50}, 
+				{name:'bdesc',     index:'bdesc',     width:300, sortable:false} ],
 			rowNum: 10,
 			rowList: [10,20,30,50,100],
 			sortname: 'brecname',
@@ -46,7 +47,6 @@
 			ondblClickRow: function(id) {
 				if (id && id!==lastSel) {
 					jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
-					//var gtf = jQuery('#searchGrid').GridToForm(id, "#record");
 					lastSel=id;
 					jQuery.ajax({
 						type: "POST",
@@ -61,9 +61,14 @@
 		.navButtonAdd('#searchPager',
 			{ caption:"Load",
 				onClickButton:function() {
-					var gsr = jQuery('#searchGrid').getGridParam('selrow');
-					if (gsr) {
-						var gtf = jQuery("#searchGrid").GridToForm(gsr,"#record");
+					var id = jQuery('#searchGrid').getGridParam('selrow');
+					if (id) {
+						jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
+						jQuery.ajax({
+							type: "POST",
+							url: ("<%= url_for(:action => 'load_record_base', :controller => 'brecords') %>?id="+id),
+							dataType: "script"
+						});
 					} else {
 						alert("Please select Row");
 					}
@@ -75,6 +80,7 @@
 <% end %>
 
 <% content_for(:content) do %>
-	<%=render :partial => 'tabs'%>
-	<%=render :partial => 'find'%>
+	<% if (controller.action_name != "index") %>
+		<%=render :partial => 'tabs'%>
+	<% end %>
 <% end %>

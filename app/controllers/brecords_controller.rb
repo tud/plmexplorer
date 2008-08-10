@@ -4,19 +4,23 @@ class BrecordsController < ApplicationController
   
   def index
     @rectype = ''
+    @clause = "brectype = ' '"
+    render :action => "show"
   end
 
   def show
+    @rectype = params[:rectype].upcase
     if request.post?
+      # fake per gestire rectype
+      params[:brecord][:find_rec_brectype] = @rectype
       brecord = params[:brecord]
-      @rectype = brecord[:rec_brectype].upcase
       @clause = ''
       name = '*'
       cage_code = nil
       brecord.each do |key, value|
         downkey = key.downcase
         case downkey
-        when /rec_(.+)/
+        when /find_rec_(.+)/
           field = $1
           if field != 'bdesc'
             normalize(value)
@@ -40,52 +44,18 @@ class BrecordsController < ApplicationController
         @clause = add_condition(@clause, 'brecname', value)
       end
     else
-      @rectype = params[:rectype].upcase
       @clause = "brectype = '" + @rectype + "'"
     end
-  end
-
-  def normalize(string)
-    string ||= ''
-    string.sub!(/ +$/,'')
-    string.sub!(/^$/,'*')
-    string.upcase!
-    return string
-  end
-
-  def matches_any(string)
-    string.nil? || /^\**$/.match(string)
-  end
-
-  def add_condition(clause, field, value)
-    if !matches_any(value)
-      clause ||= ''
-      clause += ' AND ' unless clause.empty?
-      if value.index(/[*?]/).nil?
-        # there are no wildcards in value
-        clause += "#{field} = '#{value}'"
-      else
-        # translate wildcards into SQL
-        value.gsub!(/%/,ESCAPE+'%')
-        value.gsub!(/_/,ESCAPE+'_')
-        value.gsub!(/\*/,'%')
-        value.gsub!(/\?/,'_')
-        clause += "#{field} LIKE '#{value}' ESCAPE '#{ESCAPE}'"
-      end
-    end
-    return clause
   end
 
   def grid_records
     page = (params[:page] || 1).to_i
     limit = (params[:rows]).to_i
     sidx = params[:sidx]
-    sord = params[:sord] || "desc"
+    sord = params[:sord]
     clause = params[:clause]
-    puts clause
 
     start = ((page-1) * limit).to_i
-    #start = (limit*(page-limit)).to_i
     if (start < 0)
       start = 0
     end
@@ -96,6 +66,8 @@ class BrecordsController < ApplicationController
     searchString = params[:searchString]
 
     if (isSearch == 'true')
+      # TODO
+      # check cage and name
       if (searchOper == 'eq')
         oper = "= '" + searchString +"'"
       elsif (searchOper == 'bw')
@@ -127,7 +99,7 @@ class BrecordsController < ApplicationController
       :order => sidx+' '+sord,
       :limit => limit,
       :offset => start,
-      :select =>"id, brecname, brecalt, brecver, bdesc",
+      :select =>"id, brecname, brecalt, breclevel, bdesc",
       :conditions => conditions
       
     count = Brecord.count :all,
@@ -152,22 +124,142 @@ class BrecordsController < ApplicationController
         u.name,
         u.cage_code,
         u.brecalt,
-        u.brecver,
+        u.breclevel,
         u.bdesc]}}
 
-      # Convert the hash to a json object
-      render :text => return_data.to_json, :layout=>false
+    # Convert the hash to a json object
+    render :text => return_data.to_json, :layout=>false
+  end
+
+  def grid_refs
+    page = (params[:page] || 1).to_i
+    limit = (params[:rows]).to_i
+    sidx = params[:sidx]
+    sord = params[:sord]
+    clause = params[:clause]
+
+    start = ((page-1) * limit).to_i
+    if (start < 0)
+      start = 0
     end
-  
+
+    isSearch     = params[:_search]
+    searchField  = params[:searchField]
+    searchOper   = params[:searchOper]
+    searchString = params[:searchString]
+
+    if (isSearch == 'true')
+      # TODO
+      # check cage and name
+      if (searchOper == 'eq')
+        oper = "= '" + searchString +"'"
+      elsif (searchOper == 'bw')
+        oper = "LIKE '" + searchString + "%'"
+      elsif (searchOper == 'ne')
+        oper = "<> '" + searchString +"'"
+      elsif (searchOper == 'lt')
+        oper = "< '" + searchString +"'"
+      elsif (searchOper == 'le')
+        oper = "<= '" + searchString +"'"
+      elsif (searchOper == 'gt')
+        oper = "> '" + searchString +"'"
+      elsif (searchOper == 'ge')
+        oper = ">= '" + searchString +"'"
+      elsif (searchOper == 'ew')
+        oper = "LIKE '%" + searchString +"'"
+      elsif (searchOper == 'cn')
+        oper = "LIKE '%" + searchString +"%'"
+      end
+
+      query = searchField + " " + oper
+      #puts '----> query=' + query
+      conditions = clause + " AND " + query
+    else
+      conditions = clause
+    end
+
+    @brefs = Bref.find :all,
+      :order => sidx+' '+sord,
+      :limit => limit,
+      :offset => start,
+      :select =>"breftype, brectype, brecname, brecalt, bdesc, bquantity",
+      :conditions => conditions
+      
+    count = Bref.count :all,
+      :conditions => conditions
+    
+    if (count > 0)
+      total_pages = (count/limit).ceil+1
+    else
+      total_pages = 0
+    end
+
+    # Construct a hash from the ActiveRecord result
+    return_data = Hash.new()
+    return_data[:page] = page
+    return_data[:total] = total_pages
+    return_data[:records] = count
+
+    id = 1
+    return_data[:rows] = @brefs.collect{|u| {
+      :id => id+1,
+      :cell => [
+        id,
+        u.breftype,
+        u.brectype,
+        u.name,
+        u.cage_code,
+        u.brecalt,
+        u.bdesc,
+        u.bquantity]}}
+
+    # Convert the hash to a json object
+    render :text => return_data.to_json, :layout=>false
+  end
+
   def load_record_base
     @record = Brecord.find(params[:id])
   end
-  
-  def load_record_udas
-    @udas = Brecord.find(params[:id]).budas
-  end
-  
+
   def load_record_refs
     @refs = Brecord.find(params[:id]).brefs
+  end
+
+  def load_record_history
+    rec = Brecord.find(params[:id])
+    @promotions = rec.bpromotions
+    @chkhistories = rec.bchkhistories
+  end
+
+  private
+  def normalize(string)
+    string ||= ''
+    string.sub!(/ +$/,'')
+    string.sub!(/^$/,'*')
+    string.upcase!
+    return string
+  end
+
+  def matches_any(string)
+    string.nil? || /^\**$/.match(string)
+  end
+
+  def add_condition(clause, field, value)
+    if !matches_any(value)
+      clause ||= ''
+      clause += ' AND ' unless clause.empty?
+      if value.index(/[*?]/).nil?
+        # there are no wildcards in value
+        clause += "#{field} = '#{value}'"
+      else
+        # translate wildcards into SQL
+        value.gsub!(/%/,ESCAPE+'%')
+        value.gsub!(/_/,ESCAPE+'_')
+        value.gsub!(/\*/,'%')
+        value.gsub!(/\?/,'_')
+        clause += "#{field} LIKE '#{value}' ESCAPE '#{ESCAPE}'"
+      end
+    end
+    return clause
   end
 end
