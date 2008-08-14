@@ -13,11 +13,10 @@ class Brecord < ActiveRecord::Base
   end
 
   def cage_code
-    self[:brecname].split('&')[1]
+    self[:brecname].split('&')[1].to_s
   end
   
   def title
     brectype+"\\"+brecname+"\\"+brecalt+";"+brecver.to_s+"@"+breclevel+" - "+bdesc
   end
-
 end

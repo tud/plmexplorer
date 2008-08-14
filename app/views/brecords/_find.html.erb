@@ -3,38 +3,76 @@
     <% form_for :brecord, :url => {:action => 'show'}, :html => {:id => 'find'} do |form| %>
         <fieldset>
           <legend>Select <%=h @rectype%></legend>
-            <%= form.hidden_field :rec_brectype, :value => @rectype %>
+            <%= form.hidden_field :find_rec_brectype, :value => @rectype %>
             <table>
                 <tbody>
                     <tr>
-                        <td> <label for="rec_name">Name :</label> </td>
-                        <td> <%= form.text_field :rec_name, :maxlength => "26", :tabindex => "1" %> </td>
+                        <% if @rectype == 'WORKAUTH' %>
+                            <td> <label for="find_rec_brecname">Name :</label> </td>
+                            <td> <%= form.text_field :find_rec_brecname, :maxlength => "32", :tabindex => "1" %> </td>
+                        <% else %>
+                            <td> <label for="find_rec_name">Name :</label> </td>
+                            <td> <%= form.text_field :find_rec_name, :maxlength => "26", :tabindex => "1" %> </td>
+                        <% end %>
                     </tr>
                     <tr>
-                        <td> <label for="rec_cage_code">Bus.ID :</label> </td>
-                        <td> <%= form.text_field :rec_cage_code, :maxlength => "5", :tabindex => "2" %> </td>
+                        <td> <label for="find_rec_bname1">Bus. ID :</label> </td>
+                        <td> <select id="brecord_find_rec_bname1" name="brecord[find_rec_bname1]" tabindex="2">
+                             <option value="" />
+                             <%= option_groups_from_collection_for_select(@cagelist, :options, :name, :value, :key) %>
+                        </select> </td>
                     </tr>
                     <tr>
-                        <td> <label for="rec_brecalt">Rev. :</label> </td>
-                        <td> <%= form.text_field :rec_brecalt, :maxlength => "4", :tabindex => "3" %> </td>
+                        <td> <label for="find_rec_brecalt">Rev. :</label> </td>
+                        <td> <%= form.text_field :find_rec_brecalt, :maxlength => "4", :tabindex => "3" %> </td>
                     </tr>
                     <tr>
-                        <td> <label for="rec_breclevel">Status :</label> </td>
-                        <td> <%= form.text_field :rec_breclevel, :maxlength => "16", :tabindex => "4" %> </td>
+                        <td> <label for="find_rec_breclevel">Status :</label> </td>
+                        <td> <%= form.select :find_rec_breclevel, @statuslist, {}, {:tabindex => "4"} %> </td>
                     </tr>
                     <tr>
-                        <td> <label for="rec_bproject">Project :</label> </td>
-                        <td> <%= form.text_field :rec_bproject, :maxlength => "16", :tabindex => "5" %> </td>
+                        <td> <label for="find_rec_bproject">Project :</label> </td>
+                        <td> <%= form.select :find_rec_bproject, @prjlist, {}, {:tabindex => "5"} %> </td>
                     </tr>
                     <tr>
-                        <td> <label for="rec_bowner">Owner :</label> </td>
-                        <td> <%= form.text_field :rec_bowner, :maxlength => "16", :tabindex => "6" %> </td>
+                        <td> <label for="find_rec_bowner">Owner :</label> </td>
+                        <td> <%= form.select :find_rec_bowner, @userlist, {}, {:tabindex => "6"} %> </td>
                     </tr>
+                    <tr>
+                        <td> <label for="find_rec_bcreateuser">Created By :</label> </td>
+                        <td> <%= form.select :find_rec_bcreateuser, @userlist, {}, {:tabindex => "7"} %> </td>
+                    </tr>
+                    <tr>
+                        <td> <label for="find_rec_family">Type :</label> </td>
+                        <td> <%= form.text_field :find_rec_family, :maxlength => "16", :tabindex => "8" %> </td>
+                    </tr>
+                    <tr>
+                        <td> <label for="find_rec_name4">Short Description :</label> </td>
+                        <td> <%= form.text_field :find_rec_name4, :maxlength => "32", :tabindex => "9" %> </td>
+                    </tr>
+                    <tr>
+                        <td> <label for="find_rec_bdesc">Description :</label> </td>
+                        <td> <%= form.text_field :find_rec_bdesc, :maxlength => "80", :tabindex => "10" %> </td>
+                    </tr>
+                    <% if @rectype == 'PART' %>
+                        <tr>
+                            <td> <label for="find_uda_logistic_item">Logistic Item Type :</label> </td>
+                            <td> <%= form.text_field :find_uda_logistic_item, :maxlength => "2", :tabindex => "21" %> </td>
+                        </tr>
+                        <tr>
+                            <td> <label for="find_uda_comm_number">Commercial Code :</label> </td>
+                            <td> <%= form.text_field :find_uda_comm_number, :maxlength => "80", :tabindex => "22" %> </td>
+                        </tr>
+                        <tr>
+                            <td> <label for="find_uda_maker">Manufacturer :</label> </td>
+                            <td> <%= form.text_field :find_uda_maker, :maxlength => "80", :tabindex => "23" %> </td>
+                        </tr>
+                    <% end %>
                 </tbody>
             </table>
         </fieldset>
         <p>
-            <%= submit_tag "Find", :id => "button1" %>
+            <%= submit_tag "Find", :id => "button1", :tabindex => "31" %>
         </p>
     <% end %>
     <%= debug(params) %>

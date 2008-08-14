@@ -1,47 +1,88 @@
 class BrecordsController < ApplicationController
   
   ESCAPE = '\\'
-  
+
   def index
     @rectype = ''
   end
 
   def show
+    @joins = ''
+    join_count = 0
+
     if request.post?
       brecord = params[:brecord]
-      @rectype = brecord[:rec_brectype].upcase
-      @clause = ''
-      name = '*'
+      @rectype = brecord[:find_rec_brectype].upcase
+      @conditions = nil
+      name = nil
       cage_code = nil
       brecord.each do |key, value|
         downkey = key.downcase
         case downkey
-        when /rec_(.+)/
-          field = $1
+        when /find_rec_(.+)/
+          field = $1.downcase
           if field != 'bdesc'
             normalize(value)
           end
           if field == 'name'
             name = value
-          elsif field == 'cage_code'
+          elsif field == 'bname1'
             cage_code = value
           else
-            @clause = add_condition(@clause, field, value)
+            @conditions = add_condition(@conditions, field, value)
           end
-        when /uda_(.+)/
-          field = $1
+        when /find_uda_(.+)/
+          if !matches_any(value)
+            field = $1.upcase
+            join_count += 1
+            uda_ref = 'u' + join_count.to_s
+            @joins += ', budas ' + uda_ref
+            @conditions = add_condition(@conditions, uda_ref+'.bname', field)
+            @conditions = add_condition(@conditions, uda_ref+'.bvalue', value)
+            @conditions += ' AND ' + uda_ref + '.bobjid = brecords.id'
+          end
         else
           print "Illegal field name: #{key}"
         end
       end
-      unless matches_any(name) && matches_any(cage_code)
-        value = name
-        value += ('&' + cage_code) unless cage_code.nil?
-        @clause = add_condition(@clause, 'brecname', value)
+      if name.nil?
+        # Il recname non contiene il Cage Code (es. WORKAUTH)
+        unless matches_any(cage_code)
+          @conditions = add_condition(@conditions, "bname1", cage_code)
+        end
+      else
+        # Il recname contiene il Cage Code (es. PART)
+        unless matches_any(name) && matches_any(cage_code)
+          value = name
+          value += ('&' + cage_code) unless cage_code.nil?
+          @conditions = add_condition(@conditions, 'brecname', value)
+        end
       end
     else
       @rectype = params[:rectype].upcase
-      @clause = "brectype = '" + @rectype + "'"
+      #@conditions = "brectype = '" + @rectype + "'"
+      @conditions = "brectype = '!'"
+    end
+
+    unless @cagelist
+      @cagelist = DynList.build_from('IPD_BUSINESSID')
+    end
+
+    unless @statuslist
+      @statuslist = Blevel.find(:all,
+                                :conditions => "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname = '" + @rectype + "'",
+                                :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
+      @statuslist.unshift('')
+    end
+
+    unless @prjlist
+      @prjlist = Bproject.find(:all).map { |prj| prj.bname }.sort
+      @prjlist.unshift('')
+    end
+
+    unless @userlist
+      @userlist = Bdbuser.find(:all).map { |user| user.buser }.sort.uniq
+      @userlist.unshift('')
     end
   end
 
@@ -57,23 +98,23 @@ class BrecordsController < ApplicationController
     string.nil? || /^\**$/.match(string)
   end
 
-  def add_condition(clause, field, value)
+  def add_condition(conditions, field, value)
     if !matches_any(value)
-      clause ||= ''
-      clause += ' AND ' unless clause.empty?
+      conditions ||= ''
+      conditions += ' AND ' unless conditions.empty?
       if value.index(/[*?]/).nil?
         # there are no wildcards in value
-        clause += "#{field} = '#{value}'"
+        conditions += "#{field} = '#{value}'"
       else
         # translate wildcards into SQL
         value.gsub!(/%/,ESCAPE+'%')
         value.gsub!(/_/,ESCAPE+'_')
         value.gsub!(/\*/,'%')
         value.gsub!(/\?/,'_')
-        clause += "#{field} LIKE '#{value}' ESCAPE '#{ESCAPE}'"
+        conditions += "#{field} LIKE '#{value}' ESCAPE '#{ESCAPE}'"
       end
     end
-    return clause
+    return conditions
   end
 
   def grid_records
@@ -81,8 +122,8 @@ class BrecordsController < ApplicationController
     limit = (params[:rows]).to_i
     sidx = params[:sidx]
     sord = params[:sord] || "desc"
-    clause = params[:clause]
-    puts clause
+    conditions = params[:conditions]
+    joins = params[:joins]
 
     start = ((page-1) * limit).to_i
     #start = (limit*(page-limit)).to_i
@@ -118,9 +159,7 @@ class BrecordsController < ApplicationController
 
       query = searchField + " " + oper
       #puts '----> query=' + query
-      conditions = clause + " AND " + query
-    else
-      conditions = clause
+      conditions += " AND " + query
     end
 
     @brecords = Brecord.find :all,
@@ -128,10 +167,12 @@ class BrecordsController < ApplicationController
       :limit => limit,
       :offset => start,
       :select =>"id, brecname, brecalt, brecver, bdesc",
-      :conditions => conditions
+      :conditions => conditions,
+      :joins => joins
       
     count = Brecord.count :all,
-      :conditions => conditions
+      :conditions => conditions,
+      :joins => joins
     
     if (count > 0)
       total_pages = (count/limit).ceil+1
