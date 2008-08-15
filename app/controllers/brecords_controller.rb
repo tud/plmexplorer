@@ -65,7 +65,7 @@ class BrecordsController < ApplicationController
     end
 
     unless @cageCodes
-      @cageCodes = DynList.build_from('IPD_BUSINESSID')
+      @cageCodes = DynList.build_from('IPD_BUSINESSID', :bdesc)
     end
 
     unless @statusList
@@ -101,6 +101,18 @@ class BrecordsController < ApplicationController
       else
         @typeList = []
       end
+    end
+
+    unless @docSizes || @rectype != 'DOCUMENT'
+      @docSizes = DynList.build_from('IPD_DOCSIZE', :bdesc)
+    end
+
+    unless @changeClasses || @rectype != 'WORKAUTH'
+      @changeClasses = DynList.build_from('IPD_CHNGCLASS', :bdesc)
+    end
+
+    unless @changeSubClasses || @rectype != 'WORKAUTH'
+      @changeSubClasses = DynList.build_from('IPD_CHNGSUBCLASS', :bdesc)
     end
   end
 

@@ -19,7 +19,7 @@
                         <td> <label for="find_rec_bname1">Bus. ID :</label> </td>
                         <td> <select id="brecord_find_rec_bname1" name="brecord[find_rec_bname1]" tabindex="2">
                              <option value="" />
-                             <%= option_groups_from_collection_for_select(@cageCodes, :options, :name, :value, :key) %>
+                             <%= option_groups_from_collection_for_select(@cageCodes, :options, :label, :value, :key) %>
                         </select> </td>
                     </tr>
                     <tr>
@@ -40,13 +40,13 @@
                     </tr>
                     <tr>
                         <td> <label for="find_rec_bcreateuser">Created By :</label> </td>
-                        <td> <%= form.select :find_rec_bcreateuser, @userList, {}, {:tabindex => "7"} %> </td>
+                        <td> <%= form.text_field :find_rec_bcreateuser, :maxlength => "16", :tabindex => "7" %> </td>
                     </tr>
                     <tr>
                         <td> <label for="find_rec_bfamily">Type :</label> </td>
                         <td> <select id="brecord_find_rec_bfamily" name="brecord[find_rec_bfamily]" tabindex="8">
                              <option value="" />
-                             <%= option_groups_from_collection_for_select(@typeList, :options, :name, :value, :key) %>
+                             <%= option_groups_from_collection_for_select(@typeList, :options, :label, :value, :key) %>
                         </select> </td>
                     </tr>
                     <tr>
@@ -69,6 +69,35 @@
                         <tr>
                             <td> <label for="find_uda_maker">Manufacturer :</label> </td>
                             <td> <%= form.text_field :find_uda_maker, :maxlength => "80", :tabindex => "23" %> </td>
+                        </tr>
+                    <% end %>
+                    <% if @rectype == 'DOCUMENT' %>
+                        <tr>
+                            <td> <label for="find_rec_btype4">Document Size :</label> </td>
+                            <td> <select id="brecord_find_rec_btype4" name="brecord[find_rec_btype4]" tabindex="21">
+                                <option value="" />
+                                <%= option_groups_from_collection_for_select(@docSizes, :options, :label, :value, :key) %>
+                            </select> </td>
+                        </tr>
+                    <% end %>
+                    <% if @rectype == 'WORKAUTH' %>
+                        <tr>
+                            <td> <label for="find_rec_btype3">Change Class :</label> </td>
+                            <td> <select id="brecord_find_rec_btype3" name="brecord[find_rec_btype3]" tabindex="21">
+                                <option value="" />
+                                <%= option_groups_from_collection_for_select(@changeClasses, :options, :label, :value, :key) %>
+                            </select> </td>
+                        </tr>
+                        <tr>
+                            <td> <label for="find_uda_change_subclass">Sub-Class :</label> </td>
+                            <td> <select id="brecord_find_uda_change_subclass" name="brecord[find_uda_change_subclass]" tabindex="22">
+                                <option value="" />
+                                <%= option_groups_from_collection_for_select(@changeSubClasses, :options, :label, :value, :key) %>
+                            </select> </td>
+                        </tr>
+                        <tr>
+                            <td> <label for="find_uda_ecp_number">Eng Chg Prop Nr :</label> </td>
+                            <td> <%= form.text_field :find_uda_ecp_number, :maxlength => "32", :tabindex => "23" %> </td>
                         </tr>
                     <% end %>
                 </tbody>
