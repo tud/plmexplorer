@@ -1,7 +1,9 @@
 class Brecord < ActiveRecord::Base
-  has_many :budas,  :foreign_key => 'bobjid', :order => 'bname'
-  has_many :bfiles, :foreign_key => 'bobjid', :order => 'balias'
-  has_many :brefs,  :foreign_key => 'bobjid', :order => 'brectype,brecname,brecalt'
+  has_many :budas,        :foreign_key => 'bobjid', :order => 'bname'
+  has_many :bfiles,       :foreign_key => 'bobjid', :order => 'balias'
+  has_many :brefs,        :foreign_key => 'bobjid', :order => 'breftype,brectype,brecname,brecalt'
+  has_many :bpromotions,  :foreign_key => 'bobjid', :order => 'bpromdate'
+  has_many :bchkhistories,:foreign_key => 'bobjid', :order => 'bdate'
 
   named_scope :parts,     :conditions => {:brectype => 'PART'}
   named_scope :pim_users, :conditions => {:brectype => 'PIM_USER'}
@@ -17,6 +19,6 @@ class Brecord < ActiveRecord::Base
   end
   
   def title
-    brectype+"\\"+brecname+"\\"+brecalt+";"+brecver.to_s+"@"+breclevel+" - "+bdesc
+    brectype+" "+brecname.gsub(/&/,'~')+" Rev. "+brecalt+" at Status "+breclevel+" - "+bdesc
   end
 end

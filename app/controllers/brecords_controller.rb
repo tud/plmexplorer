@@ -3,10 +3,11 @@ class BrecordsController < ApplicationController
   ESCAPE = '\\'
 
   def index
-    redirect_to :action => :show, :rectype => '*'
+    redirect_to :action => :show, :rectype => '*', :hiddengrid => 'true'
   end
 
   def show
+    @hiddengrid = params[:hiddengrid] || "false"
     @joins = ''
     join_count = 0
 
@@ -29,7 +30,7 @@ class BrecordsController < ApplicationController
           elsif field == 'bname1'
             cage_code = value
           else
-            @conditions = add_condition(@conditions, field, value)
+            add_condition(field, value)
           end
         when /find_uda_(.+)/
           if !matches_any(value)
@@ -37,8 +38,8 @@ class BrecordsController < ApplicationController
             join_count += 1
             uda_ref = 'u' + join_count.to_s
             @joins += ', budas ' + uda_ref
-            @conditions = add_condition(@conditions, uda_ref+'.bname', field)
-            @conditions = add_condition(@conditions, uda_ref+'.bvalue', value)
+            add_condition(uda_ref+'.bname', field)
+            add_condition(uda_ref+'.bvalue', value)
             @conditions += ' AND ' + uda_ref + '.bobjid = brecords.id'
           end
         else
@@ -48,20 +49,19 @@ class BrecordsController < ApplicationController
       if name.nil?
         # Il recname non contiene il Cage Code (es. WORKAUTH)
         unless matches_any(cage_code)
-          @conditions = add_condition(@conditions, "bname1", cage_code)
+          add_condition("bname1", cage_code)
         end
       else
         # Il recname contiene il Cage Code (es. PART)
         unless matches_any(name) && matches_any(cage_code)
           value = name
           value += ('&' + cage_code) unless cage_code.nil?
-          @conditions = add_condition(@conditions, 'brecname', value)
+          add_condition('brecname', value)
         end
       end
     else
       @rectype = params[:rectype].upcase
-      #@conditions = "brectype = '" + @rectype + "'"
-      @conditions = "brectype = '!'"
+      @conditions = "brectype is null"
     end
 
     unless @cageCodes
@@ -128,35 +128,33 @@ class BrecordsController < ApplicationController
     string.nil? || /^\**$/.match(string)
   end
 
-  def add_condition(conditions, field, value)
+  def add_condition(field, value)
     if !matches_any(value)
-      conditions ||= ''
-      conditions += ' AND ' unless conditions.empty?
+      @conditions ||= ''
+      @conditions += ' AND ' unless @conditions.empty?
       if value.index(/[*?]/).nil?
         # there are no wildcards in value
-        conditions += "#{field} = '#{value}'"
+        @conditions += "#{field} = '#{value}'"
       else
         # translate wildcards into SQL
         value.gsub!(/%/,ESCAPE+'%')
         value.gsub!(/_/,ESCAPE+'_')
         value.gsub!(/\*/,'%')
         value.gsub!(/\?/,'_')
-        conditions += "#{field} LIKE '#{value}' ESCAPE '#{ESCAPE}'"
+        @conditions += "#{field} LIKE '#{value}' ESCAPE '#{ESCAPE}'"
       end
     end
-    return conditions
   end
 
   def grid_records
     page = (params[:page] || 1).to_i
     limit = (params[:rows]).to_i
     sidx = params[:sidx]
-    sord = params[:sord] || "desc"
+    sord = params[:sord]
     conditions = params[:conditions]
     joins = params[:joins]
 
     start = ((page-1) * limit).to_i
-    #start = (limit*(page-limit)).to_i
     if (start < 0)
       start = 0
     end
@@ -167,6 +165,8 @@ class BrecordsController < ApplicationController
     searchString = params[:searchString]
 
     if (isSearch == 'true')
+      # TODO
+      # check cage and name
       if (searchOper == 'eq')
         oper = "= '" + searchString +"'"
       elsif (searchOper == 'bw')
@@ -196,7 +196,7 @@ class BrecordsController < ApplicationController
       :order => sidx+' '+sord,
       :limit => limit,
       :offset => start,
-      :select => "id, brecname, brecalt, brecver, bdesc",
+      :select =>"id, brecname, brecalt, breclevel, bdesc",
       :conditions => conditions,
       :joins => joins
       
@@ -223,22 +223,111 @@ class BrecordsController < ApplicationController
         u.name,
         u.cage_code,
         u.brecalt,
-        u.brecver,
+        u.breclevel,
         u.bdesc]}}
 
-      # Convert the hash to a json object
-      render :text => return_data.to_json, :layout=>false
+    # Convert the hash to a json object
+    render :text => return_data.to_json, :layout=>false
+  end
+
+  def grid_refs
+    page = (params[:page] || 1).to_i
+    limit = (params[:rows]).to_i
+    sidx = params[:sidx]
+    sord = params[:sord]
+    clause = params[:clause]
+
+    start = ((page-1) * limit).to_i
+    if (start < 0)
+      start = 0
     end
-  
+
+    isSearch     = params[:_search]
+    searchField  = params[:searchField]
+    searchOper   = params[:searchOper]
+    searchString = params[:searchString]
+
+    if (isSearch == 'true')
+      # TODO
+      # check cage and name
+      if (searchOper == 'eq')
+        oper = "= '" + searchString +"'"
+      elsif (searchOper == 'bw')
+        oper = "LIKE '" + searchString + "%'"
+      elsif (searchOper == 'ne')
+        oper = "<> '" + searchString +"'"
+      elsif (searchOper == 'lt')
+        oper = "< '" + searchString +"'"
+      elsif (searchOper == 'le')
+        oper = "<= '" + searchString +"'"
+      elsif (searchOper == 'gt')
+        oper = "> '" + searchString +"'"
+      elsif (searchOper == 'ge')
+        oper = ">= '" + searchString +"'"
+      elsif (searchOper == 'ew')
+        oper = "LIKE '%" + searchString +"'"
+      elsif (searchOper == 'cn')
+        oper = "LIKE '%" + searchString +"%'"
+      end
+
+      query = searchField + " " + oper
+      #puts '----> query=' + query
+      conditions = clause + " AND " + query
+    else
+      conditions = clause
+    end
+
+    @brefs = Bref.find :all,
+      :order => sidx+' '+sord,
+      :limit => limit,
+      :offset => start,
+      :select =>"breftype, brectype, brecname, brecalt, bdesc, bquantity",
+      :conditions => conditions
+      
+    count = Bref.count :all,
+      :conditions => conditions
+    
+    if (count > 0)
+      total_pages = (count/limit).ceil+1
+    else
+      total_pages = 0
+    end
+
+    # Construct a hash from the ActiveRecord result
+    return_data = Hash.new()
+    return_data[:page] = page
+    return_data[:total] = total_pages
+    return_data[:records] = count
+
+    id = 1
+    return_data[:rows] = @brefs.collect{|u| {
+      :id => id+1,
+      :cell => [
+        id,
+        u.breftype,
+        u.brectype,
+        u.name,
+        u.cage_code,
+        u.brecalt,
+        u.bdesc,
+        u.bquantity]}}
+
+    # Convert the hash to a json object
+    render :text => return_data.to_json, :layout=>false
+  end
+
   def load_record_base
     @record = Brecord.find(params[:id])
   end
-  
-  def load_record_udas
-    @udas = Brecord.find(params[:id]).budas
-  end
-  
+
   def load_record_refs
     @refs = Brecord.find(params[:id]).brefs
   end
+
+  def load_record_history
+    rec = Brecord.find(params[:id])
+    @promotions = rec.bpromotions
+    @chkhistories = rec.bchkhistories
+  end
+
 end

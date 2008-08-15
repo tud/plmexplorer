@@ -22,9 +22,6 @@ body {
 #footer {
 	color: #FFFFFF;
 }
-#searchPager {
-	text-align: center;
-}
 #record_title {
 	font-weight: bold;
 	background-color: #3D83CC;
@@ -37,4 +34,44 @@ body {
 }
 .ss_sprite {
 	padding-left: 18px;
+}
+
+form div {
+	clear: left;
+	display: block;
+	zoom: 1;
+	margin: 5px 0 0 0;
+	padding: 1px 3px;
+	text-align: left;
+}
+form div label {
+	display: block;
+	float: left;
+	width: 120px;
+	padding: 3px 5px;
+	margin: 0 0 5px 0;
+	text-align: right;
+}
+.button {
+	cursor:pointer;
+	border:outset 1px #ccc;
+	background:#222222;
+	color:#FFFFFF;
+	font-weight:bold;
+	padding: 2px 15px;
+}
+.button:hover {
+    background: #FFBC0B;
+}
+
+#findRecord div label {
+	width: 110px;
+}
+
+#brecord_find_rec_bname1 optgroup {
+    /*
+	font-size:0.8em;
+	margin-bottom:1.875em;
+	line-height:1.875em;
+    */
 }
