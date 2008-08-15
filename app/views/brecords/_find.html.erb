@@ -19,7 +19,7 @@
                         <td> <label for="find_rec_bname1">Bus. ID :</label> </td>
                         <td> <select id="brecord_find_rec_bname1" name="brecord[find_rec_bname1]" tabindex="2">
                              <option value="" />
-                             <%= option_groups_from_collection_for_select(@cagelist, :options, :name, :value, :key) %>
+                             <%= option_groups_from_collection_for_select(@cageCodes, :options, :name, :value, :key) %>
                         </select> </td>
                     </tr>
                     <tr>
@@ -28,23 +28,26 @@
                     </tr>
                     <tr>
                         <td> <label for="find_rec_breclevel">Status :</label> </td>
-                        <td> <%= form.select :find_rec_breclevel, @statuslist, {}, {:tabindex => "4"} %> </td>
+                        <td> <%= form.select :find_rec_breclevel, @statusList, {}, {:tabindex => "4"} %> </td>
                     </tr>
                     <tr>
                         <td> <label for="find_rec_bproject">Project :</label> </td>
-                        <td> <%= form.select :find_rec_bproject, @prjlist, {}, {:tabindex => "5"} %> </td>
+                        <td> <%= form.select :find_rec_bproject, @prjList, {}, {:tabindex => "5"} %> </td>
                     </tr>
                     <tr>
                         <td> <label for="find_rec_bowner">Owner :</label> </td>
-                        <td> <%= form.select :find_rec_bowner, @userlist, {}, {:tabindex => "6"} %> </td>
+                        <td> <%= form.select :find_rec_bowner, @userList, {}, {:tabindex => "6"} %> </td>
                     </tr>
                     <tr>
                         <td> <label for="find_rec_bcreateuser">Created By :</label> </td>
-                        <td> <%= form.select :find_rec_bcreateuser, @userlist, {}, {:tabindex => "7"} %> </td>
+                        <td> <%= form.select :find_rec_bcreateuser, @userList, {}, {:tabindex => "7"} %> </td>
                     </tr>
                     <tr>
-                        <td> <label for="find_rec_family">Type :</label> </td>
-                        <td> <%= form.text_field :find_rec_family, :maxlength => "16", :tabindex => "8" %> </td>
+                        <td> <label for="find_rec_bfamily">Type :</label> </td>
+                        <td> <select id="brecord_find_rec_bfamily" name="brecord[find_rec_bfamily]" tabindex="8">
+                             <option value="" />
+                             <%= option_groups_from_collection_for_select(@typeList, :options, :name, :value, :key) %>
+                        </select> </td>
                     </tr>
                     <tr>
                         <td> <label for="find_rec_name4">Short Description :</label> </td>
@@ -57,7 +60,7 @@
                     <% if @rectype == 'PART' %>
                         <tr>
                             <td> <label for="find_uda_logistic_item">Logistic Item Type :</label> </td>
-                            <td> <%= form.text_field :find_uda_logistic_item, :maxlength => "2", :tabindex => "21" %> </td>
+                            <td> <%= form.select :find_uda_logistic_item, DynList::LOGISTIC_ITEMS, {}, {:tabindex => "21"} %> </td>
                         </tr>
                         <tr>
                             <td> <label for="find_uda_comm_number">Commercial Code :</label> </td>
@@ -75,5 +78,4 @@
             <%= submit_tag "Find", :id => "button1", :tabindex => "31" %>
         </p>
     <% end %>
-    <%= debug(params) %>
 </div>

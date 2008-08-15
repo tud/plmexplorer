@@ -3,7 +3,7 @@ class BrecordsController < ApplicationController
   ESCAPE = '\\'
 
   def index
-    @rectype = ''
+    redirect_to :action => :show, :rectype => '*'
   end
 
   def show
@@ -64,25 +64,43 @@ class BrecordsController < ApplicationController
       @conditions = "brectype = '!'"
     end
 
-    unless @cagelist
-      @cagelist = DynList.build_from('IPD_BUSINESSID')
+    unless @cageCodes
+      @cageCodes = DynList.build_from('IPD_BUSINESSID')
     end
 
-    unless @statuslist
-      @statuslist = Blevel.find(:all,
-                                :conditions => "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname = '" + @rectype + "'",
-                                :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
-      @statuslist.unshift('')
+    unless @statusList
+      if @rectype == '*'
+        @statusList = Blevel.find(:all).map { |level| level.bname }.sort.uniq
+      else
+        @statusList = Blevel.find(:all,
+                                  :conditions => "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname = '" + @rectype + "'",
+                                  :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
+      end
+      @statusList.unshift('')
     end
 
-    unless @prjlist
-      @prjlist = Bproject.find(:all).map { |prj| prj.bname }.sort
-      @prjlist.unshift('')
+    unless @prjList
+      @prjList = Bproject.find(:all).map { |prj| prj.bname }.sort
+      @prjList.unshift('')
     end
 
-    unless @userlist
-      @userlist = Bdbuser.find(:all).map { |user| user.buser }.sort.uniq
-      @userlist.unshift('')
+    unless @userList
+      @userList = Bdbuser.find(:all).map { |user| user.buser }.sort.uniq
+      @userList.unshift('')
+    end
+
+    unless @typeList
+      if @rectype == 'PART'
+        @typeList = DynList.build_from('IPD_PARTSUBTYPE')
+      elsif @rectype == 'DOCUMENT'
+        @typeList = DynList.build_from('IPD_DOCSUBTYPE')
+      elsif @rectype == 'WORKAUTH'
+        @typeList = DynList.build_from('IPD_WORKASUBTYP')
+      elsif @rectype == 'SOFTWARE'
+        @typeList = DynList.sw_types
+      else
+        @typeList = []
+      end
     end
   end
 
@@ -166,14 +184,14 @@ class BrecordsController < ApplicationController
       :order => sidx+' '+sord,
       :limit => limit,
       :offset => start,
-      :select =>"id, brecname, brecalt, brecver, bdesc",
+      :select => "id, brecname, brecalt, brecver, bdesc",
       :conditions => conditions,
       :joins => joins
       
     count = Brecord.count :all,
       :conditions => conditions,
       :joins => joins
-    
+
     if (count > 0)
       total_pages = (count/limit).ceil+1
     else
