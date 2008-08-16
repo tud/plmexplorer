@@ -21,13 +21,13 @@ jQuery(document).ready(function(){
 		rowNum: 50,
 		rowList: [10,20,30,50,100],
 		sortname: 'bpromdate',
-		sortorder: 'desc',
+		sortorder: 'asc',
 		viewrecords: true,
 		imgpath: '/javascripts/themes/basic/images',
 		height: '100%',
 		width: 805,
 		pager: 'promotionsPager',
-		postData: {clause: 'bobjid='+id+' '}
+		postData: {conditions: 'bobjid='+id+' '}
 	})
 	.navGrid('#promotionsPager', {refresh: true, edit: false, add: false, del: false, search: true})
 });
@@ -46,25 +46,24 @@ jQuery(document).ready(function(){
 		url: '/brecords/grid_revisions',
 		datatype: 'json',
 		mtype: 'GET',
-		colNames: ['id', 'Date', 'Action', 'Status', 'Signature', 'Approver', 'Description'],
+		colNames: ['id', 'Revision', 'Status', 'Project', 'Owner', 'Promotion Date'],
 		colModel :[
-			{name:'id',       index:'id',       hidden:true},
-			{name:'date',     index:'bdate',    width:80},
-			{name:'bcommand', index:'bcommand', width:30},
-			{name:'bstatus',  index:'bstatus',  width:20},
-			{name:'bname',    index:'banme',    width:80},
-			{name:'buser',    index:'buser',    width:50},
-			{name:'bdesc',    index:'bdesc',    width:80} ],
+			{name:'id',        index:'id',        hidden:true},
+			{name:'brecalt',   index:'brecalt',   width:20},
+			{name:'breclevel', index:'breclevel', width:30},
+			{name:'bproject',  index:'bproject',  width:50},
+			{name:'bowner',    index:'bowner',    width:50},
+			{name:'promdate',  index:'bpromdate', width:80} ],
 		rowNum: 50,
 		rowList: [10,20,30,50,100],
-		sortname: 'bdate',
+		sortname: 'brecalt',
 		sortorder: 'desc',
 		viewrecords: true,
 		imgpath: '/javascripts/themes/basic/images',
 		height: '100%',
 		width: 805,
 		pager: 'revisionsPager',
-		postData: {clause: 'bobjid='+id+' '}
+		postData: {conditions: 'brectype="<%=@record.brectype%>" AND brecname="<%=@record.brecname%>" '}
 	})
 	.navGrid('#revisionsPager', {refresh: true, edit: false, add: false, del: false, search: true})
 });
@@ -95,13 +94,13 @@ jQuery(document).ready(function(){
 		rowNum: 50,
 		rowList: [10,20,30,50,100],
 		sortname: 'bdate',
-		sortorder: 'desc',
+		sortorder: 'asc',
 		viewrecords: true,
 		imgpath: '/javascripts/themes/basic/images',
 		height: '100%',
 		width: 805,
 		pager: 'signoffsPager',
-		postData: {clause: 'bobjid='+id+' '}
+		postData: {conditions: 'bobjid='+id+' '}
 	})
 	.navGrid('#signoffsPager', {refresh: true, edit: false, add: false, del: false, search: true})
 });

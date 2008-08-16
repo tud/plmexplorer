@@ -204,7 +204,7 @@ class BrecordsController < ApplicationController
     limit = (params[:rows]).to_i
     sidx = params[:sidx]
     sord = params[:sord] || 'desc'
-    clause = params[:clause]
+    conditions = params[:conditions]
 
     start = ((page-1) * limit).to_i
     if (start < 0)
@@ -241,9 +241,9 @@ class BrecordsController < ApplicationController
 
       query = searchField + " " + oper
       #puts '----> query=' + query
-      conditions = clause + " AND " + query
+      conditions = conditions + " AND " + query
     else
-      conditions = clause
+      conditions = conditions
     end
 
     @brefs = Bref.find :all,
@@ -290,7 +290,7 @@ class BrecordsController < ApplicationController
     limit = (params[:rows]).to_i
     sidx = params[:sidx]
     sord = params[:sord] || 'desc'
-    clause = params[:clause]
+    conditions = params[:conditions]
 
     start = ((page-1) * limit).to_i
     if (start < 0)
@@ -327,9 +327,9 @@ class BrecordsController < ApplicationController
 
       query = searchField + " " + oper
       #puts '----> query=' + query
-      conditions = clause + " AND " + query
+      conditions = conditions + " AND " + query
     else
-      conditions = clause
+      conditions = conditions
     end
 
     @promotions = Bpromotion.find :all,
@@ -374,7 +374,7 @@ class BrecordsController < ApplicationController
     limit = (params[:rows]).to_i
     sidx = params[:sidx]
     sord = params[:sord] || 'desc'
-    clause = params[:clause]
+    conditions = params[:conditions]
 
     start = ((page-1) * limit).to_i
     if (start < 0)
@@ -411,9 +411,9 @@ class BrecordsController < ApplicationController
 
       query = searchField + " " + oper
       #puts '----> query=' + query
-      conditions = clause + " AND " + query
+      conditions = conditions + " AND " + query
     else
-      conditions = clause
+      conditions = conditions
     end
 
     @signoffs = Bchkhistory.find :all,
@@ -453,20 +453,104 @@ class BrecordsController < ApplicationController
     # Convert the hash to a json object
     render :text => return_data.to_json, :layout=>false
   end
+  
+  def grid_revisions
+    page = (params[:page] || 1).to_i
+    limit = (params[:rows]).to_i
+    sidx = params[:sidx]
+    sord = params[:sord] || 'desc'
+    conditions = params[:conditions]
+
+    start = ((page-1) * limit).to_i
+    if (start < 0)
+      start = 0
+    end
+
+    isSearch     = params[:_search]
+    searchField  = params[:searchField]
+    searchOper   = params[:searchOper]
+    searchString = params[:searchString]
+
+    if (isSearch == 'true')
+      # TODO
+      # check cage and name
+      if (searchOper == 'eq')
+        oper = "= '" + searchString +"'"
+      elsif (searchOper == 'bw')
+        oper = "LIKE '" + searchString + "%'"
+      elsif (searchOper == 'ne')
+        oper = "<> '" + searchString +"'"
+      elsif (searchOper == 'lt')
+        oper = "< '" + searchString +"'"
+      elsif (searchOper == 'le')
+        oper = "<= '" + searchString +"'"
+      elsif (searchOper == 'gt')
+        oper = "> '" + searchString +"'"
+      elsif (searchOper == 'ge')
+        oper = ">= '" + searchString +"'"
+      elsif (searchOper == 'ew')
+        oper = "LIKE '%" + searchString +"'"
+      elsif (searchOper == 'cn')
+        oper = "LIKE '%" + searchString +"%'"
+      end
+
+      query = searchField + " " + oper
+      #puts '----> query=' + query
+      conditions = conditions + " AND " + query
+    else
+      conditions = conditions
+    end
+
+    @revisions = Brecord.find :all,
+      :order => sidx+' '+sord,
+      :limit => limit,
+      :offset => start,
+      :select =>"brectype, brecname, brecalt, breclevel, bproject, bowner, bpromdate",
+      :conditions => conditions
+      
+    count = Brecord.count :all,
+            :conditions => conditions
+    
+    if (count > 0)
+      total_pages = (count/limit).ceil+1
+    else
+      total_pages = 0
+    end
+
+    # Construct a hash from the ActiveRecord result
+    return_data = Hash.new()
+    return_data[:page] = page
+    return_data[:total] = total_pages
+    return_data[:records] = count
+
+    id = 1
+    return_data[:rows] = @revisions.collect{|u| {
+      :id => id+1,
+      :cell => [
+        id,
+        u.brecalt,
+        u.breclevel,
+        u.bproject,
+        u.bowner,
+        u.promdate]}}
+
+    # Convert the hash to a json object
+    render :text => return_data.to_json, :layout=>false
+  end
 
   def load_record_base
     @record = Brecord.find(params[:id])
   end
 
   def load_record_refs
-    @refs = Brecord.find(params[:id]).brefs
+    #@refs = Brecord.find(params[:id]).brefs
   end
 
   def load_record_history
-    rec = Brecord.find(params[:id])
-    @promotions = rec.bpromotions
-    @chkhistories = rec.bchkhistories
-    @revisions = Brecord.find_all_by_brectype_and_brecname(rec.brectype,rec.brecalt)
+    @record = Brecord.find(params[:id])
+    #@promotions = rec.bpromotions
+    #@chkhistories = rec.bchkhistories
+    #@revisions = Brecord.find_all_by_brectype_and_brecname(rec.brectype,rec.brecalt)
   end
 
 private
