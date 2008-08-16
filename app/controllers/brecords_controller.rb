@@ -172,9 +172,9 @@ class BrecordsController < ApplicationController
     count =  Brecord.count :all,
             :conditions => conditions,
             :joins => joins
-            
-    total_pages = (count/limit).ceil
 
+    total_pages = (count/limit).ceil
+      
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
     return_data[:page] = page
