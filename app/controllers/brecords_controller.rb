@@ -251,7 +251,7 @@ class BrecordsController < ApplicationController
       
     count = Bref.count :all,
             :conditions => conditions
-    
+
     total_pages = (count/limit).ceil
 
     # Construct a hash from the ActiveRecord result
@@ -333,7 +333,7 @@ class BrecordsController < ApplicationController
       
     count = Bpromotion.count :all,
             :conditions => conditions
-    
+
     total_pages = (count/limit).ceil
 
     # Construct a hash from the ActiveRecord result
@@ -413,7 +413,7 @@ class BrecordsController < ApplicationController
       
     count = Bchkhistory.count :all,
             :conditions => conditions
-    
+
     total_pages = (count/limit).ceil
 
     # Construct a hash from the ActiveRecord result
@@ -494,7 +494,7 @@ class BrecordsController < ApplicationController
       
     count = Brecord.count :all,
             :conditions => conditions
-    
+
     total_pages = (count/limit).ceil
 
     # Construct a hash from the ActiveRecord result
@@ -523,14 +523,10 @@ class BrecordsController < ApplicationController
   end
 
   def load_record_refs
-    #@refs = Brecord.find(params[:id]).brefs
   end
 
   def load_record_history
     @record = Brecord.find(params[:id])
-    #@promotions = rec.bpromotions
-    #@chkhistories = rec.bchkhistories
-    #@revisions = Brecord.find_all_by_brectype_and_brecname(rec.brectype,rec.brecalt)
   end
 
 private
