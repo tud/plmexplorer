@@ -1,6 +1,6 @@
 class BrecordsController < ApplicationController
   
-  ESCAPE = '\\'
+  ESCAPE = '|'
 
   def index
     redirect_to :action => :show, :rectype => '*', :hiddengrid => 'true'
@@ -172,12 +172,8 @@ class BrecordsController < ApplicationController
     count =  Brecord.count :all,
             :conditions => conditions,
             :joins => joins
-      
-    if (count > 0)
-      total_pages = (count/limit).ceil+1
-    else
-      total_pages = 0
-    end
+            
+    total_pages = (count/limit).ceil
 
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
@@ -255,12 +251,8 @@ class BrecordsController < ApplicationController
       
     count = Bref.count :all,
             :conditions => conditions
-    
-    if (count > 0)
-      total_pages = (count/limit).ceil+1
-    else
-      total_pages = 0
-    end
+
+    total_pages = (count/limit).ceil
 
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
@@ -341,12 +333,8 @@ class BrecordsController < ApplicationController
       
     count = Bpromotion.count :all,
             :conditions => conditions
-    
-    if (count > 0)
-      total_pages = (count/limit).ceil+1
-    else
-      total_pages = 0
-    end
+
+    total_pages = (count/limit).ceil
 
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
@@ -425,12 +413,8 @@ class BrecordsController < ApplicationController
       
     count = Bchkhistory.count :all,
             :conditions => conditions
-    
-    if (count > 0)
-      total_pages = (count/limit).ceil+1
-    else
-      total_pages = 0
-    end
+
+    total_pages = (count/limit).ceil
 
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
@@ -510,12 +494,8 @@ class BrecordsController < ApplicationController
       
     count = Brecord.count :all,
             :conditions => conditions
-    
-    if (count > 0)
-      total_pages = (count/limit).ceil+1
-    else
-      total_pages = 0
-    end
+
+    total_pages = (count/limit).ceil
 
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
@@ -543,14 +523,10 @@ class BrecordsController < ApplicationController
   end
 
   def load_record_refs
-    #@refs = Brecord.find(params[:id]).brefs
   end
 
   def load_record_history
     @record = Brecord.find(params[:id])
-    #@promotions = rec.bpromotions
-    #@chkhistories = rec.bchkhistories
-    #@revisions = Brecord.find_all_by_brectype_and_brecname(rec.brectype,rec.brecalt)
   end
 
 private

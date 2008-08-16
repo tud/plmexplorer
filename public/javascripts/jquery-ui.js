@@ -38,12 +38,19 @@ $.widget = function(name, prototype) {
 		var isMethodCall = (typeof options == 'string'),
 			args = Array.prototype.slice.call(arguments, 1);
 		
+		// prevent calls to internal methods
+		if (isMethodCall && options.substring(0, 1) == '_') {
+			return this;
+		}
+		
+		// handle getter methods
 		if (isMethodCall && getter(namespace, name, options)) {
 			var instance = $.data(this[0], name);
 			return (instance ? instance[options].apply(instance, args)
 				: undefined);
 		}
 		
+		// handle initialization and non-getter methods
 		return this.each(function() {
 			var instance = $.data(this, name);
 			if (isMethodCall && instance && $.isFunction(instance[options])) {
@@ -70,16 +77,16 @@ $.widget = function(name, prototype) {
 		
 		this.element = $(element)
 			.bind('setData.' + name, function(e, key, value) {
-				return self.setData(key, value);
+				return self._setData(key, value);
 			})
 			.bind('getData.' + name, function(e, key) {
-				return self.getData(key);
+				return self._getData(key);
 			})
 			.bind('remove', function() {
 				return self.destroy();
 			});
 		
-		this.init();
+		this._init();
 	};
 	
 	// add widget prototype
@@ -87,15 +94,15 @@ $.widget = function(name, prototype) {
 };
 
 $.widget.prototype = {
-	init: function() {},
+	_init: function() {},
 	destroy: function() {
 		this.element.removeData(this.widgetName);
 	},
 	
-	getData: function(key) {
+	_getData: function(key) {
 		return this.options[key];
 	},
-	setData: function(key, value) {
+	_setData: function(key, value) {
 		this.options[key] = value;
 		
 		if (key == 'disabled') {
@@ -105,13 +112,13 @@ $.widget.prototype = {
 	},
 	
 	enable: function() {
-		this.setData('disabled', false);
+		this._setData('disabled', false);
 	},
 	disable: function() {
-		this.setData('disabled', true);
+		this._setData('disabled', true);
 	},
 	
-	trigger: function(type, e, data) {
+	_trigger: function(type, e, data) {
 		var eventName = (type == this.widgetEventPrefix
 			? type : this.widgetEventPrefix + type);
 		e = e  || $.event.fix({ type: eventName, target: this.element[0] });

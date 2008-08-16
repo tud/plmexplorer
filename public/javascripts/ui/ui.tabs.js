@@ -13,24 +13,24 @@
 (function($) {
 
 $.widget("ui.tabs", {
-	init: function() {
+	_init: function() {
 		this.options.event += '.tabs'; // namespace event
 		
 		// create tabs
-		this.tabify(true);
+		this._tabify(true);
 	},
-	setData: function(key, value) {
+	_setData: function(key, value) {
 		if ((/^selected/).test(key))
 			this.select(value);
 		else {
 			this.options[key] = value;
-			this.tabify();
+			this._tabify();
 		}
 	},
 	length: function() {
 		return this.$tabs.length;
 	},
-	tabId: function(a) {
+	_tabId: function(a) {
 		return a.title && a.title.replace(/\s/g, '_').replace(/[^A-Za-z0-9\-_:\.]/g, '')
 			|| this.options.idPrefix + $.data(a);
 	},
@@ -42,7 +42,7 @@ $.widget("ui.tabs", {
 			index: this.$tabs.index(tab)
 		};
 	},
-	tabify: function(init) {
+	_tabify: function(init) {
 
 		this.$lis = $('li:has(a[href])', this.element);
 		this.$tabs = this.$lis.map(function() { return $('a', this)[0]; });
@@ -58,7 +58,7 @@ $.widget("ui.tabs", {
 			else if ($(a).attr('href') != '#') { // prevent loading the page itself if href is just "#"
 				$.data(a, 'href.tabs', a.href); // required for restore on destroy
 				$.data(a, 'load.tabs', a.href); // mutable
-				var id = self.tabId(a);
+				var id = self._tabId(a);
 				a.href = '#' + id;
 				var $panel = $('#' + id);
 				if (!$panel.length) {
@@ -73,6 +73,7 @@ $.widget("ui.tabs", {
 				o.disabled.push(i + 1);
 		});
 
+		// initialization from scratch
 		if (init) {
 
 			// attach necessary classes for styling if not present
@@ -134,7 +135,7 @@ $.widget("ui.tabs", {
 				
 				// seems to be expected behavior that the show callback is fired
 				var onShow = function() {
-					self.trigger('show', null,
+					self._trigger('show', null,
 						self.ui(self.$tabs[o.selected], self.$panels[o.selected]));
 				};
 
@@ -153,6 +154,9 @@ $.widget("ui.tabs", {
 			});
 
 		}
+		// update selected after add/remove
+		else
+			o.selected = this.$lis.index( this.$lis.filter('.' + o.selectedClass)[0] );
 
 		// disable tabs
 		for (var i = 0, li; li = this.$lis[i]; i++)
@@ -197,7 +201,7 @@ $.widget("ui.tabs", {
 					$show[0].style.filter = '';
 
 				// callback
-				self.trigger('show', null, self.ui(clicked, $show[0]));
+				self._trigger('show', null, self.ui(clicked, $show[0]));
 			});
 		}
 
@@ -226,7 +230,7 @@ $.widget("ui.tabs", {
 			if (($li.hasClass(o.selectedClass) && !o.unselect)
 				|| $li.hasClass(o.disabledClass) 
 				|| $(this).hasClass(o.loadingClass)
-				|| self.trigger('select', null, self.ui(this, $show[0])) === false
+				|| self._trigger('select', null, self.ui(this, $show[0])) === false
 				) {
 				this.blur();
 				return false;
@@ -319,7 +323,7 @@ $.widget("ui.tabs", {
 		var $li = $(o.tabTemplate.replace(/#\{href\}/g, url).replace(/#\{label\}/g, label));
 		$li.data('destroy.tabs', true);
 
-		var id = url.indexOf('#') == 0 ? url.replace('#', '') : this.tabId( $('a:first-child', $li)[0] );
+		var id = url.indexOf('#') == 0 ? url.replace('#', '') : this._tabId( $('a:first-child', $li)[0] );
 
 		// try to find an existing element before creating a new one
 		var $panel = $('#' + id);
@@ -340,7 +344,7 @@ $.widget("ui.tabs", {
 		o.disabled = $.map(o.disabled,
 			function(n, i) { return n >= index ? ++n : n });
 			
-		this.tabify();
+		this._tabify();
 
 		if (this.$tabs.length == 1) {
 			$li.addClass(o.selectedClass);
@@ -351,7 +355,7 @@ $.widget("ui.tabs", {
 		}
 
 		// callback
-		this.trigger('add', null, this.ui(this.$tabs[index], this.$panels[index]));
+		this._trigger('add', null, this.ui(this.$tabs[index], this.$panels[index]));
 	},
 	remove: function(index) {
 		var o = this.options, $li = this.$lis.eq(index).remove(),
@@ -365,10 +369,10 @@ $.widget("ui.tabs", {
 		o.disabled = $.map($.grep(o.disabled, function(n, i) { return n != index; }),
 			function(n, i) { return n >= index ? --n : n });
 
-		this.tabify();
+		this._tabify();
 
 		// callback
-		this.trigger('remove', null, this.ui($li.find('a')[0], $panel[0]));
+		this._trigger('remove', null, this.ui($li.find('a')[0], $panel[0]));
 	},
 	enable: function(index) {
 		var o = this.options;
@@ -386,7 +390,7 @@ $.widget("ui.tabs", {
 		o.disabled = $.grep(o.disabled, function(n, i) { return n != index; });
 
 		// callback
-		this.trigger('enable', null, this.ui(this.$tabs[index], this.$panels[index]));
+		this._trigger('enable', null, this.ui(this.$tabs[index], this.$panels[index]));
 	},
 	disable: function(index) {
 		var self = this, o = this.options;
@@ -397,7 +401,7 @@ $.widget("ui.tabs", {
 			o.disabled.sort();
 
 			// callback
-			this.trigger('disable', null, this.ui(this.$tabs[index], this.$panels[index]));
+			this._trigger('disable', null, this.ui(this.$tabs[index], this.$panels[index]));
 		}
 	},
 	select: function(index) {
@@ -449,7 +453,7 @@ $.widget("ui.tabs", {
 					$.data(a, 'cache.tabs', true); // if loaded once do not load them again
 
 				// callbacks
-				self.trigger('load', null, self.ui(self.$tabs[index], self.$panels[index]));
+				self._trigger('load', null, self.ui(self.$tabs[index], self.$panels[index]));
 				o.ajaxOptions.success && o.ajaxOptions.success(r, s);
 				
 				// This callback is required because the switch has to take
