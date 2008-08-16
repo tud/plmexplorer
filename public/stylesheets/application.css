@@ -64,10 +64,6 @@ form div label {
     background: #FFBC0B;
 }
 
-#findRecord div label {
-	width: 80px;
-}
-
 #brecord_find_rec_bname1 optgroup {
 	font-size:.8em;
 	margin-bottom:1.875em;

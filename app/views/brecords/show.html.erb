@@ -52,7 +52,10 @@
 					});
 				}
 			},
-			postData: {clause: '<%=escape_javascript @clause%>'}
+			postData: {
+				conditions: '<%=escape_javascript @conditions%>',
+				joins: '<%=escape_javascript @joins%>'
+			}
 		})
 		.navGrid('#searchPager', {refresh: true, edit: false, add: false, del: false, search: true})
 		.navButtonAdd('#searchPager',

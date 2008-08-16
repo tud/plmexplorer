@@ -1,27 +1,27 @@
 <ul class="sf-menu large">
-	<li class="current">
-		<a href="#"><span class="ss_sprite ss_find">&nbsp;</span>Find</a>
-		<ul>
-			<li><a href="#" class="find_rec" title="part"><span class="ss_sprite ss_page_white_gear">&nbsp;</span>Part</a></li>
-			<li><a href="#" class="find_rec" title="document"><span class="ss_sprite ss_page_white_word">&nbsp;</span>Document</a></li>
-			<li><a href="#" class="find_rec" title="software"><span class="ss_sprite ss_page_white_code">&nbsp;</span>Software</a></li>
-			<li><a href="#" class="find_rec" title="workauth"><span class="ss_sprite ss_page_white_lightning">&nbsp;</span>Workauth</a></li>
-		</ul>
-	</li>
-	<li>
-		<a href="#"><span class="ss_sprite ss_printer">&nbsp;</span>Reports</a>
-		<ul>
-			<li><a href="#"><span class="ss_sprite ss_report">&nbsp;</span>Report 1</a></li>
-			<li><a href="#"><span class="ss_sprite ss_report">&nbsp;</span>Report 2</a></li>
-			<li><a href="#"><span class="ss_sprite ss_report">&nbsp;</span>Report 3</a></li>
-		</ul>
-	</li>
-	<li>
-		<a href="#"><span class="ss_sprite ss_help">&nbsp;</span>Help</a>
-		<ul>
-			<li id="about"><a href="#"><span class="ss_sprite ss_information">&nbsp;</span>About</a></li>
-		</ul>
-	</li>
+    <li class="current">
+        <a href="#"><span class="ss_sprite ss_find">&nbsp;</span>Find</a>
+        <ul>
+            <li><a href="#" class="find_rec" title="part"><span class="ss_sprite ss_page_white_gear">&nbsp;</span>Part</a></li>
+            <li><a href="#" class="find_rec" title="document"><span class="ss_sprite ss_page_white_word">&nbsp;</span>Document</a></li>
+            <li><a href="#" class="find_rec" title="software"><span class="ss_sprite ss_page_white_code">&nbsp;</span>Software</a></li>
+            <li><a href="#" class="find_rec" title="workauth"><span class="ss_sprite ss_page_white_lightning">&nbsp;</span>Workauth</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="#"><span class="ss_sprite ss_printer">&nbsp;</span>Reports</a>
+        <ul>
+            <li><a href="#"><span class="ss_sprite ss_report">&nbsp;</span>Report 1</a></li>
+            <li><a href="#"><span class="ss_sprite ss_report">&nbsp;</span>Report 2</a></li>
+            <li><a href="#"><span class="ss_sprite ss_report">&nbsp;</span>Report 3</a></li>
+        </ul>
+    </li>
+    <li>
+        <a href="#"><span class="ss_sprite ss_help">&nbsp;</span>Help</a>
+        <ul>
+            <li id="about"><a href="#"><span class="ss_sprite ss_information">&nbsp;</span>About</a></li>
+        </ul>
+    </li>
 </ul>
 
 <div id="dialogAbout" class="flora" title="PLM on Rails">
@@ -33,39 +33,110 @@
 </div>
 
 <div id="findRecord" class="flora" title="Find records">
-	<% form_for :brecord, :html => {:id => 'find_records'} do |f| %>
-		<fieldset>
-			<legend id="legend_find_record"></legend>
-			<div>
-				<label for="brecord_find_rec_name">Name :</label>
-				<%= f.text_field :find_rec_name, :maxlength => "26", :tabindex => "1" %>
-			</div>
-			<div>
-				<label for="brecord_find_rec_cage_code">Bus.ID :</label>
-				<%= f.text_field :find_rec_cage_code, :maxlength => "5", :tabindex => "2" %>
-			</div>
-			<div>
-				<label for="brecord_find_rec_brecalt">Rev. :</label>
-				<%= f.text_field :find_rec_brecalt, :maxlength => "4", :tabindex => "3" %>
-			</div>
-			<div>
-				<label for="brecord_find_rec_breclevel">Status :</label>
-				<%= f.text_field :find_rec_breclevel, :maxlength => "16", :tabindex => "4" %>
-			</div>
-			<div>
-				<label for="brecord_find_rec_bproject">Project :</label>
-				<%= f.text_field :find_rec_bproject, :maxlength => "16", :tabindex => "5" %>
-			</div>
-			<div>
-				<label for="brecord_find_rec_bowner">Owner :</label>
-				<%= f.text_field :find_rec_bowner, :maxlength => "16", :tabindex => "6" %>
-			</div>
-			<div>
-				<label>&nbsp;</label>
-				<%= submit_tag "Find", :id => "find_button", :class => "button"%>
-			</div>
-		</fieldset>
-	<% end %>
+    <% form_for :brecord, :html => {:id => 'find_records'} do |f| %>
+        <fieldset>
+            <legend id="legend_find_record"></legend>
+            <%= f.hidden_field :find_rec_brectype, :value => @rectype %>
+            <div>
+                <% if @rectype == 'WORKAUTH' %>
+                    <label for="brecord_find_rec_brecname">Name :</label>
+                    <%= f.text_field :find_rec_brecname, :maxlength => "32", :tabindex => "1" %>
+                <% else %>
+                    <label for="brecord_find_rec_name">Name :</label>
+                    <%= f.text_field :find_rec_name, :maxlength => "26", :tabindex => "1" %>
+                <% end %>
+            </div>
+            <div>
+                <label for="brecord_find_rec_bname1">Bus. ID :</label>
+                <select id="brecord_find_rec_bname1" name="brecord[find_rec_bname1]" tabindex="2">
+                    <option value="" />
+                    <%= option_groups_from_collection_for_select(@cageCodes, :options, :label, :value, :key) %>
+                </select>
+            </div>
+            <div>
+                <label for="brecord_find_rec_brecalt">Rev. :</label>
+                <%= f.text_field :find_rec_brecalt, :maxlength => "4", :tabindex => "3" %>
+            </div>
+            <div>
+                <label for="brecord_find_rec_breclevel">Status :</label>
+                <%= f.select :find_rec_breclevel, @statusList, {}, {:tabindex => "4"} %>
+            </div>
+            <div>
+                <label for="brecord_find_rec_bproject">Project :</label>
+                <%= f.select :find_rec_bproject, @prjList, {}, {:tabindex => "5"} %>
+            </div>
+            <div>
+                <label for="brecord_find_rec_bowner">Owner :</label>
+                <%= f.select :find_rec_bowner, @userList, {}, {:tabindex => "6"} %>
+            </div>
+            <div>
+                <label for="brecord_find_rec_bcreateuser">Created By :</label>
+                <%= f.text_field :find_rec_bcreateuser, :maxlength => "16", :tabindex => "7" %>
+            </div>
+            <div>
+                <label for="brecord_find_rec_bfamily">Type :</label>
+                <select id="brecord_find_rec_bfamily" name="brecord[find_rec_bfamily]" tabindex="8">
+                    <option value="" />
+                    <%= option_groups_from_collection_for_select(@typeList, :options, :label, :value, :key) %>
+                </select>
+            </div>
+            <div>
+                <label for="brecord_find_rec_name4">Short Description :</label>
+                <%= f.text_field :find_rec_name4, :maxlength => "32", :tabindex => "9" %>
+            </div>
+            <div>
+                <label for="brecord_find_rec_bdesc">Description :</label>
+                <%= f.text_field :find_rec_bdesc, :maxlength => "80", :tabindex => "10" %>
+            </div>
+            <% if @rectype == 'PART' %>
+                <div>
+                    <label for="brecord_find_uda_logistic_item">Logistic Item Type :</label>
+                    <%= f.select :find_uda_logistic_item, DynList::LOGISTIC_ITEMS, {}, {:tabindex => "21"} %>
+                </div>
+                <div>
+                    <label for="brecord_find_uda_comm_number">Commercial Code :</label>
+                    <%= f.text_field :find_uda_comm_number, :maxlength => "80", :tabindex => "22" %>
+                </div>
+                <div>
+                    <label for="brecord_find_uda_maker">Manufacturer :</label>
+                    <%= f.text_field :find_uda_maker, :maxlength => "80", :tabindex => "23" %>
+                </div>
+            <% end %>
+            <% if @rectype == 'DOCUMENT' %>
+                <div>
+                    <label for="brecord_find_rec_btype4">Document Size :</label>
+                    <select id="brecord_find_rec_btype4" name="brecord[find_rec_btype4]" tabindex="21">
+                        <option value="" />
+                        <%= option_groups_from_collection_for_select(@docSizes, :options, :label, :value, :key) %>
+                    </select>
+                </div>
+            <% end %>
+            <% if @rectype == 'WORKAUTH' %>
+                <div>
+                    <label for="brecord_find_rec_btype3">Change Class :</label>
+                    <select id="brecord_find_rec_btype3" name="brecord[find_rec_btype3]" tabindex="21">
+                        <option value="" />
+                        <%= option_groups_from_collection_for_select(@changeClasses, :options, :label, :value, :key) %>
+                    </select>
+                </div>
+                <div>
+                    <label for="brecord_find_uda_change_subclass">Sub-Class :</label>
+                    <select id="brecord_find_uda_change_subclass" name="brecord[find_uda_change_subclass]" tabindex="22">
+                        <option value="" />
+                        <%= option_groups_from_collection_for_select(@changeSubClasses, :options, :label, :value, :key) %>
+                    </select>
+                </div>
+                <div>
+                    <label for="brecord_find_uda_ecp_number">Eng Chg Prop Nr :</label>
+                    <%= f.text_field :find_uda_ecp_number, :maxlength => "32", :tabindex => "23" %>
+                </div>
+            <% end %>
+            <div>
+                <label>&nbsp;</label>
+                <%= submit_tag "Find", :id => "button1", :class => "button"%>
+            </div>
+        </fieldset>
+    <% end %>
 </div>
 
 <script type="text/javascript"> 
@@ -94,8 +165,8 @@
 				opacity: 0.5,
 				background: "black"
 			},
-			height: 350,
-			width: 650
+			height: 610,
+			width: 770
 		});
 		
 		$('#about').click(function() {
@@ -106,7 +177,6 @@
 			var rectype = $(this).attr('title');
 			var title = 'Find '+rectype.toUpperCase()
 			$('#legend_find_record').html(title);
-			$('#brecord_find_rec_brectype').val(rectype);
 			$('#find_records').attr('action', '/rectype/'+rectype)
 			$('#findRecord').dialog("open");
 		});

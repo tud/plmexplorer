@@ -3,50 +3,145 @@ class BrecordsController < ApplicationController
   ESCAPE = '\\'
 
   def index
-    @rectype = ''
-    @clause = "brectype is null"
-    @hiddengrid = "true"
-    redirect_to :action => "show", :rectype => ''
+    redirect_to :action => :show, :rectype => '*', :hiddengrid => 'true'
   end
 
   def show
-    @hiddengrid = "false"
-    @rectype = params[:rectype].upcase
+    @hiddengrid = params[:hiddengrid] || "false"
+    @joins = ''
+    join_count = 0
     if request.post?
-      # fake per gestire rectype
-      params[:brecord][:find_rec_brectype] = @rectype
       brecord = params[:brecord]
-      @clause = ''
-      name = '*'
+      @rectype = brecord[:find_rec_brectype].upcase
+      @conditions = nil
+      name = nil
       cage_code = nil
       brecord.each do |key, value|
         downkey = key.downcase
         case downkey
         when /find_rec_(.+)/
-          field = $1
+          field = $1.downcase
           if field != 'bdesc'
             normalize(value)
           end
           if field == 'name'
             name = value
-          elsif field == 'cage_code'
+          elsif field == 'bname1'
             cage_code = value
           else
-            @clause = add_condition(@clause, field, value)
+            add_condition(field, value)
           end
-        when /uda_(.+)/
-          field = $1
+        when /find_uda_(.+)/
+          if !matches_any(value)
+            field = $1.upcase
+            join_count += 1
+            uda_ref = 'u' + join_count.to_s
+            @joins += ', budas ' + uda_ref
+            add_condition(uda_ref+'.bname', field)
+            add_condition(uda_ref+'.bvalue', value)
+            @conditions += ' AND ' + uda_ref + '.bobjid = brecords.id'
+          end
         else
           print "Illegal field name: #{key}"
         end
       end
-      unless matches_any(name) && matches_any(cage_code)
-        value = name
-        value += ('&' + cage_code) unless cage_code.nil?
-        @clause = add_condition(@clause, 'brecname', value)
+      if name.nil?
+        # Il recname non contiene il Cage Code (es. WORKAUTH)
+        unless matches_any(cage_code)
+          add_condition("bname1", cage_code)
+        end
+      else
+        # Il recname contiene il Cage Code (es. PART)
+        unless matches_any(name) && matches_any(cage_code)
+          value = name
+          value += ('&' + cage_code) unless cage_code.nil?
+          add_condition('brecname', value)
+        end
       end
     else
-      @clause = "brectype = '" + @rectype + "'"
+      @rectype = params[:rectype].upcase
+      @conditions = "brectype is null"
+    end
+
+    unless @cageCodes
+      @cageCodes = DynList.build_from('IPD_BUSINESSID', :bdesc)
+    end
+
+    unless @statusList
+      if @rectype == '*'
+        @statusList = Blevel.find(:all).map { |level| level.bname }.sort.uniq
+      else
+        @statusList = Blevel.find(:all,
+                                  :conditions => "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname = '" + @rectype + "'",
+                                  :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
+      end
+      @statusList.unshift('')
+    end
+
+    unless @prjList
+      @prjList = Bproject.find(:all).map { |prj| prj.bname }.sort
+      @prjList.unshift('')
+    end
+
+    unless @userList
+      @userList = Bdbuser.find(:all).map { |user| user.buser }.sort.uniq
+      @userList.unshift('')
+    end
+
+    unless @typeList
+      if @rectype == 'PART'
+        @typeList = DynList.build_from('IPD_PARTSUBTYPE')
+      elsif @rectype == 'DOCUMENT'
+        @typeList = DynList.build_from('IPD_DOCSUBTYPE')
+      elsif @rectype == 'WORKAUTH'
+        @typeList = DynList.build_from('IPD_WORKASUBTYP')
+      elsif @rectype == 'SOFTWARE'
+        @typeList = DynList.sw_types
+      else
+        @typeList = []
+      end
+    end
+
+    unless @docSizes || @rectype != 'DOCUMENT'
+      @docSizes = DynList.build_from('IPD_DOCSIZE', :bdesc)
+    end
+
+    unless @changeClasses || @rectype != 'WORKAUTH'
+      @changeClasses = DynList.build_from('IPD_CHNGCLASS', :bdesc)
+    end
+
+    unless @changeSubClasses || @rectype != 'WORKAUTH'
+      @changeSubClasses = DynList.build_from('IPD_CHNGSUBCLASS', :bdesc)
+    end
+  end
+
+  def normalize(string)
+    string ||= ''
+    string.sub!(/ +$/,'')
+    string.sub!(/^$/,'*')
+    string.upcase!
+    return string
+  end
+
+  def matches_any(string)
+    string.nil? || /^\**$/.match(string)
+  end
+
+  def add_condition(field, value)
+    if !matches_any(value)
+      @conditions ||= ''
+      @conditions += ' AND ' unless @conditions.empty?
+      if value.index(/[*?]/).nil?
+        # there are no wildcards in value
+        @conditions += "#{field} = '#{value}'"
+      else
+        # translate wildcards into SQL
+        value.gsub!(/%/,ESCAPE+'%')
+        value.gsub!(/_/,ESCAPE+'_')
+        value.gsub!(/\*/,'%')
+        value.gsub!(/\?/,'_')
+        @conditions += "#{field} LIKE '#{value}' ESCAPE '#{ESCAPE}'"
+      end
     end
   end
 
@@ -55,7 +150,8 @@ class BrecordsController < ApplicationController
     limit = (params[:rows]).to_i
     sidx = params[:sidx]
     sord = params[:sord] || 'desc'
-    clause = params[:clause]
+    conditions = params[:conditions]
+    joins = params[:joins]
 
     start = ((page-1) * limit).to_i
     if (start < 0)
@@ -92,9 +188,7 @@ class BrecordsController < ApplicationController
 
       query = searchField + " " + oper
       #puts '----> query=' + query
-      conditions = clause + " AND " + query
-    else
-      conditions = clause
+      conditions += " AND " + query
     end
 
     @brecords = Brecord.find :all,
@@ -102,10 +196,11 @@ class BrecordsController < ApplicationController
       :limit => limit,
       :offset => start,
       :select =>"id, brecname, brecalt, breclevel, bdesc, bname1",
-      :conditions => conditions
+      :conditions => conditions,
+      :joins => joins
       
     count = @brecords.size
-    
+      
     if (count > 0)
       total_pages = (count/limit).ceil+1
     else
@@ -449,6 +544,5 @@ class BrecordsController < ApplicationController
     end
     return tabs
   end
-
 
 end
