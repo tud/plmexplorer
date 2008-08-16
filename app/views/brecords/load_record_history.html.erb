@@ -1,0 +1,108 @@
+<div class="title">Promotion History</div>
+<br/>
+<table id="promotionsGrid" class="scroll"></table>
+<div id="promotionsPager" class="scroll"></div>
+
+<script type="text/javascript">
+var id = jQuery('#view_record_id').attr('value');
+jQuery(document).ready(function(){
+	jQuery('#promotionsGrid').jqGrid({
+		url: '/brecords/grid_promotions',
+		datatype: 'json',
+		mtype: 'GET',
+		colNames: ['id', 'Date', 'State', 'LifeCycle', 'Approver', 'Description'],
+		colModel :[
+			{name:'id',        index:'id',        hidden:true},
+			{name:'promdate',  index:'bpromdate', width:80},
+			{name:'blevel',    index:'blevel',    width:50},
+			{name:'brelproc',  index:'brelproc',  width:80},
+			{name:'buser',     index:'buser',     width:50},
+			{name:'bdesc',     index:'bdesc',     width:80} ],
+		rowNum: 50,
+		rowList: [10,20,30,50,100],
+		sortname: 'bpromdate',
+		sortorder: 'desc',
+		viewrecords: true,
+		imgpath: '/javascripts/themes/basic/images',
+		height: '100%',
+		width: 805,
+		pager: 'promotionsPager',
+		postData: {clause: 'bobjid='+id+' '}
+	})
+	.navGrid('#promotionsPager', {refresh: true, edit: false, add: false, del: false, search: true})
+});
+</script>
+
+<br/>
+<div class="title">Revision History</div>
+<br/>
+<table id="revisionsGrid" class="scroll"></table>
+<div id="revisionsPager" class="scroll"></div>
+
+<script type="text/javascript">
+var id = jQuery('#view_record_id').attr('value');
+jQuery(document).ready(function(){
+	jQuery('#revisionsGrid').jqGrid({
+		url: '/brecords/grid_revisions',
+		datatype: 'json',
+		mtype: 'GET',
+		colNames: ['id', 'Date', 'Action', 'Status', 'Signature', 'Approver', 'Description'],
+		colModel :[
+			{name:'id',       index:'id',       hidden:true},
+			{name:'date',     index:'bdate',    width:80},
+			{name:'bcommand', index:'bcommand', width:30},
+			{name:'bstatus',  index:'bstatus',  width:20},
+			{name:'bname',    index:'banme',    width:80},
+			{name:'buser',    index:'buser',    width:50},
+			{name:'bdesc',    index:'bdesc',    width:80} ],
+		rowNum: 50,
+		rowList: [10,20,30,50,100],
+		sortname: 'bdate',
+		sortorder: 'desc',
+		viewrecords: true,
+		imgpath: '/javascripts/themes/basic/images',
+		height: '100%',
+		width: 805,
+		pager: 'revisionsPager',
+		postData: {clause: 'bobjid='+id+' '}
+	})
+	.navGrid('#revisionsPager', {refresh: true, edit: false, add: false, del: false, search: true})
+});
+</script>
+
+<br/>
+<div class="title">Signoff History</div>
+<br/>
+<table id="signoffsGrid" class="scroll"></table>
+<div id="signoffsPager" class="scroll"></div>
+
+<script type="text/javascript">
+var id = jQuery('#view_record_id').attr('value');
+jQuery(document).ready(function(){
+	jQuery('#signoffsGrid').jqGrid({
+		url: '/brecords/grid_signoffs',
+		datatype: 'json',
+		mtype: 'GET',
+		colNames: ['id', 'Date', 'Action', 'Status', 'Signature', 'Approver', 'Description'],
+		colModel :[
+			{name:'id',       index:'id',       hidden:true},
+			{name:'date',     index:'bdate',    width:80},
+			{name:'bcommand', index:'bcommand', width:30},
+			{name:'bstatus',  index:'bstatus',  width:20},
+			{name:'bname',    index:'banme',    width:80},
+			{name:'buser',    index:'buser',    width:50},
+			{name:'bdesc',    index:'bdesc',    width:80} ],
+		rowNum: 50,
+		rowList: [10,20,30,50,100],
+		sortname: 'bdate',
+		sortorder: 'desc',
+		viewrecords: true,
+		imgpath: '/javascripts/themes/basic/images',
+		height: '100%',
+		width: 805,
+		pager: 'signoffsPager',
+		postData: {clause: 'bobjid='+id+' '}
+	})
+	.navGrid('#signoffsPager', {refresh: true, edit: false, add: false, del: false, search: true})
+});
+</script>

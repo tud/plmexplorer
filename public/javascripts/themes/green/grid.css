@@ -34,10 +34,13 @@
 .HeaderRight img{
 	width: 9px;
 	}
+.GridHeader table {margin:0;}
+.GridHeader td, tr {padding:0;}
 
 /* Grid */
 table.scroll {
 	table-layout: fixed;
+	margin-bottom :0px;
 }
 table.scroll tbody tr {
 	background-color: #fffcf2; 
@@ -140,6 +143,7 @@ input.selbox{
 	padding:1px;
 	float: right;
 }
+table.navtable {margin-bottom:0; width: auto;}
 
 table.navtable tr{
 	background-image: url(images/grid-blue-ft.gif);	
@@ -397,4 +401,42 @@ img.jqResize {
 	color: #FF0000;
 	vertical-align: top;
 	background-color: #f7f7f7; 
+}
+
+/* Tree Grid */
+.tree-wrap
+{
+	float: left; 
+	position: relative;
+	height: 18px;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.tree-minus
+{
+	position: absolute;
+	height: 18px; 
+	width: 16px;
+	overflow: hidden;
+	background: url(images/tree_minus.gif) no-repeat;
+}
+.tree-plus
+{
+	position: absolute;
+	height: 18px; 
+	width: 16px;
+	overflow: hidden;
+	background: url(images/tree_plus.gif) no-repeat;
+}
+.tree-leaf
+{
+	position: absolute;
+	height: 18px; 
+	width: 16px;
+	overflow: hidden;
+	background: url(images/tree_leaf.gif) no-repeat;
+}
+.treeclick
+{
+	cursor: pointer;
 }

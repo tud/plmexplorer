@@ -158,8 +158,10 @@ $.fn.extend({
             beforeShowForm: null,
             afterShowForm: null,
             beforeSubmit: null,
-            afterSubmit: null
-        }, $.jgrid.edit, p ||{});
+            afterSubmit: null,
+            onclickSubmit: null,
+            editData : {}
+        }, $.jgrid.edit, p || {});
         return this.each(function(){
             var $t = this;
             if (!$t.grid || !rowid) return;
@@ -244,6 +246,7 @@ $.fn.extend({
 						if(!suc) return false;
                     });
                     if(j==0) {ret[0] = false; ret[1] = "No records to process";}
+                    if( typeof p.onclickSubmit === 'function' ) p.editData = p.onclickSubmit(p) || {};
 					if(ret[0])
 						if( typeof p.beforeSubmit === 'function') ret = p.beforeSubmit(postdata,$("#"+frmgr));
                     var gurl = p.url ? p.url : $t.p.editurl;
@@ -259,6 +262,7 @@ $.fn.extend({
             				$(this).attr("disabled",true);
                             // we add to pos data array the action - the name is oper
                             postdata.oper = postdata.id == "_empty" ? "add" : "edit";
+                            postdata = $.extend(postdata,p.editData);
                             $.ajax({
                                 url:gurl,
                                 type: p.mtype,
@@ -287,11 +291,11 @@ $.fn.extend({
                                             postdata.id = ret[2];
                                             if(p.closeAfterAdd) {
                                                 if(p.reloadAfterSubmit) $($t).trigger("reloadGrid");
-                                                else $($t).addRowData(ret[2],postdata,"top");
+                                                else $($t).addRowData(ret[2],postdata,"first");
                                                 $("#"+IDs.themodal).jqmHide();
                                             } else if (p.clearAfterAdd) {
                                                 if(p.reloadAfterSubmit) $($t).trigger("reloadGrid");
-                                                else $($t).addRowData(ret[2],postdata,"top");
+                                                else $($t).addRowData(ret[2],postdata,"first");
                                                 $(".FormElement", "#"+frmtb).each(function(i){
                                                     switch ($(this).get(0).type) {
                                                     case "checkbox":
@@ -309,7 +313,7 @@ $.fn.extend({
                                                 });
                                             } else {
                                                 if(p.reloadAfterSubmit) $($t).trigger("reloadGrid");
-                                                else $($t).addRowData(ret[2],postdata,"top");                                            
+                                                else $($t).addRowData(ret[2],postdata,"first");                                            
                                             }
                                         } else {
                                             // the action is update
@@ -366,7 +370,7 @@ $.fn.extend({
             function getCurrPos() {
             	var rowsInGrid = $($t).getDataIDs();
             	var selrow = $("#id_g","#"+frmtb).val();
-            	var pos = rowsInGrid.indexOf(selrow);
+            	var pos = $.inArray(selrow,rowsInGrid);
             	return [pos,rowsInGrid];
             };
             function createData(rowid,obj,tb){
@@ -388,7 +392,7 @@ $.fn.extend({
                         trdata = $("<tr "+dc+"></tr>").addClass("FormData");
                         tdl = $("<td></td>").addClass("CaptionTD");
                         tde = $("<td></td>").addClass("DataTD")
-                        $(tdl).text(obj.p.colNames[i]+": ");
+                        $(tdl).html(obj.p.colNames[i]+": ");
                         $(tde).append(elc);
                         trdata.append(tdl);
                         trdata.append(tde);
@@ -535,7 +539,10 @@ $.fn.extend({
             beforeShowForm: null,
             afterShowForm: null,
             beforeSubmit: null,
-            afterSubmit: null
+            onclickSubmit: null,
+            afterSubmit: null,
+            onclickSubmit: null,
+            delData: {}
         }, $.jgrid.del, p ||{});
         return this.each(function(){
             var $t = this;
@@ -569,6 +576,7 @@ $.fn.extend({
                 $("#dData","#"+dtbl).click(function(e){
                     var ret=[true,""];
                     var postdata = $("#DelData>td","#"+dtbl).text(); //the pair is name=val1,val2,...
+                    if( typeof p.onclickSubmit === 'function' ) p.delData = p.onclickSubmit(p) || {};
                     if( typeof p.beforeSubmit === 'function' ) ret = p.beforeSubmit(postdata);
                		var gurl = p.url ? p.url : $t.p.editurl;
                     if(!gurl) {ret[0]=false;ret[1] += " No url set!";};
@@ -580,10 +588,11 @@ $.fn.extend({
                 			p.processing = true;
                             $("div.loading","#"+IDs.themodal).fadeIn("fast");
                 			$(this).attr("disabled",true);
+                            var postd = $.extend({oper:"del", id:postdata},p.delData);
                             $.ajax({
                                 url:gurl,
                                 type: p.mtype,
-                                data:{oper:"del", id:postdata},
+                                data:postd,
                                 complete:function(data,Status){
                                     if(Status != "success") {
                                         ret[0] = false;
@@ -833,6 +842,7 @@ $.fn.extend({
         }, p ||{});		
 		return this.each(function() {
 			if( !this.grid) return;
+            if( elem.indexOf("#") != 0) elem = "#"+elem;
 			var findnav = $(".navtable",elem)[0];
 			if (findnav) {
 				var tdb, tbd1;
@@ -935,8 +945,9 @@ function createModal(aIDs, content, p, insertSelector, posSelector, appendsel) {
         p.top = pos[1] + 4;
     }
     if (p.width == 0 || !p.width) p.width = 300;
-    if(p.height==0 || !p.width) p.height =200
-    jQuery(mw).css({top: p.top+"px",left: p.left+"px",width: p.width+"px",height: p.height+"px"});
+    if(p.height==0 || !p.width) p.height =200;
+    if(!p.zIndex) p.zIndex = 950;
+    jQuery(mw).css({top: p.top+"px",left: p.left+"px",width: p.width+"px",height: p.height+"px", zIndex:p.zIndex});
     return false;
 };
 

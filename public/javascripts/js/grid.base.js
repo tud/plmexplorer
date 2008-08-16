@@ -1,11 +1,11 @@
 ;(function ($) {
 /*
- * jqGrid  3.2.1- jQuery Grid
+ * jqGrid  3.2.3-jQuery Grid
  * Copyright (c) 2008, Tony Tomov, tony@trirand.com
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
- * Date: 2008-07-23 rev 49
+ * Date: 2008-08-13 rev 51
  */
 $.jgrid = $.jgrid || {};
 $.jgrid.defaults = {
@@ -13,7 +13,8 @@ $.jgrid.defaults = {
 	loadtext: "Loading...",
 	loadui: "enable",
 	pgbuttons: true,
-	pginput: true
+	pginput: true,
+	pgtext : "/"
 };
 
 $.fn.jqGrid = function( p ) {
@@ -62,7 +63,7 @@ $.fn.jqGrid = function( p ) {
 	viewrecords: false,
 	loadonce: false,
 	multiselect: false,
-	multikey: null,
+	multikey: false,
 	editurl: null,
 	search: false,
 	searchdata: {},
@@ -71,6 +72,17 @@ $.fn.jqGrid = function( p ) {
 	hiddengrid: false,
 	postData: {},
 	userData: {},
+	treeGrid : false,
+	treeANode: 0,
+	treedatatype: null,
+	treeReader: {level_field: "level",
+		left_field:"lft",
+		right_field: "rgt",
+		leaf_field: "isLeaf",
+		expanded_field: "expanded"
+	},
+	tree_root_level: 0,
+	ExpandColumn: null,
 	toolbar: [false,"top"]
 	}, $.jgrid.defaults, p || {});
 	var grid={         
@@ -145,7 +157,6 @@ $.fn.jqGrid = function( p ) {
 					$("tr th:eq("+$t.p.lastsort+") div img",$t.grid.hDiv).remove();
 					$t.p.lastsort = i;
 					$t.p.sortname=newsort;
-					$t.p.msort = true;
 					break;
 				}
 			}
@@ -165,9 +176,9 @@ $.fn.jqGrid = function( p ) {
 				$(pt).addClass("selected");
 				if( t.p.onSelectRow ) { t.p.onSelectRow(t.p.selrow, true); }
 				}
-			} else {  			
+			} else {
 				t.p.selrow = selection;
-				var ia = t.p.selarrrow.indexOf(t.p.selrow);
+				var ia = $.inArray(t.p.selrow,t.p.selarrrow);
 				if (  ia === -1 ){ 
 					if($(pt).attr("class") !== "subgrid") { $(pt).addClass("selected");}
 					stat = true;
@@ -178,7 +189,7 @@ $.fn.jqGrid = function( p ) {
 					stat = false;
 					$("#jqg_"+t.p.selrow,t.rows).attr("checked",stat);
 					t.p.selarrrow.splice(ia,1);
-				}			
+				}
 				if( t.p.onSelectRow ) { t.p.onSelectRow(t.p.selrow, stat); }
 			}
 		});
@@ -259,7 +270,7 @@ $.fn.jqGrid = function( p ) {
 				success=true;
 				$(this.p.colModel).each(function(i){
 					nm = this.name;
-					if(data[nm] != 'undefined') {
+					if(data[nm] !== 'undefined') {
 						$("td:eq("+i+")",t.rows[ind]).html(data[nm]);
 						success = true;
 					}
@@ -268,10 +279,10 @@ $.fn.jqGrid = function( p ) {
 		});
 		return success;
 	};
-	$.fn.addRowData = function(rowid,data,pos) {
+	$.fn.addRowData = function(rowid,data,pos,src) {
 		if(!pos) {pos = "last";}
 		var success = false;
-		var nm, row, td, gi=0, si=0;
+		var nm, row, td, gi=0, si=0,sind;
 		if(data) {
 			this.each(function() {
 				var t = this;
@@ -288,15 +299,29 @@ $.fn.jqGrid = function( p ) {
 				for(var i = gi+si; i < this.p.colModel.length;i++){
 					nm = this.p.colModel[i].name;
 					td  = $('<td></td>');
-					$(td[0]).html('&nbsp;');
-					if(data[nm] != 'undefined') {
-						$(td[0]).html(data[nm]);
+					$(td[0]).html('&#160;');
+					if(data[nm] !== 'undefined') {
+						$(td[0]).html(data[nm] || '&#160;');
 					}
 					t.formatCol($(td[0],t.grid.bDiv),i);
 					row.appendChild(td[0]);
 				}
-				if (pos === "last") {$(t.rows[t.rows.length-1]).after(row);}
-				else {$(t.rows[0]).after(row);}
+				switch (pos) {
+					case 'last':
+						$(t.rows[t.rows.length-1]).after(row);
+						break;
+					case 'first':
+						$(t.rows[0]).after(row);
+						break;
+					case 'after':
+						sind = $(t).getInd(t.rows,src);
+						sind >= 0 ?	$(t.rows[sind]).after(row): "";
+						break;
+					case 'before':
+						sind = $(t).getInd(t.rows,src);
+						sind > 0 ?	$(t.rows[sind-1]).after(row): "";
+						break;
+				}
 				t.p.records++;
 				if($.browser.safari || $.browser.opera) {
 					t.scrollLeft = t.scrollLeft;
@@ -327,7 +352,7 @@ $.fn.jqGrid = function( p ) {
 			if (!$t.grid ) {return;}
 			if( typeof colname == 'string') {colname=[colname];}
 			$(this.p.colModel).each(function(i) {
-				if (colname.indexOf(this.name) != -1 && !this.hidden) {
+				if ($.inArray(this.name,colname) != -1 && !this.hidden) {
 					var w = parseInt($("tr th:eq("+i+")",$t.grid.hDiv).css("width"),10);
  					$("tr th:eq("+i+")",$t.grid.hDiv).css({display:"none"});
 					$($t.rows).each(function(j){
@@ -346,7 +371,7 @@ $.fn.jqGrid = function( p ) {
 				$("table:first",$t.grid.bDiv).width(gtw);
 				$($t.grid.hDiv).width(gtw);
 				$($t.grid.bDiv).width(gtw);
-				if($t.p.pager && $($t.p.pager).attr("class")=="scroll" ) {
+				if($t.p.pager && $($t.p.pager).hasClass("scroll") ) {
 					$($t.p.pager).width(gtw);
 				}
 				if($t.p.caption) {$($t.grid.cDiv).width(gtw);}
@@ -361,7 +386,7 @@ $.fn.jqGrid = function( p ) {
 			if (!$t.grid ) {return;}
 			if( typeof colname == 'string') {colname=[colname];}
 			$($t.p.colModel).each(function(i) {
-				if (colname.indexOf(this.name) != -1 && this.hidden) {
+				if ($.inArray(this.name,colname) != -1 && this.hidden) {
 					var w = parseInt($("tr th:eq("+i+")",$t.grid.hDiv).css("width"),10);
 					$("tr th:eq("+i+")",$t.grid.hDiv).css("display","");
 					$($t.rows).each(function(j){
@@ -381,7 +406,7 @@ $.fn.jqGrid = function( p ) {
 				$("table:first",$t.grid.bDiv).width(gtw);
 				$($t.grid.hDiv).width(gtw);
 				$($t.grid.bDiv).width(gtw).css("overflow-x",ofl);
-				if($t.p.pager && $($t.p.pager).attr("class")=="scroll" ) {
+				if($t.p.pager && $($t.p.pager).hasClass("scroll") ) {
 					$($t.p.pager).width(gtw);
 				}
 				if($t.p.caption) {$($t.grid.cDiv).width(gtw);}
@@ -449,11 +474,18 @@ $.fn.jqGrid = function( p ) {
 			if(!$t.grid) {return;}
 			$("tbody tr:gt(0)", $t.grid.bDiv).remove();
 			$t.p.selrow = null; $t.p.selarrrow= [];
+			$t.p.records = 0;$t.p.page=0;$t.p.lastpage=0;
+			$t.updatepager();
 		});
 	};
-	$.fn.getInd = function(obj,rowid){
+	$.fn.getInd = function(obj,rowid,rc){
 		var ret =false;
-		$(obj).each(function(i){ if(this.id==rowid) {ret=i; return false;} });
+		$(obj).each(function(i){
+			if(this.id==rowid) {
+				ret = rc===true ? this : i;
+				return false;
+			}
+		});
 		return ret;
 	};
 	return this.each( function() {
@@ -477,25 +509,12 @@ $.fn.jqGrid = function( p ) {
 		if(typeof loadError !== 'function') {loadError=false;}
 		if(typeof loadBeforeSend !== 'function') {loadBeforeSend=false;}
 		if(typeof afterInsRow !== 'function') {afterInsRow=false;}
-		if(!Array.indexOf){
-			Array.prototype.indexOf = function(obj){
-				for(var i=0; i<this.length; i++){
-					if(this[i]===obj){
-						return i;
-					}
-				}
-				return -1;
-			};
-		}
 		var sortkeys = ["shiftKey","altKey","ctrlKey"];
-		if (sortkeys.indexOf(ts.p.multikey) == -1 ) {ts.p.multikey = null;}
+		if ($.inArray(ts.p.multikey,sortkeys) == -1 ) {ts.p.multikey = false;}
 		var IntNum = function(val,defval) {
 			val = parseInt(val,10);
-			if (isNaN(val)) {
-				return (defval) ? defval : 0;
-			} else {
-				return val;
-			}
+			if (isNaN(val)) { return (defval) ? defval : 0;}
+			else {return val;}
 		};
 		var formatCol = function (elem, pos){
 			var rowalign1 = ts.p.colModel[pos].align || "left";
@@ -535,10 +554,10 @@ $.fn.jqGrid = function( p ) {
 			return f;
 		};
 		var addXmlData = function addXmlData (xml,t) {
-			if(xml) { $("tbody tr:gt(0)", t).remove(); } else { return; }
-			var row,gi=0,si=0,cbid,idn, getId, f=[],rd=[],cn=(ts.p.altRows === true) ? 'alt':'';
+			if(xml) { var fpos = ts.p.treeANode; if(fpos===0) {$("tbody tr:gt(0)", t).remove();} } else { return; }
+			var row,gi=0,si=0,cbid,idn, getId,f=[],rd =[],cn=(ts.p.altRows === true) ? 'alt':'';
 			if(!ts.p.xmlReader.repeatitems) {f = reader("xml");}
-			if( !ts.p.keyIndex ) {
+			if( ts.p.keyIndex===false) {
 				idn = ts.p.xmlReader.id;
 				if( idn.indexOf("[") === -1 ) {
 					getId = function( trow, k) {return $(idn,trow).text() || k;};
@@ -547,7 +566,7 @@ $.fn.jqGrid = function( p ) {
 					getId = function( trow, k) {return trow.getAttribute(idn.replace(/[\[\]]/g,"")) || k;};
 				}
 			} else {
-				getId = function(trow) { return (f.length >= ts.p.keyIndex) ? $(f[ts.p.keyIndex],trow).text() : $(ts.p.xmlReader.cell+":eq("+ts.p.keyIndex+")",trow).text(); };
+				getId = function(trow) { return (f.length - 1 >= ts.p.keyIndex) ? $(f[ts.p.keyIndex],trow).text() : $(ts.p.xmlReader.cell+":eq("+ts.p.keyIndex+")",trow).text(); };
 			}
 			$(ts.p.xmlReader.page,xml).each(function() {ts.p.page = this.textContent  || this.text ; });
 			$(ts.p.xmlReader.total,xml).each(function() {ts.p.lastpage = this.textContent  || this.text ; }  );
@@ -568,18 +587,19 @@ $.fn.jqGrid = function( p ) {
 				if(ts.p.xmlReader.repeatitems===true){
 					$(ts.p.xmlReader.cell,this).each( function (i) {
 						v = this.textContent || this.text;
-						addCell(t,row,v || '&nbsp;',i+gi+si);
+						addCell(t,row,v || '&#160;',i+gi+si);
 						rd[ts.p.colModel[i+gi+si].name] = v;
 					});
 				} else {
 					for(var i = 0; i < f.length;i++) {
 						v = $(f[i],this).text();
-						addCell(t, row, v || '&nbsp;', i+gi+si);
+						addCell(t, row, v || '&#160;', i+gi+si);
 						rd[ts.p.colModel[i+gi+si].name] = v;
 					}
 				}
 				if(j%2 == 1) {row.className = cn;} $(row).addClass("jqgrow");
-				$("tbody",t).append(row);
+				if(ts.p.treeGrid === true) {$(ts).setTreeNode(rd,row);}
+				$(ts.rows[j+fpos]).after(row);
 				if(afterInsRow) {ts.p.afterInsertRow(row.id,rd);}
 				rd=[];
 			});
@@ -591,19 +611,19 @@ $.fn.jqGrid = function( p ) {
 		};
 		var addJSONData = function(data,t) {
 			if(data) { $("tbody tr:gt(0)", t).remove(); } else { return; }
-			var row,cur,gi=0,si=0,drows,idn,rd=[],cn=(ts.p.altRows===true) ? 'alt':'';
+			var row,f=[],cur,gi=0,si=0,drows,idn,rd=[],cn=(ts.p.altRows===true) ? 'alt':'';
 			ts.p.page = data[ts.p.jsonReader.page];
 			ts.p.lastpage= data[ts.p.jsonReader.total];
 			ts.p.records= data[ts.p.jsonReader.records];
 			ts.p.userData = data[ts.p.jsonReader.userdata] || {};
-			idn = (!ts.p.keyIndex) ? ts.p.jsonReader.id : ts.p.keyIndex;
-			if(!ts.p.jsonReader.repeatitems) {var f = reader("json");}
+			if(!ts.p.jsonReader.repeatitems) {f = reader("json");}
+			idn = (ts.p.keyIndex===false) ? ts.p.jsonReader.id : ts.p.keyIndex;
 			drows = data[ts.p.jsonReader.root];
 			if (drows) {
 			for (var i=0;i<drows.length;i++) {
 				cur = drows[i];
 				row = document.createElement("tr");
-				row.id = cur[idn] || i+1;
+				row.id = cur[idn] || cur[ts.p.jsonReader.cell][idn] || i+1;
 				if(ts.p.multiselect){
 					addMulti(t,row);
 					gi = 1;
@@ -615,20 +635,21 @@ $.fn.jqGrid = function( p ) {
 				if (ts.p.jsonReader.repeatitems === true) {
 					if(ts.p.jsonReader.cell) {cur = cur[ts.p.jsonReader.cell];}
 					for (var j=0;j<cur.length;j++) {
-						addCell(t,row,cur[j] || '&nbsp;',j+gi+si);
+						addCell(t,row,cur[j] || '&#160;',j+gi+si);
 						rd[ts.p.colModel[j+gi+si].name] = cur[j];
 					}
 				} else {
 					for (var j=0;j<f.length;j++) {
-						addCell(t,row,cur[f[j]] || '&nbsp;',j+gi+si);
+						addCell(t,row,cur[f[j]] || '&#160;',j+gi+si);
 						rd[ts.p.colModel[j+gi+si].name] = cur[f[j]];
 					}
 				}
 				if(i%2 == 1) {row.className = cn;} $(row).addClass("jqgrow");
-				$("tbody",t).append(row);
+				if(ts.p.treeGrid === true) {$(ts).setTreeNode(rd,row);}
+				$(ts.rows[i]).after(row);
 				if(afterInsRow) {ts.p.afterInsertRow(row.id,rd);}
 				rd=[];
-			}		
+			}
 			}
 			data = null;
 			if(isSafari || isOpera) {resizeFirstRow(t,1);}
@@ -649,11 +670,11 @@ $.fn.jqGrid = function( p ) {
 					$(".selbox",ts.p.pager).attr("disabled",false);
 				}
 				if(ts.p.pginput===true) {
-					$('#sp_1',ts.p.pager).html("/"+"&nbsp;"+ts.p.lastpage );
 					$('input.selbox',ts.p.pager).val(ts.p.page);
 				}
 				if (ts.p.viewrecords){
-					$('#sp_2',ts.p.pager).html(ts.p.records+"&nbsp;"+ts.p.recordtext+"&nbsp;");
+					$('#sp_1',ts.p.pager).html(ts.p.pgtext+"&#160;"+ts.p.lastpage );
+					$('#sp_2',ts.p.pager).html(ts.p.records+"&#160;"+ts.p.recordtext+"&#160;");
 				}
 				if(ts.p.pgbuttons===true) {
 					if(cp==1) {$("#first",ts.p.pager).attr({src:imp+"off-"+ts.p.firstimg,disabled:true});} else {$("#first",ts.p.pager).attr({src:imp+ts.p.firstimg,disabled:false});}
@@ -672,12 +693,12 @@ $.fn.jqGrid = function( p ) {
 				switch(ts.p.datatype)
 				{
 				case "json":
-					$.ajax({url:ts.p.url,type:ts.p.mtype,dataType:"json",data: gdata, complete:function(JSON,st) { if(st=="success") {addJSONData(eval("("+JSON.responseText+")"),ts.grid.bDiv); if(loadComplete) {loadComplete();}}}, error:function(xhr,st,err){if(loadError) {loadError(xhr,st,err);}endReq(); }, beforeSend: function(xhr){if(loadBeforeSend) {loadBeforeSend(xhr);}}});
-					if( ts.p.loadonce ) {ts.p.datatype = "local";}
+					$.ajax({url:ts.p.url,type:ts.p.mtype,dataType:"json",data: gdata, complete:function(JSON,st) { if(st=="success") {addJSONData(eval("("+JSON.responseText+")"),ts.grid.bDiv); if(loadComplete) {loadComplete();}}}, error:function(xhr,st,err){if(loadError) {loadError(xhr,st,err);}endReq();}, beforeSend: function(xhr){if(loadBeforeSend) {loadBeforeSend(xhr);}}});
+					if( ts.p.loadonce || ts.p.treeGrid) {ts.p.datatype = "local";}
 				break;
 				case "xml":
-					$.ajax({url: ts.p.url,type:ts.p.mtype,dataType:"xml",data: gdata , complete:function(xml,stat) { if(stat=="success") {addXmlData(xml.responseXML,ts.grid.bDiv);if(loadComplete) {loadComplete();}}},error : function(xhr,st,err){if(loadError) {loadError(xhr,st,err);}endReq();},beforeSend: function(xhr){if(loadBeforeSend) {loadBeforeSend(xhr);}}});
-					if( ts.p.loadonce ) {ts.p.datatype = "local";}
+					$.ajax({url:ts.p.url,type:ts.p.mtype,dataType:"xml",data: gdata , complete:function(xml,st) {if(st=="success")	{addXmlData(xml.responseXML,ts.grid.bDiv);                   if(loadComplete) {loadComplete();}}}, error:function(xhr,st,err){if(loadError) {loadError(xhr,st,err);}endReq();}, beforeSend: function(xhr){if(loadBeforeSend) {loadBeforeSend(xhr);}}});
+					if( ts.p.loadonce || ts.p.treeGrid) {ts.p.datatype = "local";}
 				break;
 				case "xmlstring":
 					addXmlData(stringToDoc(ts.p.datastr),ts.grid.bDiv);
@@ -740,46 +761,59 @@ $.fn.jqGrid = function( p ) {
 			return (xmlDoc && xmlDoc.documentElement && xmlDoc.documentElement.tagName != 'parsererror') ? xmlDoc : null;
 		};
 		var sortArrayData = function() {
-			var newDir = (ts.p.sortorder == "asc") ? 1 :-1;
-			var column = (ts.p.lastsort >=0) ? ts.p.lastsort:0;
-			var st = ts.p.colModel[column].sorttype,findSortKey;
+			var stripNum = /[\$,%]/g;
+			var col=0,st,findSortKey,newDir = (ts.p.sortorder == "asc") ? 1 :-1;
+			$.each(ts.p.colModel,function(i,v){
+				if(this.index == ts.p.sortname || this.name == ts.p.sortname){
+					col = ts.p.lastsort= i;
+					st = this.sorttype;
+					return false;
+				}
+			});
 			if (st == 'float') {
 				findSortKey = function($cell) {
-					var key = parseFloat($cell.html().replace(/,/g, ''));
+					var key = parseFloat($cell.text().replace(stripNum, ''));
 					return isNaN(key) ? 0 : key;
 				};
 			} else if (st=='int') {
 				findSortKey = function($cell) {
-					return IntNum($cell.html().replace(/,/g, ''));
+					return IntNum($cell.text().replace(stripNum, ''));
 				};
 			} else if(st == 'date') {
 				findSortKey = function($cell) {
-					var fd = ts.p.colModel[column].datefmt || "Y-m-d";
-					return parseDate(fd,$cell.html()).getTime();
+					var fd = ts.p.colModel[col].datefmt || "Y-m-d";
+					return parseDate(fd,$cell.text()).getTime();
 				};
 			} else {
 				findSortKey = function($cell) {
-					return $cell.html().toUpperCase();
+					return $cell.text().toUpperCase();
 				};
 			}
-			var rows = $(ts.grid.bDiv).find('tbody > tr:gt(0)').get();
-			$.each(rows, function(index, row) {
-				row.sortKey = findSortKey($(row).children('td').eq(column));
-				var a =1;
+			var rows=[];
+			$.each(ts.rows, function(index, row) {
+				if (index > 0) {
+					row.sortKey = findSortKey($(row).children('td').eq(col));
+					rows[index-1] = this;
+				}
 			});
-			rows.sort(function(a, b) {
-				if (a.sortKey < b.sortKey) {return -newDir;}
-				if (a.sortKey > b.sortKey) {return newDir;}
-				return 0;
-			});
-			$.each(rows, function(index, row) {
-				$('tbody',ts.grid.bDiv).append(row);
-				row.sortKey = null;
-			});
-			if(!isMSIE) { ts.scrollLeft = ts.scrollLeft; resizeFirstRow(grid.bDiv);}
+			if(ts.p.treeGrid) {
+				$(ts).SortTree( newDir);
+			} else {
+				rows.sort(function(a, b) {
+					if (a.sortKey < b.sortKey) {return -newDir;}
+					if (a.sortKey > b.sortKey) {return newDir;}
+					return 0;
+				});
+				$.each(rows, function(index, row) {
+					$('tbody',ts.grid.bDiv).append(row);
+					row.sortKey = null;
+				});
+			}
+			if(isSafari || isOpera) {resizeFirstRow(ts.grid.bDiv,1);}
 			if(ts.p.multiselect) {
 				$("tbody tr:gt(0)", ts.grid.bDiv).removeClass("selected");
-				$("[@id^=jqg_]",ts.grid.bDiv).attr("checked",false);
+				$("[@id^=jqg_]",ts.rows).attr("checked",false);
+				$("#cb_jqg",ts.grid.hDiv).attr("checked",false);
 				ts.p.selarrrow = [];
 			}
 			if( ts.p.altRows === true ) {
@@ -805,11 +839,12 @@ $.fn.jqGrid = function( p ) {
 		};
 		var setPager = function (){
 			var inpt = "<img class='pgbuttons' src='"+ts.p.imgpath+"spacer.gif'";
-			var pginp = (ts.p.pginput===true) ? "<input class='selbox' type='text' size='3' maxlength='5' value='0'/><span id='sp_1'></span>&nbsp" : "";
+			var pginp = (ts.p.pginput===true) ? "<input class='selbox' type='text' size='3' maxlength='5' value='0'/>" : "";
+			if(ts.p.viewrecords===true) {pginp += "<span id='sp_1'></span>&#160;";}
 			var pgl="", pgr="";
 			if(ts.p.pgbuttons===true) {
-				pgl = inpt+" id='first'/>&nbsp;&nbsp;"+inpt+" id='prev'/>&nbsp;";
-				pgr = inpt+" id='next' />&nbsp;&nbsp;"+inpt+" id='last'/>";
+				pgl = inpt+" id='first'/>&#160;&#160;"+inpt+" id='prev'/>&#160;";
+				pgr = inpt+" id='next' />&#160;&#160;"+inpt+" id='last'/>";
 			}
 			$(ts.p.pager).append(pgl+pginp+pgr);
 			if(ts.p.rowList.length >0){
@@ -818,14 +853,14 @@ $.fn.jqGrid = function( p ) {
 					str +="<OPTION value="+ts.p.rowList[i]+((ts.p.rowNum == ts.p.rowList[i])?' selected':'')+">"+ts.p.rowList[i];
 				}
 				str +="</SELECT>";
-				$(ts.p.pager).append("&nbsp;"+str+"&nbsp;<span id='sp_2'></span>");
+				$(ts.p.pager).append("&#160;"+str+"&#160;<span id='sp_2'></span>");
 				$(ts.p.pager).find("select").bind('change',function() { 
 					ts.p.rowNum = (this.value>0) ? this.value : ts.p.rowNum; 
 					if (typeof ts.p.onPaging =='function') {ts.p.onPaging('records');}
 					populate();
 					ts.p.selrow = null;
 				});
-			} else { $(ts.p.pager).append("&nbsp;<span id='sp_2'></span>");}
+			} else { $(ts.p.pager).append("&#160;<span id='sp_2'></span>");}
 			if(ts.p.pgbuttons===true) {
 			$(".pgbuttons",ts.p.pager).mouseover(function(e){
 				this.style.cursor= "pointer";
@@ -909,6 +944,16 @@ $.fn.jqGrid = function( p ) {
 				ts.p.colModel[l].width = Math.round(tblwidth/initwidth*ts.p.colModel[l].width);
 			}
 		};
+		if(this.p.treeGrid === true) {
+			this.p.subGrid = false; this.p.altRows =false;
+			this.p.pgbuttons = false; this.p.pginput = false;
+			this.p.viewrecords = false; this.p.rowList = [];
+			this.p.treedatatype = this.p.datatype;
+			$.each(this.p.treeReader,function(i,n){
+				ts.p.colNames.push(n);
+				ts.p.colModel.push({name:n,width:1,hidden:true,sortable:false,resizable:false});
+			});
+		}
 		if(this.p.subGrid) {
 			this.p.colNames.unshift("");
 			this.p.colModel.unshift({name:'subgrid',width:25,sortable: false,resizable:false});
@@ -962,7 +1007,7 @@ $.fn.jqGrid = function( p ) {
 			idn = (idn) ? idn : i+1;
 			thdiv = document.createElement("div");
 			thdiv.id = ""+idn+"";
-			$(thdiv).html(ts.p.colNames[i]+"&nbsp;");
+			$(thdiv).html(ts.p.colNames[i]+"&#160;");
 			if (idn == ts.p.sortname) {
 				var imgs = (ts.p.sortorder==='asc') ? ts.p.sortascimg : ts.p.sortdescimg;
 				imgs = "<img src='"+ts.p.imgpath+imgs+"'>";
@@ -1005,22 +1050,20 @@ $.fn.jqGrid = function( p ) {
 		var w, res, sort;
 		$("tr:first th",thead).each(function ( j ) {
 			w = ts.p.colModel[j].width;
-			if(typeof ts.p.colModel[j].resizable == 'undefined') {ts.p.colModel[j].resizable = true;}
+			if(typeof ts.p.colModel[j].resizable === 'undefined') {ts.p.colModel[j].resizable = true;}
 			res = document.createElement("span");
-			$(res).html("&nbsp;");
+			$(res).html("&#160;");
 			if(ts.p.colModel[j].resizable){
 				$(res).mousedown(function (e) {grid.dragStart( j ,e.clientX);return false;});
 			} else {$(res).css("cursor","default");}
 			$(this).css("width",w+"px").prepend(res);
 			if( ts.p.colModel[j].hidden) {$(this).css("display","none");}
 			grid.headers[j] = { width: w, el: this };
-		});
-		$("tr:first th div",thead).each(function(l) {
-			sort = ts.p.colModel[l].sortable;
+			sort = ts.p.colModel[j].sortable;
 			if( typeof sort !== 'boolean') {sort =  true;}
 			if(sort) { 
-				$(this).css("cursor","pointer");
-				$(this).click(function(){sortData(this.id,l);return false;});
+				$("div",this).css("cursor","pointer")
+				.click(function(){sortData(this.id,j);return false;});
 			}
 		});
 		var isMSIE = $.browser.msie ? true:false;
@@ -1060,7 +1103,7 @@ $.fn.jqGrid = function( p ) {
 		grid.hTable.appendChild(thead);
 		$(grid.hTable).addClass("scroll")
 		.attr({cellSpacing:"0",cellPadding:"0",border:"0"})
-		.css({width:grid.width+"px",marginRight:"20px"});
+		.css({width:grid.width+"px"});
 		grid.hDiv = document.createElement("div");
 		var hg = (ts.p.caption && ts.p.hiddengrid===true) ? true : false;
 		$(grid.hDiv)
@@ -1071,7 +1114,7 @@ $.fn.jqGrid = function( p ) {
 		if(hg) {$(grid.hDiv).hide();}
 		if(ts.p.pager){
 			if(typeof ts.p.pager == "string") {ts.p.pager = $("#"+ts.p.pager);}
-			if( $(ts.p.pager).attr("class") == "scroll") { $(ts.p.pager).css({ width: grid.width+"px", overflow: "hidden"}).show(); ts.p._height= parseInt($(ts.p.pager).height(),10); if(hg) {$(ts.p.pager).hide();}}
+			if( $(ts.p.pager).hasClass("scroll")) { $(ts.p.pager).css({ width: grid.width+"px", overflow: "hidden"}).show(); ts.p._height= parseInt($(ts.p.pager).height(),10); if(hg) {$(ts.p.pager).hide();}}
 			setPager();
 		}
 		$(ts).mouseover(function(e) {
@@ -1104,8 +1147,8 @@ $.fn.jqGrid = function( p ) {
 				$(ts).setSelection(false,ptr);
 			} else {
 				if(e[ts.p.multikey]) {
-					$(ts).setSelection(false,ptr);					
-				} else if(ts.p.multiselect) {
+					$(ts).setSelection(false,ptr);
+				} else if(ts.p.multiselect && !ts.p.multikey) {
 					$("[@id^=jqg_]",ptr).attr("checked",false);
 				}
 			}
@@ -1139,7 +1182,7 @@ $.fn.jqGrid = function( p ) {
 			});
 		}
 		grid.bDiv = document.createElement("div");
-		var ofl2 = (isNaN(ts.p.height) && isMoz && ts.p.height.indexOf("%")!=-1) ? "hidden" : "auto";
+		var ofl2 = (isNaN(ts.p.height) && isMoz && (ts.p.height.indexOf("%")!=-1 || ts.p.height=="auto")) ? "hidden" : "auto";
 		$(grid.bDiv)
 			.scroll(function (e) {grid.scrollGrid();})
 			.css({ height: ts.p.height+(isNaN(ts.p.height)?"":"px"), padding: "0px", margin: "0px", overflow: ofl2,width: (grid.width)+"px"} ).css("overflow-x","hidden")
@@ -1148,6 +1191,7 @@ $.fn.jqGrid = function( p ) {
 		if( isMSIE ) {
 			if( $("tbody",this).size() === 2 ) { $("tbody:first",this).remove();}
 			if( ts.p.multikey) {$(grid.bDiv).bind("selectstart",function(){return false;});}
+			if(ts.p.treeGrid) {$(grid.bDiv).css("position","relative");}
 		} else {
 			if( ts.p.multikey) {$(grid.bDiv).bind("mousedown",function(){return false;});}
 		}
@@ -1195,7 +1239,7 @@ $.fn.jqGrid = function( p ) {
 				if(grid.newWidth){
 					var gwdt = (grid.width < ts.p.width) ? grid.width : ts.p.width;
 					var overfl = (grid.width <= ts.p.width) ? "hidden" : "auto";
-					if(ts.p.pager && $(ts.p.pager).attr("class")=="scroll" ) {
+					if(ts.p.pager && $(ts.p.pager).hasClass("scroll") ) {
 						$(ts.p.pager).width(gwdt);
 					}
 					if(ts.p.caption) {$(grid.cDiv).width(gwdt);}
@@ -1227,7 +1271,7 @@ $.fn.jqGrid = function( p ) {
 			$(grid.bDiv).css({"overflow-x":ofl2});
 		}
 		$(window).unload(function () {
-			$(this).unbind();
+			$(this).unbind("*");
 			this.grid = null;
 			this.p = null;
 			$.jgrid = null;

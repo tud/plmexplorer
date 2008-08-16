@@ -126,44 +126,49 @@ $.fn.extend({
 			if(!$t.grid.hDiv.loading) {
 				$t.grid.hDiv.loading = true;
 				$("div.loading",$t.grid.hDiv).fadeIn("fast");
-				$.post(url,tmp,function(res,stat){
-					if (stat === "success"){
-						var ret;
-						if( typeof succesfunc === "function") ret = succesfunc(res);
-						else ret = true;
-						if (ret===true) {
-							$('#'+rowid+" td",$t.grid.bDiv).each(function(i) {
-								nm = $t.p.colModel[i].name;
-								if ( nm !== 'cb' && nm !== 'subgrid' && $t.p.colModel[i].editable===true) {
-									switch ($t.p.colModel[i].edittype) {
-										case "select":
-											tmp2 = $("select>option:selected", this).text();
-											break;
-										case "checkbox":
-											var cbv = $t.p.colModel[i].editoptions.value.split(":") || ["Yes","No"];
-											tmp2 = $("input",this).attr("checked") ? cbv[0] : cbv[1];
-											break;
-										case "text":
-										case "textarea":
-											tmp2 = $("input, textarea", this).val();
-											break;
+				$.ajax({url:url,
+					data: tmp,
+					type: "POST",
+					complete: function(res,stat){
+						if (stat === "success"){
+							var ret;
+							if( typeof succesfunc === "function") ret = succesfunc(res);
+							else ret = true;
+							if (ret===true) {
+								$('#'+rowid+" td",$t.grid.bDiv).each(function(i) {
+									nm = $t.p.colModel[i].name;
+									if ( nm !== 'cb' && nm !== 'subgrid' && $t.p.colModel[i].editable===true) {
+										switch ($t.p.colModel[i].edittype) {
+											case "select":
+												tmp2 = $("select>option:selected", this).text();
+												break;
+											case "checkbox":
+												var cbv = $t.p.colModel[i].editoptions.value.split(":") || ["Yes","No"];
+												tmp2 = $("input",this).attr("checked") ? cbv[0] : cbv[1];
+												break;
+											case "text":
+											case "textarea":
+												tmp2 = $("input, textarea", this).val();
+												break;
+										}
+										$(this).empty();
+										$(this).html(tmp2 || "&nbsp;");
 									}
-									$(this).empty();
-									$(this).html(tmp2 || "&nbsp;");
-								}
-							});
-							$('#'+rowid,$t.grid.bDiv).attr("editable","0");
-							for( var k=0;k<$t.p.savedRow.length;k++) {
-								if( $t.p.savedRow[k].id===rowid) {fr = k; break;}
-							};
-							if(fr >= 0) $t.p.savedRow.splice(fr,1);
-							if( typeof aftersavefunc === "function") aftersavefunc(rowid,res);
-						} else $($t).restoreRow(rowid);
-					} else {
+								});
+								$('#'+rowid,$t.grid.bDiv).attr("editable","0");
+								for( var k=0;k<$t.p.savedRow.length;k++) {
+									if( $t.p.savedRow[k].id===rowid) {fr = k; break;}
+								};
+								if(fr >= 0) $t.p.savedRow.splice(fr,1);
+								if( typeof aftersavefunc === "function") aftersavefunc(rowid,res);
+							} else $($t).restoreRow(rowid);
+						}
+					},
+					error:function(res,stat){
 						if(typeof errorfunc == "function") {
 							errorfunc(res,stat)
 						} else {
-							alert("Error Row: "+rowid+" Result: " +res+" Status: "+stat);
+							alert("Error Row: "+rowid+" Result: " +res.status+":"+res.statusText+" Status: "+stat);
 						}
 					}
 				});

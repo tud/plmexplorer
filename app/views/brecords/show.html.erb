@@ -16,10 +16,6 @@
 	<div id="searchPager" class="scroll"></div>
 
 	<script type="text/javascript">
-	var hideCageCol = false;
-	if ("<%=h @rectype%>" == "WORKAUTH") {
-		hideCageCol = true;
-	}
 	var lastSel;
 	jQuery(document).ready(function(){
 		jQuery('#searchGrid').jqGrid({
@@ -30,7 +26,7 @@
 			colModel :[
 				{name:'id',        index:'id',        hidden:true},
 				{name:'name',      index:'brecname',  width:80},
-				{name:'busid',     index:'brecname',  width:50,  align:'right', hidden: hideCageCol},
+				{name:'bname1',    index:'bname1',    width:50,  align:'right'},
 				{name:'brecalt',   index:'brecalt',   width:30,  align:'right'},
 				{name:'breclevel', index:'breclevel', width:50}, 
 				{name:'bdesc',     index:'bdesc',     width:300, sortable:false} ],
@@ -44,8 +40,9 @@
 			height: '100%',
 			width: 925,
 			pager: 'searchPager',
+			hiddengrid: <%= @hiddengrid %>,
 			ondblClickRow: function(id) {
-				if (id && id!==lastSel) {
+				if (id!=null && id!==lastSel) {
 					jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
 					lastSel=id;
 					jQuery.ajax({
@@ -81,6 +78,6 @@
 
 <% content_for(:content) do %>
 	<% if (controller.action_name != "index") %>
-		<%=render :partial => 'tabs'%>
+		<%=render :partial => 'tabs2'%>
 	<% end %>
 <% end %>

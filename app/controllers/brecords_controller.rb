@@ -1,14 +1,16 @@
 class BrecordsController < ApplicationController
   
   ESCAPE = '\\'
-  
+
   def index
     @rectype = ''
-    @clause = "brectype = ' '"
-    render :action => "show"
+    @clause = "brectype is null"
+    @hiddengrid = "true"
+    redirect_to :action => "show", :rectype => ''
   end
 
   def show
+    @hiddengrid = "false"
     @rectype = params[:rectype].upcase
     if request.post?
       # fake per gestire rectype
@@ -52,7 +54,7 @@ class BrecordsController < ApplicationController
     page = (params[:page] || 1).to_i
     limit = (params[:rows]).to_i
     sidx = params[:sidx]
-    sord = params[:sord]
+    sord = params[:sord] || 'desc'
     clause = params[:clause]
 
     start = ((page-1) * limit).to_i
@@ -99,11 +101,10 @@ class BrecordsController < ApplicationController
       :order => sidx+' '+sord,
       :limit => limit,
       :offset => start,
-      :select =>"id, brecname, brecalt, breclevel, bdesc",
+      :select =>"id, brecname, brecalt, breclevel, bdesc, bname1",
       :conditions => conditions
       
-    count = Brecord.count :all,
-      :conditions => conditions
+    count = @brecords.size
     
     if (count > 0)
       total_pages = (count/limit).ceil+1
@@ -122,7 +123,7 @@ class BrecordsController < ApplicationController
       :cell => [
         u.id,
         u.name,
-        u.cage_code,
+        u.bname1,
         u.brecalt,
         u.breclevel,
         u.bdesc]}}
@@ -135,7 +136,7 @@ class BrecordsController < ApplicationController
     page = (params[:page] || 1).to_i
     limit = (params[:rows]).to_i
     sidx = params[:sidx]
-    sord = params[:sord]
+    sord = params[:sord] || 'desc'
     clause = params[:clause]
 
     start = ((page-1) * limit).to_i
@@ -185,8 +186,7 @@ class BrecordsController < ApplicationController
       :select =>"breftype, brectype, brecname, brecalt, bdesc, bquantity",
       :conditions => conditions
       
-    count = Bref.count :all,
-      :conditions => conditions
+    count = @brefs.size
     
     if (count > 0)
       total_pages = (count/limit).ceil+1
@@ -216,6 +216,173 @@ class BrecordsController < ApplicationController
     # Convert the hash to a json object
     render :text => return_data.to_json, :layout=>false
   end
+  
+  def grid_promotions
+    page = (params[:page] || 1).to_i
+    limit = (params[:rows]).to_i
+    sidx = params[:sidx]
+    sord = params[:sord] || 'desc'
+    clause = params[:clause]
+
+    start = ((page-1) * limit).to_i
+    if (start < 0)
+      start = 0
+    end
+
+    isSearch     = params[:_search]
+    searchField  = params[:searchField]
+    searchOper   = params[:searchOper]
+    searchString = params[:searchString]
+
+    if (isSearch == 'true')
+      # TODO
+      # check cage and name
+      if (searchOper == 'eq')
+        oper = "= '" + searchString +"'"
+      elsif (searchOper == 'bw')
+        oper = "LIKE '" + searchString + "%'"
+      elsif (searchOper == 'ne')
+        oper = "<> '" + searchString +"'"
+      elsif (searchOper == 'lt')
+        oper = "< '" + searchString +"'"
+      elsif (searchOper == 'le')
+        oper = "<= '" + searchString +"'"
+      elsif (searchOper == 'gt')
+        oper = "> '" + searchString +"'"
+      elsif (searchOper == 'ge')
+        oper = ">= '" + searchString +"'"
+      elsif (searchOper == 'ew')
+        oper = "LIKE '%" + searchString +"'"
+      elsif (searchOper == 'cn')
+        oper = "LIKE '%" + searchString +"%'"
+      end
+
+      query = searchField + " " + oper
+      #puts '----> query=' + query
+      conditions = clause + " AND " + query
+    else
+      conditions = clause
+    end
+
+    @promotions = Bpromotion.find :all,
+      :order => sidx+' '+sord,
+      :limit => limit,
+      :offset => start,
+      :select =>"bpromdate, blevel, brelproc, buser, bdesc",
+      :conditions => conditions
+      
+    count = @promotions.size
+    
+    if (count > 0)
+      total_pages = (count/limit).ceil+1
+    else
+      total_pages = 0
+    end
+
+    # Construct a hash from the ActiveRecord result
+    return_data = Hash.new()
+    return_data[:page] = page
+    return_data[:total] = total_pages
+    return_data[:records] = count
+
+    id = 1
+    return_data[:rows] = @promotions.collect{|u| {
+      :id => id+1,
+      :cell => [
+        id,
+        u.promdate,
+        u.blevel,
+        u.brelproc,
+        u.buser,
+        u.bdesc]}}
+
+    # Convert the hash to a json object
+    render :text => return_data.to_json, :layout=>false
+  end
+  
+  def grid_signoffs
+    page = (params[:page] || 1).to_i
+    limit = (params[:rows]).to_i
+    sidx = params[:sidx]
+    sord = params[:sord] || 'desc'
+    clause = params[:clause]
+
+    start = ((page-1) * limit).to_i
+    if (start < 0)
+      start = 0
+    end
+
+    isSearch     = params[:_search]
+    searchField  = params[:searchField]
+    searchOper   = params[:searchOper]
+    searchString = params[:searchString]
+
+    if (isSearch == 'true')
+      # TODO
+      # check cage and name
+      if (searchOper == 'eq')
+        oper = "= '" + searchString +"'"
+      elsif (searchOper == 'bw')
+        oper = "LIKE '" + searchString + "%'"
+      elsif (searchOper == 'ne')
+        oper = "<> '" + searchString +"'"
+      elsif (searchOper == 'lt')
+        oper = "< '" + searchString +"'"
+      elsif (searchOper == 'le')
+        oper = "<= '" + searchString +"'"
+      elsif (searchOper == 'gt')
+        oper = "> '" + searchString +"'"
+      elsif (searchOper == 'ge')
+        oper = ">= '" + searchString +"'"
+      elsif (searchOper == 'ew')
+        oper = "LIKE '%" + searchString +"'"
+      elsif (searchOper == 'cn')
+        oper = "LIKE '%" + searchString +"%'"
+      end
+
+      query = searchField + " " + oper
+      #puts '----> query=' + query
+      conditions = clause + " AND " + query
+    else
+      conditions = clause
+    end
+
+    @signoffs = Bchkhistory.find :all,
+      :order => sidx+' '+sord,
+      :limit => limit,
+      :offset => start,
+      :select =>"bdate, bcommand, bstatus, bname, buser, bdesc",
+      :conditions => conditions
+      
+    count = @signoffs.size
+    
+    if (count > 0)
+      total_pages = (count/limit).ceil+1
+    else
+      total_pages = 0
+    end
+
+    # Construct a hash from the ActiveRecord result
+    return_data = Hash.new()
+    return_data[:page] = page
+    return_data[:total] = total_pages
+    return_data[:records] = count
+
+    id = 1
+    return_data[:rows] = @signoffs.collect{|u| {
+      :id => id+1,
+      :cell => [
+        id,
+        u.date,
+        u.bcommand,
+        u.bstatus,
+        u.bname,
+        u.buser,
+        u.bdesc]}}
+
+    # Convert the hash to a json object
+    render :text => return_data.to_json, :layout=>false
+  end
 
   def load_record_base
     @record = Brecord.find(params[:id])
@@ -229,6 +396,7 @@ class BrecordsController < ApplicationController
     rec = Brecord.find(params[:id])
     @promotions = rec.bpromotions
     @chkhistories = rec.bchkhistories
+    @revisions = Brecord.find_all_by_brectype_and_brecname(rec.brectype,rec.brecalt)
   end
 
   private
@@ -262,4 +430,25 @@ class BrecordsController < ApplicationController
     end
     return clause
   end
+  
+  def get_tabs rectype
+    if (rectype == 'PART')
+      tabs = TABS_PART
+    elsif (rectype == 'WORKAUTH')
+      tabs = TABS_WORKAUTH
+    elsif (rectype == 'DOCUMENT')
+      tabs = TABS_DOCUMENT
+    elsif (rectype == 'SOFTWARE')
+      tabs = TABS_SOFTWARE
+    end
+    tabs.each do |tab|
+      p tab[:label]
+      tab[:fields].each do |field|
+        p field[:label]
+      end
+    end
+    return tabs
+  end
+
+
 end

@@ -1,19 +1,65 @@
-jQuery('#view_record_id').val('<%= escape_javascript h @record.id %>')
-jQuery('#view_record_type').val('<%= escape_javascript h @record.brectype %>')
-jQuery('#view_record_name').val('<%= escape_javascript h @record.name %>')
-jQuery('#view_record_cage').val('<%= escape_javascript h @record.cage_code %>')
-jQuery('#view_record_brecalt').val('<%= escape_javascript h @record.brecalt %>')
-jQuery('#view_record_breclevel').val('<%= escape_javascript h @record.breclevel %>')
-jQuery('#view_record_bdesc').val("<%= escape_javascript h @record.bdesc %>")
-jQuery('#view_record_bproject').val("<%= escape_javascript h @record.bproject %>")
-jQuery('#view_record_bowner').val("<%= escape_javascript h @record.bowner %>")
+<%
+	TABS["#{@record.brectype}"].each do |tab|
+		tab['fields'].each do |field|
+			fid = field['id']
+			if (fid.starts_with? "record_")
+				attrname = fid.gsub(/record_/, '')
+				if (@record.attribute_present? attrname)
+%>
+					jQuery('#view_<%=fid%>').val('<%= escape_javascript h @record.read_attribute attrname %>')
+<%
+				elsif (@record.respond_to? attrname)
+%>
+					jQuery('#view_<%=fid%>').val('<%= escape_javascript h @record.send(attrname) %>')
+<%
+				end
+			elsif (fid.starts_with? "uda_")
+				ftype = field['type']
+				if (ftype == nil)
+					attrname = fid.gsub(/uda_/, '').upcase
+					uda = @record.budas.find_by_bname(attrname)
+					if (uda != nil)
+%>
+						jQuery('#view_<%=fid%>').val('<%= escape_javascript h uda.bvalue  %>')
+<%
+					end
+				elsif (ftype.starts_with? "multi_")
+					attrname = fid.gsub(/uda_/, '').upcase
+					counter = ftype.gsub(/multi_/,'').to_i
+					ii = 1
+					value = ""
+					while (ii <= counter)
+						suffix = "%02d" % ii  
+						multi_attrname = "#{attrname}_#{suffix}"
+						uda = @record.budas.find_by_bname(multi_attrname)
+						if (uda)
+							value = "#{value}#{uda.bvalue}\n"
+						end
+						ii = ii + 1
+					end
+%>
+					jQuery('#view_<%=fid%>').val('<%= escape_javascript h value  %>')
+<%
+				end
+			end
+		end
+	end
+
+	itabs = TABS["#{@record.brectype}"].size
+	TABS["COMMONS"].each do |tab|
+%>
+		jQuery('#tabs_record > ul').tabs("url", <%= itabs %> , "/<%= controller.controller_name %>/<%= tab['action'] %>?id=<%= @record.id %>")
+<%
+		itabs=itabs+1
+	end
+%>
+
+jQuery('#view_record_id').val('<%= escape_javascript h @record.id  %>')
 
 jQuery('#record_title').html("<%= escape_javascript h @record.title %>")
 jQuery('#record_title').show()
 jQuery('#record_title').corner("10px")
 
-jQuery('#tabsRec > ul').tabs("select", 0)
-jQuery('#tabsRec > ul').tabs("url", 1 , '/brecords/load_record_refs?id=<%= @record.id %>')
-jQuery('#tabsRec > ul').tabs("url", 2 , '/brecords/load_record_history?id=<%= @record.id %>')
+jQuery('#tabs_record > ul').tabs("select", 0)
 
 jQuery('#record_base').effect("highlight", {}, 1000);

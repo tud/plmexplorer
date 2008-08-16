@@ -1,5 +1,6 @@
 # Be sure to restart your server when you modify this file
-
+# inserita by Tud
+require 'yaml'
 # Uncomment below to force Rails into production mode when
 # you don't control web/app server and can't set it the proper way
 # ENV['RAILS_ENV'] ||= 'production'
@@ -65,3 +66,6 @@ Rails::Initializer.run do |config|
   # Activate observers that should always be running
   # config.active_record.observers = :cacher, :garbage_collector
 end
+
+# inserita by Tud
+TABS = YAML::load(File.open("#{RAILS_ROOT}/config/settings/tabs.yml"))
