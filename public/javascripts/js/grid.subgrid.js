@@ -22,7 +22,11 @@ $.fn.addSubGrid = function(t,row,pos) {
 				res = $(this).parent();
 				var atd= pos==1?'<td></td>':'';
 				_id = $(res).attr("id");
-				var subdata = "<tr class='subgrid'>"+atd+"<td><img src='"+ts.p.imgpath+"line3.gif'/></td><td colspan='"+parseInt(ts.p.colNames.length-1)+"'><div id="+pID+"_"+_id+" class='tablediv'>";
+				var nhc = 0;
+				$.each(ts.p.colModel,function(i,v){
+					if(this.hidden === true) {nhc++;}
+				});
+				var subdata = "<tr class='subgrid'>"+atd+"<td><img src='"+ts.p.imgpath+"line3.gif'/></td><td colspan='"+parseInt(ts.p.colNames.length-1-nhc)+"'><div id="+pID+"_"+_id+" class='tablediv'>";
 				$(this).parent().after( subdata+ "</div></td></tr>" );
 				$(".tablediv",ts).css("width", ts.grid.width-20+"px");
 				if( typeof ts.p.subGridRowExpanded == 'function') {

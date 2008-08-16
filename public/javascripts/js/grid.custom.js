@@ -29,9 +29,10 @@ $.fn.extend({
             if( obj ) {
                 var cM = this.p.colModel;
                 for(var i =0;i<cM.length;i++) {
-                    if(cM[i].name == colname) 
+                    if(cM[i].name == colname) {
                         $.extend(this.p.colModel[i],obj);
-                    break;
+	                    break;
+                    }
                 }
             };
         });

@@ -166,7 +166,7 @@
 				background: "black"
 			},
 			height: 610,
-			width: 730
+			width: 770
 		});
 		
 		$('#about').click(function() {
@@ -177,7 +177,6 @@
 			var rectype = $(this).attr('title');
 			var title = 'Find '+rectype.toUpperCase()
 			$('#legend_find_record').html(title);
-                        // $('#brecord_find_rec_brectype').val(rectype);
 			$('#find_records').attr('action', '/rectype/'+rectype)
 			$('#findRecord').dialog("open");
 		});

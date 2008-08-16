@@ -1,0 +1,263 @@
+PART:
+  - label: Identification
+    fields:
+    - label: Name
+      id:    record_name
+      size:  26
+    - label: Bud ID.
+      id:    record_bname1
+      size:  5
+    - label: Revision
+      id:    record_brecalt
+      size:  4
+    - label: Type
+      id:    record_bfamily
+      size:  16
+    - label: Short Description
+      id:    record_bname4
+      size:  32
+    - label: Description
+      id:    record_bdesc
+      size:  80
+  - label: Mngmt Info
+    fields:
+    - label: Assigned Project
+      id:    record_bproject
+      size:  16
+    - label: LifeCycle
+      id:    record_brelproc
+      size:  16
+    - label: Assigned Owner
+      id:    record_bowner
+      size:  16
+    - label: Created By
+      id:    record_bcreateuser
+      size:  16
+    - label: Status
+      id:    record_breclevel
+      size:  16
+  - label: Part Info
+    fields:
+    - label: Control Item
+      id:    record_btype2
+      size:  1
+    - label: Logistic Item Type
+      id:    uda_logistic_item
+      size:  2
+    - label: Material
+      id:    uda_Material_1
+      size:  80
+    - label: Treatment
+      id:    uda_treatment
+      size:  80
+    - label: Commercial Code
+      id:    uda_comm_number
+      size:  80
+    - label: Manufacturer
+      id:    uda_maker
+      size:  80
+    - label: Quantity UM
+      id:    record_bmeasure
+      size:  2
+    - label: Control Item
+      id:    uda_proprietary
+      size:  32
+    - label: Security Class
+      id:    uda_sec_class
+      size:  32
+    - label: Comments
+      id:    uda_comment
+      size:  80
+      type:  multi_15
+
+DOCUMENT:
+  - label: Identification
+    fields:
+    - label: Name
+      id:    record_name
+      size:  26
+    - label: Bud ID.
+      id:    record_bname1
+      size:  5
+    - label: Revision
+      id:    record_brecalt
+      size:  4
+    - label: Type
+      id:    record_bfamily
+      size:  16
+    - label: Short Description
+      id:    record_bname4
+      size:  32
+    - label: Description
+      id:    record_bdesc
+      size:  80
+  - label: Mngmt Info
+    fields:
+    - label: Assigned Project
+      id:    record_bproject
+      size:  16
+    - label: LifeCycle
+      id:    record_brelproc
+      size:  16
+    - label: Assigned Owner
+      id:    record_bowner
+      size:  16
+    - label: Author
+      id:    uda_author
+      size:  16
+    - label: Status
+      id:    record_breclevel
+      size:  16
+  - label: Doc Info
+    fields:
+    - label: Document Size
+      id:    record_btype4
+      size:  3
+    - label: No. of Sheets
+      id:    record_blong3
+      size:  3
+    - label: Tool Name
+      id:    uda_tool_name
+      size:  16
+    - label: Comments
+      id:    uda_comment
+      size:  80
+      type:  multi_15
+  - label: Sec Info
+    fields:
+    - label: Proprietary
+      id:    uda_proprietary
+      size:  32
+    - label: Security Class
+      id:    uda_sec_class
+      size:  32
+
+WORKAUTH:
+  - label: Identification
+    fields:
+    - label: Name
+      id:    record_name
+      size:  26
+    - label: Bud ID.
+      id:    record_bname1
+      size:  5
+    - label: Revision
+      id:    record_brecalt
+      size:  4
+    - label: Type
+      id:    record_bfamily
+      size:  16
+    - label: Short Description
+      id:    record_bname4
+      size:  32
+    - label: Description
+      id:    record_bdesc
+      size:  80
+  - label: Mngmt Info
+    fields:
+    - label: Assigned Project
+      id:    record_bproject
+      size:  16
+    - label: LifeCycle
+      id:    record_brelproc
+      size:  16
+    - label: Assigned Owner
+      id:    record_bowner
+      size:  16
+    - label: Created By
+      id:    record_bcreateuser
+      size:  16
+    - label: Status
+      id:    record_breclevel
+      size:  16
+  - label: WA Info
+    fields:
+    - label: Reason for Change
+      id:    record_bname3
+      size:  32
+    - label: Change Class
+      id:    record_btype3
+      size:  1
+    - label: Sub-Class
+      id:    uda_change_subclass
+      size:  1
+    - label: Eng Chg Prop Nr
+      id:    uda_ecp_number
+      size:  32
+    - label: Request Author
+      id:    uda_wa_req_author
+      size:  32
+    - label: Description of Change
+      id:    uda_desc_of_chng
+      size:  80
+      type:  multi_15
+    - label: Solution
+      id:    uda_solution
+      size:  80
+      type:  multi_10
+    - label: Comments
+      id:    uda_comment
+      size:  80
+      type:  multi_15
+  - label: Sec Info
+    fields:
+    - label: Proprietary
+      id:    uda_proprietary
+      size:  32
+    - label: Security Class
+      id:    uda_sec_class
+      size:  32
+
+SOFTWARE:
+  - label: Identification
+    fields:
+    - label: Name
+      id:    record_name
+      size:  26
+    - label: Bud ID.
+      id:    record_bname1
+      size:  5
+    - label: Revision
+      id:    record_brecalt
+      size:  4
+    - label: Type
+      id:    record_bfamily
+      size:  16
+    - label: Short Description
+      id:    record_bname4
+      size:  32
+    - label: Description
+      id:    record_bdesc
+      size:  80
+  - label: Mngmt Info
+    fields:
+    - label: Assigned Project
+      id:    record_bproject
+      size:  16
+    - label: LifeCycle
+      id:    record_brelproc
+      size:  16
+    - label: Assigned Owner
+      id:    record_bowner
+      size:  16
+    - label: Created By
+      id:    record_bcreateuser
+      size:  16
+    - label: Status
+      id:    record_breclevel
+      size:  16
+  - label: SW Info
+    fields:
+    - label: Tool Name
+      id:    uda_tool_name
+      size:  16
+    - label: Comments
+      id:    uda_comment
+      size:  80
+      type:  multi_15
+
+COMMONS:
+    - label:  References
+      action: load_record_refs
+    - label:  History
+      action: load_record_history

@@ -1,0 +1,6 @@
+= come inserire un'icona nell'applicazione http://www.ajaxbestiary.com/Labs/SilkSprite/
+
+codice html:
+<span class="ss_sprite ss_add">&nbsp;</span>
+
+nella stessa pagina ci sono tutte le icone utilizzabili
