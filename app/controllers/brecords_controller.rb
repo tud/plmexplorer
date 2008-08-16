@@ -1,6 +1,6 @@
 class BrecordsController < ApplicationController
   
-  ESCAPE = '\\'
+  ESCAPE = '|'
 
   def index
     redirect_to :action => :show, :rectype => '*', :hiddengrid => 'true'
@@ -204,11 +204,7 @@ class BrecordsController < ApplicationController
       :conditions => conditions,
       :joins => joins
 
-    if (count > 0)
-      total_pages = (count/limit).ceil+1
-    else
-      total_pages = 0
-    end
+    total_pages = (count/limit).ceil
 
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
@@ -287,11 +283,7 @@ class BrecordsController < ApplicationController
     count = Bref.count :all,
       :conditions => conditions
     
-    if (count > 0)
-      total_pages = (count/limit).ceil+1
-    else
-      total_pages = 0
-    end
+    total_pages = (count/limit).ceil
 
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
