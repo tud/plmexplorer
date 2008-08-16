@@ -334,11 +334,7 @@ class BrecordsController < ApplicationController
     count = Bpromotion.count :all,
             :conditions => conditions
     
-    if (count > 0)
-      total_pages = (count/limit).ceil+1
-    else
-      total_pages = 0
-    end
+    total_pages = (count/limit).ceil
 
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
@@ -418,11 +414,7 @@ class BrecordsController < ApplicationController
     count = Bchkhistory.count :all,
             :conditions => conditions
     
-    if (count > 0)
-      total_pages = (count/limit).ceil+1
-    else
-      total_pages = 0
-    end
+    total_pages = (count/limit).ceil
 
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
@@ -503,11 +495,7 @@ class BrecordsController < ApplicationController
     count = Brecord.count :all,
             :conditions => conditions
     
-    if (count > 0)
-      total_pages = (count/limit).ceil+1
-    else
-      total_pages = 0
-    end
+    total_pages = (count/limit).ceil
 
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
@@ -546,33 +534,35 @@ class BrecordsController < ApplicationController
   end
 
 private
-def normalize(string)
-  string ||= ''
-  string.sub!(/ +$/,'')
-  string.sub!(/^$/,'*')
-  string.upcase!
-  return string
-end
 
-def matches_any(string)
-  string.nil? || /^\**$/.match(string)
-end
+  def normalize(string)
+    string ||= ''
+    string.sub!(/ +$/,'')
+    string.sub!(/^$/,'*')
+    string.upcase!
+    return string
+  end
 
-def add_condition(field, value)
-  if !matches_any(value)
-    @conditions ||= ''
-    @conditions += ' AND ' unless @conditions.empty?
-    if value.index(/[*?]/).nil?
-      # there are no wildcards in value
-      @conditions += "#{field} = '#{value}'"
-    else
-      # translate wildcards into SQL
-      value.gsub!(/%/,ESCAPE+'%')
-      value.gsub!(/_/,ESCAPE+'_')
-      value.gsub!(/\*/,'%')
-      value.gsub!(/\?/,'_')
-      @conditions += "#{field} LIKE '#{value}' ESCAPE '#{ESCAPE}'"
+  def matches_any(string)
+    string.nil? || /^\**$/.match(string)
+  end
+
+  def add_condition(field, value)
+    if !matches_any(value)
+      @conditions ||= ''
+      @conditions += ' AND ' unless @conditions.empty?
+      if value.index(/[*?]/).nil?
+        # there are no wildcards in value
+        @conditions += "#{field} = '#{value}'"
+      else
+        # translate wildcards into SQL
+        value.gsub!(/%/,ESCAPE+'%')
+        value.gsub!(/_/,ESCAPE+'_')
+        value.gsub!(/\*/,'%')
+        value.gsub!(/\?/,'_')
+        @conditions += "#{field} LIKE '#{value}' ESCAPE '#{ESCAPE}'"
+      end
     end
   end
-end
+
 end
