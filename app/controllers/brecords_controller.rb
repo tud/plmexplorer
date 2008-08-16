@@ -115,36 +115,6 @@ class BrecordsController < ApplicationController
     end
   end
 
-  def normalize(string)
-    string ||= ''
-    string.sub!(/ +$/,'')
-    string.sub!(/^$/,'*')
-    string.upcase!
-    return string
-  end
-
-  def matches_any(string)
-    string.nil? || /^\**$/.match(string)
-  end
-
-  def add_condition(field, value)
-    if !matches_any(value)
-      @conditions ||= ''
-      @conditions += ' AND ' unless @conditions.empty?
-      if value.index(/[*?]/).nil?
-        # there are no wildcards in value
-        @conditions += "#{field} = '#{value}'"
-      else
-        # translate wildcards into SQL
-        value.gsub!(/%/,ESCAPE+'%')
-        value.gsub!(/_/,ESCAPE+'_')
-        value.gsub!(/\*/,'%')
-        value.gsub!(/\?/,'_')
-        @conditions += "#{field} LIKE '#{value}' ESCAPE '#{ESCAPE}'"
-      end
-    end
-  end
-
   def grid_records
     page = (params[:page] || 1).to_i
     limit = (params[:rows]).to_i
@@ -199,7 +169,9 @@ class BrecordsController < ApplicationController
       :conditions => conditions,
       :joins => joins
       
-    count = @brecords.size
+    count =  Brecord.count :all,
+            :conditions => conditions,
+            :joins => joins
       
     if (count > 0)
       total_pages = (count/limit).ceil+1
@@ -281,7 +253,8 @@ class BrecordsController < ApplicationController
       :select =>"breftype, brectype, brecname, brecalt, bdesc, bquantity",
       :conditions => conditions
       
-    count = @brefs.size
+    count = Bref.count :all,
+            :conditions => conditions
     
     if (count > 0)
       total_pages = (count/limit).ceil+1
@@ -366,7 +339,8 @@ class BrecordsController < ApplicationController
       :select =>"bpromdate, blevel, brelproc, buser, bdesc",
       :conditions => conditions
       
-    count = @promotions.size
+    count = Bpromotion.count :all,
+            :conditions => conditions
     
     if (count > 0)
       total_pages = (count/limit).ceil+1
@@ -449,7 +423,8 @@ class BrecordsController < ApplicationController
       :select =>"bdate, bcommand, bstatus, bname, buser, bdesc",
       :conditions => conditions
       
-    count = @signoffs.size
+    count = Bchkhistory.count :all,
+            :conditions => conditions
     
     if (count > 0)
       total_pages = (count/limit).ceil+1
@@ -494,55 +469,34 @@ class BrecordsController < ApplicationController
     @revisions = Brecord.find_all_by_brectype_and_brecname(rec.brectype,rec.brecalt)
   end
 
-  private
-  def normalize(string)
-    string ||= ''
-    string.sub!(/ +$/,'')
-    string.sub!(/^$/,'*')
-    string.upcase!
-    return string
-  end
+private
+def normalize(string)
+  string ||= ''
+  string.sub!(/ +$/,'')
+  string.sub!(/^$/,'*')
+  string.upcase!
+  return string
+end
 
-  def matches_any(string)
-    string.nil? || /^\**$/.match(string)
-  end
+def matches_any(string)
+  string.nil? || /^\**$/.match(string)
+end
 
-  def add_condition(clause, field, value)
-    if !matches_any(value)
-      clause ||= ''
-      clause += ' AND ' unless clause.empty?
-      if value.index(/[*?]/).nil?
-        # there are no wildcards in value
-        clause += "#{field} = '#{value}'"
-      else
-        # translate wildcards into SQL
-        value.gsub!(/%/,ESCAPE+'%')
-        value.gsub!(/_/,ESCAPE+'_')
-        value.gsub!(/\*/,'%')
-        value.gsub!(/\?/,'_')
-        clause += "#{field} LIKE '#{value}' ESCAPE '#{ESCAPE}'"
-      end
+def add_condition(field, value)
+  if !matches_any(value)
+    @conditions ||= ''
+    @conditions += ' AND ' unless @conditions.empty?
+    if value.index(/[*?]/).nil?
+      # there are no wildcards in value
+      @conditions += "#{field} = '#{value}'"
+    else
+      # translate wildcards into SQL
+      value.gsub!(/%/,ESCAPE+'%')
+      value.gsub!(/_/,ESCAPE+'_')
+      value.gsub!(/\*/,'%')
+      value.gsub!(/\?/,'_')
+      @conditions += "#{field} LIKE '#{value}' ESCAPE '#{ESCAPE}'"
     end
-    return clause
   end
-  
-  def get_tabs rectype
-    if (rectype == 'PART')
-      tabs = TABS_PART
-    elsif (rectype == 'WORKAUTH')
-      tabs = TABS_WORKAUTH
-    elsif (rectype == 'DOCUMENT')
-      tabs = TABS_DOCUMENT
-    elsif (rectype == 'SOFTWARE')
-      tabs = TABS_SOFTWARE
-    end
-    tabs.each do |tab|
-      p tab[:label]
-      tab[:fields].each do |field|
-        p field[:label]
-      end
-    end
-    return tabs
-  end
-
+end
 end
