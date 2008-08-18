@@ -26,13 +26,13 @@
 			colModel :[
 				{name:'id',        index:'id',        hidden:true},
 				{name:'name',      index:'brecname',  width:80},
-				{name:'bname1',    index:'bname1',    width:50,  align:'right'},
-				{name:'brecalt',   index:'brecalt',   width:30,  align:'right'},
+				{name:'bname1',    index:'bname1',    width:50},
+				{name:'brecalt',   index:'brecalt',   width:30},
 				{name:'breclevel', index:'breclevel', width:50}, 
 				{name:'bdesc',     index:'bdesc',     width:300, sortable:false} ],
 			rowNum: 10,
 			rowList: [10,20,30,50,100],
-			sortname: 'brecname',
+			sortname: 'brecname,brecalt',
 			sortorder: 'asc',
 			viewrecords: true,
 			imgpath: '/javascripts/themes/basic/images',
@@ -54,7 +54,8 @@
 			},
 			postData: {
 				conditions: '<%=escape_javascript @conditions%>',
-				joins: '<%=escape_javascript @joins%>'
+				joins: '<%=escape_javascript @joins%>',
+				group: '<%=escape_javascript @group%>'
 			}
 		})
 		.navGrid('#searchPager', {refresh: true, edit: false, add: false, del: false, search: true})

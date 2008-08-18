@@ -9,11 +9,12 @@ class BrecordsController < ApplicationController
   def show
     @hiddengrid = params[:hiddengrid] || "false"
     @joins = ''
+    @group = ''
     join_count = 0
     if request.post?
       brecord = params[:brecord]
       @rectype = brecord[:find_rec_brectype].upcase
-      @conditions = nil
+      @conditions = 'id = blatest'
       name = nil
       cage_code = nil
       brecord.each do |key, value|
@@ -29,6 +30,10 @@ class BrecordsController < ApplicationController
           elsif field == 'bname1'
             cage_code = value
           else
+            if field == 'brecalt' and value[-1,1] == '#'
+              value[-1,1] = '*'
+              @group = 'brectype,brecname'
+            end
             add_condition(field, value)
           end
         when /find_uda_(.+)/
@@ -122,6 +127,7 @@ class BrecordsController < ApplicationController
     sord = params[:sord] || 'desc'
     conditions = params[:conditions]
     joins = params[:joins]
+    group = params[:group]
 
     start = ((page-1) * limit).to_i
     if (start < 0)
@@ -161,19 +167,59 @@ class BrecordsController < ApplicationController
       conditions += " AND " + query
     end
 
-    @brecords = Brecord.find :all,
-      :order => sidx+' '+sord,
-      :limit => limit,
-      :offset => start,
-      :select =>"id, brecname, brecalt, breclevel, bdesc, bname1",
-      :conditions => conditions,
-      :joins => joins
-      
-    count =  Brecord.count :all,
-            :conditions => conditions,
-            :joins => joins
+    last_conditions = session[:last_conditions] || ''
+    last_group = session[:last_group] || ''
+    last_count = session[:last_count].to_i
+    if group.empty?
+      # Ricerca di tutte le revisioni del record (senza GROUP BY)
+      @brecords = Brecord.find :all,
+        :order => sidx+' '+sord,
+        :limit => limit,
+        :offset => start,
+        :select =>"id, brecname, brecalt, breclevel, bdesc, bname1",
+        :conditions => conditions,
+        :joins => joins
+        
+      # Ricalcolo count solo quando necessario
+      if (conditions == last_conditions && last_group.empty?)
+        count = last_count
+      else
+        count = Brecord.count :all,
+          :conditions => conditions,
+          :joins => joins
+      end
+    else
+      # Ricerca della revisione piu' recente del record (con GROUP BY)
+      latest = Brecord.find(:all,
+        :order => sidx+' '+sord,
+        :limit => limit,
+        :offset => start,
+        :select =>"brectype, brecname, max(brecalt) as brecalt",
+        :conditions => conditions,
+        :joins => joins,
+        :group => group).map { |rec| [ "('#{rec.brectype}','#{rec.brecname}','#{rec.brecalt}')" ] }.join(',')
 
-    total_pages = (count/limit).ceil
+      @brecords = Brecord.find :all,
+        :order => sidx+' '+sord,
+        :select =>"id, brecname, brecalt, breclevel, bdesc, bname1",
+        :conditions => [ "(brectype,brecname,brecalt) IN (#{latest})" ]
+
+      # Ricalcolo count solo quando necessario
+      if (conditions == last_conditions && last_group == group)
+        count = last_count
+      else
+        count = Brecord.find(:all,
+          :select =>"brectype, brecname, max(brecalt) as brecalt",
+          :conditions => conditions,
+          :joins => joins,
+          :group => group).size
+      end
+    end
+    session[:last_conditions] = conditions
+    session[:last_group] = group
+    session[:last_count] = count.to_s
+
+    total_pages = (count.to_f/limit).ceil
       
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
@@ -242,17 +288,11 @@ class BrecordsController < ApplicationController
       conditions = conditions
     end
 
-    @brefs = Bref.find :all,
-      :order => sidx+' '+sord,
-      :limit => limit,
-      :offset => start,
-      :select =>"breftype, brectype, brecname, brecalt, bdesc, bquantity",
-      :conditions => conditions
+    @brefs = Bref.resolve(sidx+' '+sord, limit, start, conditions)
       
-    count = Bref.count :all,
-            :conditions => conditions
+    count = Bref.count :all, :conditions => conditions
 
-    total_pages = (count/limit).ceil
+    total_pages = (count.to_f/limit).ceil
 
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
@@ -270,6 +310,7 @@ class BrecordsController < ApplicationController
         u.name,
         u.cage_code,
         u.brecalt,
+        u.breclevel,
         u.bdesc,
         u.bquantity]}}
 
@@ -334,7 +375,7 @@ class BrecordsController < ApplicationController
     count = Bpromotion.count :all,
             :conditions => conditions
 
-    total_pages = (count/limit).ceil
+    total_pages = (count.to_f/limit).ceil
 
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
@@ -414,7 +455,7 @@ class BrecordsController < ApplicationController
     count = Bchkhistory.count :all,
             :conditions => conditions
 
-    total_pages = (count/limit).ceil
+    total_pages = (count.to_f/limit).ceil
 
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()
@@ -495,7 +536,7 @@ class BrecordsController < ApplicationController
     count = Brecord.count :all,
             :conditions => conditions
 
-    total_pages = (count/limit).ceil
+    total_pages = (count.to_f/limit).ceil
 
     # Construct a hash from the ActiveRecord result
     return_data = Hash.new()

@@ -10,7 +10,7 @@ class Brecord < ActiveRecord::Base
   end
 
   def cage_code
-    self[:brecname].split('&')[1].to_s
+    self[:brecname].split('&')[1] || ''
   end
 
   def title
@@ -20,4 +20,27 @@ class Brecord < ActiveRecord::Base
   def promdate
     self[:bpromdate].to_s(:db)
   end
+
+  def self.latest(brectype, brecname, brecalt = '#')
+    latest_rev = nil
+    conditions = "brectype = '#{brectype}' AND brecname = '#{brecname}' AND id = blatest"
+    if brecalt
+      if brecalt[-1,1] == '#'
+        brecalt[-1,1] = '%'
+      end
+      if !brecalt.empty?
+        conditions += " AND brecalt LIKE '#{brecalt}'"
+      end
+    end
+    rec = self.find(:all,
+      :select =>"MAX(brecalt) AS brecalt",
+      :conditions => conditions,
+      :group => 'brectype,brecname')[0]
+    if rec
+      conditions = "brectype = '#{brectype}' AND brecname = '#{brecname}' AND brecalt = '#{rec.brecalt}' AND id = blatest"
+      latest_rev = self.find(:all, :conditions => conditions)[0]
+    end
+    latest_rev
+  end
+
 end
