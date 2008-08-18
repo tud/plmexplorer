@@ -1,4 +1,5 @@
 <%
+	udas = @record.budas
 	TABS["#{@record.brectype}"].each do |tab|
 		tab['fields'].each do |field|
 			fid = field['id']
@@ -17,10 +18,10 @@
 				ftype = field['type']
 				if (ftype == nil)
 					attrname = fid.gsub(/uda_/, '').upcase
-					uda = @record.budas.find_by_bname(attrname)
-					if (uda != nil)
+					uda = get_uda_value udas, attrname
+					if (uda)
 %>
-						jQuery('#view_<%=fid%>').val('<%= escape_javascript h uda.bvalue  %>')
+						jQuery('#view_<%=fid%>').val('<%= escape_javascript h uda %>')
 <%
 					end
 				elsif (ftype.starts_with? "multi_")
@@ -31,9 +32,9 @@
 					while (ii <= counter)
 						suffix = "%02d" % ii  
 						multi_attrname = "#{attrname}_#{suffix}"
-						uda = @record.budas.find_by_bname(multi_attrname)
+						uda = get_uda_value udas, multi_attrname
 						if (uda)
-							value = "#{value}#{uda.bvalue}\n"
+							value = "#{value}#{uda}\n"
 						end
 						ii = ii + 1
 					end
