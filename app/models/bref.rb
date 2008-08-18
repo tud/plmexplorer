@@ -1,5 +1,7 @@
 class Bref < ActiveRecord::Base
   belongs_to :brecord, :foreign_key => 'bobjid'
+
+  attr_reader :child_id
   
   def name
     self[:brecname].split('&')[0]
@@ -10,8 +12,6 @@ class Bref < ActiveRecord::Base
   end
 
   def self.resolve(order, limit, offset, conditions)
-    attr_reader :child_id
-
     refs = Bref.find(:all,
       :order => order,
       :limit => limit,
