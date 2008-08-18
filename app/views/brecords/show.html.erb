@@ -81,7 +81,7 @@
 <% end %>
 
 <% content_for(:content) do %>
-	<% if (controller.action_name != "index") %>
+	<% if (TABS["#{@rectype}"]) %>
 		<%=render :partial => 'tabs'%>
 	<% end %>
 <% end %>
