@@ -1,56 +1,48 @@
 <%= javascript_include_tag 'ui/ui.tabs.js', :cache => true %>
 <script type="text/javascript">
 	jQuery(document).ready(function(){
-		$('#tabsRec > ul').tabs({ fx: { height: 'toggle', opacity: 'toggle' }});
+		$('#tabs_record > ul').tabs({ fx: { height: 'toggle', opacity: 'toggle' }});
 	});
 </script>
 <br/>
 <div id="record_title"></div>
 <br/>
-<div id="tabsRec">
+<div id="tabs_record">
 	<ul>
-		<li><a href="#tab_base"><span>Info</span></a></li>
-		<li><%= link_to '<span>References</span>', :controller => 'brecords' %></li>
-		<li><%= link_to '<span>History</span>', :controller => 'brecords' %></li>
+		<% (tab_names @rectype).each do |tab| %>
+			<li><%= link_to tab['label'], :anchor => tab['action'] %></li>
+		<% end %>
+		<% (tab_commons).each do |tab| %>
+			<% if (@record) %>
+				<% id = @record.id %>
+			<% else %>
+				<% id = 0 %>
+			<% end %>
+			<li><%= link_to tab['label'], :controller => 'brecords', :action => tab['action'], :id => id %></li>
+		<% end %>
 	</ul>
-	<div id="tab_base" class="ui-tabs-hide">
-		<form id="record_base" action="" method="post">
-			<fieldset>
-				<legend></legend>
-				<input type="hidden" id="view_record_id" />
-				<div>
-					<label for="f1">Type:</label>
-					<input type="text" id="view_record_type" readonly="readonly" />
-				</div>
-				<div>
-					<label for="f2">Name:</label>
-					<input type="text" id="view_record_name" readonly="readonly" />
-				</div>
-				<div>
-					<label for="f3">Bus. ID:</label>
-					<input type="text" id="view_record_cage" readonly="readonly" />
-				</div>
-				<div>
-					<label for="f4">Rev.:</label>
-					<input type="text" id="view_record_brecalt" readonly="readonly" />
-				</div>
-				<div>
-					<label for="f6">Status:</label>
-					<input type="text" id="view_record_breclevel" readonly="readonly" />
-				</div>
-				<div>
-					<label for="f7">Description:</label>
-					<input type="text" id="view_record_bdesc" readonly="readonly" size="80"/>
-				</div>
-				<div>
-					<label for="f7">Project:</label>
-					<input type="text" id="view_record_bproject" readonly="readonly" />
-				</div>
-				<div>
-					<label for="f7">Owner:</label>
-					<input type="text" id="view_record_bowner" readonly="readonly" />
-				</div>
-			</fieldset>
-		</form>
-	</div>
+	<input type="hidden" id="view_record_id" />
+	<% (tab_names @rectype).each do |tab| %>
+		<div id="<%= tab['action'] %>" class="ui-tabs-hide">
+			<form id="view_<%= tab['action'] %>" action="" method="post">
+				<fieldset>
+					<legend></legend>
+					<% tab['fields'].each do |field| %>
+						<% if (field['type'] == nil) %>
+							<div>
+								<label for="view_<%= field['id'] %>"><%= field['label'] %>:</label>
+								<input type="text" id="view_<%= field['id'] %>" readonly="readonly" size="<%= field['size'] %>"/>
+							</div>
+						<% elsif (field['type'].starts_with? "multi") %>
+							<% rows = (field['type']).gsub(/multi_/,'') %>
+							<div>
+								<label for="view_<%= field['id'] %>"><%= field['label'] %>:</label>
+								<textarea id="view_<%= field['id'] %>" readonly="readonly" cols="<%= field['size'] %>" rows="<%= rows %>"></textarea>
+							</div>
+						<% end %>
+					<% end %>
+				</fieldset>
+			</form>
+		</div>
+	<% end %>
 </div>
