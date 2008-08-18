@@ -10,6 +10,8 @@ class Bref < ActiveRecord::Base
   end
 
   def self.resolve(order, limit, offset, conditions)
+    attr_reader :child_id
+
     refs = Bref.find(:all,
       :order => order,
       :limit => limit,
@@ -24,10 +26,12 @@ class Bref < ActiveRecord::Base
           :conditions => "brectype = '#{ref.brectype}' AND brecname = '#{ref.brecname}' AND brecalt = '#{ref.brecalt}' AND id = blatest")[0]
       end
       if child
+        child_id = child.id
         ref.brecalt = child.brecalt
         ref.breclevel = child.breclevel
         ref.bdesc = child.bdesc
       else
+        child_id = 0
         ref.bdesc = '*** UNRESOLVED ***'
       end
     end

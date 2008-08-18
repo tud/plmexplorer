@@ -63,7 +63,7 @@ jQuery(document).ready(function(){
 		height: '100%',
 		width: 805,
 		pager: 'revisionsPager',
-		postData: {conditions: 'brectype="<%=@record.brectype%>" AND brecname="<%=@record.brecname%>" '}
+		postData: {conditions: 'brectype=\'<%=@record.brectype%>\' AND brecname=\'<%=@record.brecname%>\' '}
 	})
 	.navGrid('#revisionsPager', {refresh: true, edit: false, add: false, del: false, search: true})
 });
