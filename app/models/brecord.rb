@@ -32,13 +32,13 @@ class Brecord < ActiveRecord::Base
         conditions += " AND brecalt LIKE '#{brecalt}'"
       end
     end
-    rec = self.find(:all,
+    rec = self.find(:first,
       :select =>"MAX(brecalt) AS brecalt",
       :conditions => conditions,
-      :group => 'brectype,brecname')[0]
+      :group => 'brectype,brecname')
     if rec
       conditions = "brectype = '#{brectype}' AND brecname = '#{brecname}' AND brecalt = '#{rec.brecalt}' AND id = blatest"
-      latest_rev = self.find(:all, :conditions => conditions)[0]
+      latest_rev = self.find(:first, :conditions => conditions)
     end
     latest_rev
   end

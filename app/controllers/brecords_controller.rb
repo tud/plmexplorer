@@ -185,7 +185,7 @@ class BrecordsController < ApplicationController
 
   def grid_refs
     prep_query
-    @brefs = Bref.resolve(@order, @limit, @offset, @conditions)
+    @brefs = Bref.resolve_set(@order, @limit, @offset, @conditions)
       
     if (@conditions == @prev_conditions)
       count = @prev_count

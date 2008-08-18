@@ -11,30 +11,33 @@ class Bref < ActiveRecord::Base
     self[:brecname].split('&')[1] || ''
   end
 
-  def self.resolve(order, limit, offset, conditions)
+  def resolve
+    if self.btype1 == 'LATEST' || self.brecalt[-1,1] == '#'
+      child = Brecord.latest(self.brectype, self.brecname, self.brecalt)
+    else
+      child = Brecord.find(:first,
+        :conditions => "brectype = '#{self.brectype}' AND brecname = '#{self.brecname}' AND brecalt = '#{self.brecalt}' AND id = blatest")
+    end
+    if child
+      @child_id = child.id
+      self.brecalt = child.brecalt
+      self.breclevel = child.breclevel
+      self.bdesc = child.bdesc
+    else
+      @child_id = 0
+      self.bdesc = '*** UNRESOLVED ***'
+    end
+    self
+  end
+
+  def self.resolve_set(order, limit, offset, conditions)
     refs = Bref.find(:all,
       :order => order,
       :limit => limit,
       :offset => offset,
       :select =>"breftype, brectype, brecname, brecalt, breclevel, bdesc, bquantity, btype1",
       :conditions => conditions)
-    refs.each do |ref|
-      if ref.btype1 == 'LATEST' || ref.brecalt[-1,1] == '#'
-        child = Brecord.latest(ref.brectype, ref.brecname, ref.brecalt)
-      else
-        child = Brecord.find(:all,
-          :conditions => "brectype = '#{ref.brectype}' AND brecname = '#{ref.brecname}' AND brecalt = '#{ref.brecalt}' AND id = blatest")[0]
-      end
-      if child
-        child_id = child.id
-        ref.brecalt = child.brecalt
-        ref.breclevel = child.breclevel
-        ref.bdesc = child.bdesc
-      else
-        child_id = 0
-        ref.bdesc = '*** UNRESOLVED ***'
-      end
-    end
+    refs.each { |ref| ref.resolve }
     refs
   end
   
