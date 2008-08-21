@@ -45,6 +45,7 @@
 				if (id!=null && id!==lastSel) {
 					jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
 					lastSel=id;
+					$('#tabs_record').show();
 					jQuery.ajax({
 						type: "POST",
 						url: ("<%= url_for(:action => 'load_record_base', :controller => 'brecords') %>?id="+id),
@@ -64,6 +65,7 @@
 				onClickButton:function() {
 					var id = jQuery('#searchGrid').getGridParam('selrow');
 					if (id) {
+						$('#tabs_record').show();
 						jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
 						jQuery.ajax({
 							type: "POST",

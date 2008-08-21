@@ -16,7 +16,7 @@ class Brecord < ActiveRecord::Base
   def title
     brectype+" "+brecname.gsub(/&/,'~')+" Rev. "+brecalt+" at Status "+breclevel+" - "+bdesc
   end
-  
+
   def promdate
     self[:bpromdate].to_s(:db)
   end

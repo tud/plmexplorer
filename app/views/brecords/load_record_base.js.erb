@@ -1,66 +1,71 @@
 <%
-	udas = @record.budas
-	TABS["#{@record.brectype}"].each do |tab|
-		tab['fields'].each do |field|
-			fid = field['id']
-			if (fid.starts_with? "record_")
-				attrname = fid.gsub(/record_/, '')
-				if (@record.attribute_present? attrname)
+	if (TABS["#{@record.brectype}"])
+		udas = @record.budas
+		TABS["#{@record.brectype}"].each do |tab|
+			tab['fields'].each do |field|
+				fid = field['id']
+				if (fid.starts_with? "record_")
+					attrname = fid.gsub(/record_/, '')
+					if (@record.attribute_present? attrname)
 %>
-					jQuery('#view_<%=fid%>').val('<%= escape_javascript h @record.read_attribute attrname %>')
+						jQuery('#view_<%=fid%>').val('<%= escape_javascript h @record.read_attribute attrname %>')
 <%
-				elsif (@record.respond_to? attrname)
+					elsif (@record.respond_to? attrname)
 %>
-					jQuery('#view_<%=fid%>').val('<%= escape_javascript h @record.send(attrname) %>')
-<%
-				end
-			elsif (fid.starts_with? "uda_")
-				ftype = field['type']
-				if (ftype == nil)
-					attrname = fid.gsub(/uda_/, '').upcase
-					uda = get_uda_value udas, attrname
-					if (uda)
-%>
-						jQuery('#view_<%=fid%>').val('<%= escape_javascript h uda %>')
+						jQuery('#view_<%=fid%>').val('<%= escape_javascript h @record.send(attrname) %>')
 <%
 					end
-				elsif (ftype.starts_with? "multi_")
-					attrname = fid.gsub(/uda_/, '').upcase
-					counter = ftype.gsub(/multi_/,'').to_i
-					ii = 1
-					value = ""
-					while (ii <= counter)
-						suffix = "%02d" % ii  
-						multi_attrname = "#{attrname}_#{suffix}"
-						uda = get_uda_value udas, multi_attrname
+				elsif (fid.starts_with? "uda_")
+					ftype = field['type']
+					if (ftype == nil)
+						attrname = fid.gsub(/uda_/, '').upcase
+						uda = get_uda_value udas, attrname
 						if (uda)
-							value = "#{value}#{uda}\n"
-						end
-						ii = ii + 1
-					end
 %>
-					jQuery('#view_<%=fid%>').val('<%= escape_javascript h value  %>')
+							jQuery('#view_<%=fid%>').val('<%= escape_javascript h uda %>')
 <%
+						end
+					elsif (ftype.starts_with? "multi_")
+						attrname = fid.gsub(/uda_/, '').upcase
+						counter = ftype.gsub(/multi_/,'').to_i
+						ii = 1
+						value = ""
+						while (ii <= counter)
+							suffix = "%02d" % ii  
+							multi_attrname = "#{attrname}_#{suffix}"
+							uda = get_uda_value udas, multi_attrname
+							if (uda)
+								value = "#{value}#{uda}\n"
+							end
+							ii = ii + 1
+						end
+%>
+						jQuery('#view_<%=fid%>').val('<%= escape_javascript h value  %>')
+<%
+					end
 				end
 			end
 		end
-	end
 
-	itabs = TABS["#{@record.brectype}"].size
-	TABS["COMMONS"].each do |tab|
+		itabs = TABS["#{@record.brectype}"].size
+		TABS["COMMONS"].each do |tab|
 %>
-		jQuery('#tabs_record > ul').tabs("url", <%= itabs %> , "/<%= controller.controller_name %>/<%= tab['action'] %>?id=<%= @record.id %>")
+			jQuery('#tabs_record > ul').tabs("url", <%= itabs %> , "/<%= controller.controller_name %>/<%= tab['action'] %>?id=<%= @record.id %>")
 <%
-		itabs=itabs+1
-	end
+			itabs=itabs+1
+		end
 %>
 
-jQuery('#view_record_id').val('<%= escape_javascript h @record.id  %>')
+		jQuery('#view_record_id').val('<%= escape_javascript h @record.id  %>')
 
-jQuery('#record_title').html("<%= escape_javascript h @record.title %>")
-jQuery('#record_title').show()
-jQuery('#record_title').corner("10px")
+		jQuery('#record_title').html("<%= escape_javascript h @record.title %>")
+		jQuery('#record_title').show()
+		jQuery('#record_title').corner("10px")
 
-jQuery('#tabs_record > ul').tabs("select", 0)
+		jQuery('#tabs_record > ul').tabs("select", 0)
 
-jQuery('#record_base').effect("highlight", {}, 1000);
+		jQuery('#record_base').effect("highlight", {}, 1000);
+
+<%
+	end
+%>
