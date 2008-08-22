@@ -10,7 +10,7 @@ class BrecordsController < ApplicationController
     @hiddengrid = params[:hiddengrid] || "false"
     @joins = ''
     @group = ''
-    join_count = 0
+    uda_ref = 'u0'
     if request.post?
       brecord = params[:brecord]
       @rectype = brecord[:find_rec_brectype].upcase
@@ -39,8 +39,7 @@ class BrecordsController < ApplicationController
         when /find_uda_(.+)/
           if !matches_any(value)
             field = $1.upcase
-            join_count += 1
-            uda_ref = 'u' + join_count.to_s
+            uda_ref.next!
             @joins += ', budas ' + uda_ref
             add_condition(uda_ref+'.bname', field)
             add_condition(uda_ref+'.bvalue', value)
@@ -151,10 +150,14 @@ class BrecordsController < ApplicationController
         :joins => @joins,
         :group => @group).map { |rec| [ "('#{rec.brectype}','#{rec.brecname}','#{rec.brecalt}')" ] }.join(',')
 
-      @brecords = Brecord.find :all,
-        :order => @order,
-        :select =>"id, brecname, brecalt, breclevel, bdesc, bname1",
-        :conditions => [ "(brectype,brecname,brecalt) IN (#{latest})" ]
+      if latest.empty?
+        @brecords = []
+      else
+        @brecords = Brecord.find(:all,
+          :order => @order,
+          :select =>"id, brecname, brecalt, breclevel, bdesc, bname1",
+          :conditions => [ "(brectype,brecname,brecalt) IN (#{latest})" ])
+      end
 
       # Ricalcolo count solo quando necessario
       if (@conditions == @prev_conditions && @prev_group == @group)

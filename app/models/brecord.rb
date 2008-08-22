@@ -22,25 +22,9 @@ class Brecord < ActiveRecord::Base
   end
 
   def self.latest(brectype, brecname, brecalt = '#')
-    latest_rev = nil
     conditions = "brectype = '#{brectype}' AND brecname = '#{brecname}' AND id = blatest"
-    if brecalt
-      if brecalt[-1,1] == '#'
-        brecalt[-1,1] = '%'
-      end
-      if !brecalt.empty?
-        conditions += " AND brecalt LIKE '#{brecalt}'"
-      end
-    end
-    rec = self.find(:first,
-      :select =>"MAX(brecalt) AS brecalt",
-      :conditions => conditions,
-      :group => 'brectype,brecname')
-    if rec
-      conditions = "brectype = '#{brectype}' AND brecname = '#{brecname}' AND brecalt = '#{rec.brecalt}' AND id = blatest"
-      latest_rev = self.find(:first, :conditions => conditions)
-    end
-    latest_rev
+    conditions += " AND brecalt > '#{brecalt}'" if brecalt && brecalt[-1,1] == '#'
+    latest_rev = self.find(:first, :conditions => conditions, :order => 'brecalt DESC')
   end
 
 end
