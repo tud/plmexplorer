@@ -23,8 +23,36 @@ class Brecord < ActiveRecord::Base
 
   def self.latest(brectype, brecname, brecalt = '#')
     conditions = "brectype = '#{brectype}' AND brecname = '#{brecname}' AND id = blatest"
-    conditions += " AND brecalt > '#{brecalt}'" if brecalt && brecalt[-1,1] == '#'
+    if brecalt && brecalt[-1,1] == '#'
+      brecalt[-1,1] = '%'
+      conditions += " AND brecalt like '#{brecalt}'"
+    end
     latest_rev = self.find(:first, :conditions => conditions, :order => 'brecalt DESC')
   end
+
+  def where_used(order, limit, offset, conditions = '')
+    conditions ||= ''
+    if !conditions.empty?
+      conditions += ' AND '
+    end
+    select = 'brecords.brectype, brecords.brecname, MAX(brecords.brecalt) AS brecalt'
+    conditions = "brecords.id = brefs.bobjid AND brefs.brectype = '#{self.brectype}' AND brefs.brecname = '#{self.brecname}' AND (((brefs.btype1 = 'LATEST' OR SUBSTR(brefs.brecalt,-1,1) = '#') AND SUBSTR(brefs.breftype,-4,4) != '_FRZ' AND SUBSTR(brefs.brecalt,1,4) <= '#{self.brecalt}') OR (((brefs.btype1 != 'LATEST' AND SUBSTR(brefs.brecalt,-1,1) != '#') OR SUBSTR(brefs.breftype,-4,4) = '_FRZ') AND SUBSTR(brefs.brecalt,1,4) = '#{self.brecalt}'))"
+    joins = ', brefs'
+    group = 'brecords.brectype, brecords.brecname'
+    latest = Brecord.find(:all,
+      :select => select,
+      :conditions => conditions,
+      :joins => joins,
+      :group => group).uniq.map { |rec| [ "('#{rec.brectype}','#{rec.brecname}','#{rec.brecalt}')" ] }.join(',')
+    if latest.empty?
+      parents = []
+    else
+      conditions = "brecords.id = brefs.bobjid AND brecords.id = brecords.blatest AND (brecords.brectype,brecords.brecname,brecords.brecalt) IN (#{latest}) AND brefs.brectype = '#{self.brectype}' AND brefs.brecname = '#{self.brecname}'"
+      parents = Brecord.find(:all,
+        :select => "brefs.breftype, brecords.*",
+        :conditions => conditions,
+        :joins => joins)
+    end
+  end  
 
 end

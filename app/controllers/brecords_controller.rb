@@ -76,7 +76,7 @@ class BrecordsController < ApplicationController
         @statusList = Blevel.find(:all).map { |level| level.bname }.sort.uniq
       else
         @statusList = Blevel.find(:all,
-                                  :conditions => "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname = '" + @rectype + "'",
+                                  :conditions => "blevels.bobjid = brelprocs.id AND brelprocs.id = brelrectypes.bobjid AND brelrectypes.bname = '" + @rectype + "'",
                                   :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
       end
       @statusList.unshift('')
@@ -127,7 +127,7 @@ class BrecordsController < ApplicationController
         :order => @order,
         :limit => @limit,
         :offset => @offset,
-        :select =>"id, brecname, brecalt, breclevel, bdesc, bname1",
+        :select => "id, brecname, brecalt, breclevel, bdesc, bname1",
         :conditions => @conditions,
         :joins => @joins
         
@@ -145,7 +145,7 @@ class BrecordsController < ApplicationController
         :order => @order,
         :limit => @limit,
         :offset => @offset,
-        :select =>"brectype, brecname, max(brecalt) as brecalt",
+        :select => "brectype, brecname, MAX(brecalt) AS brecalt",
         :conditions => @conditions,
         :joins => @joins,
         :group => @group).map { |rec| [ "('#{rec.brectype}','#{rec.brecname}','#{rec.brecalt}')" ] }.join(',')
@@ -155,7 +155,7 @@ class BrecordsController < ApplicationController
       else
         @brecords = Brecord.find(:all,
           :order => @order,
-          :select =>"id, brecname, brecalt, breclevel, bdesc, bname1",
+          :select => "id, brectype, brecname, brecalt, breclevel, bdesc, bname1",
           :conditions => [ "(brectype,brecname,brecalt) IN (#{latest})" ])
       end
 
@@ -164,7 +164,7 @@ class BrecordsController < ApplicationController
         count = @prev_count
       else
         count = Brecord.find(:all,
-          :select =>"brectype, brecname, max(brecalt) as brecalt",
+          :select => "brectype, brecname, MAX(brecalt) AS brecalt",
           :conditions => @conditions,
           :joins => @joins,
           :group => @group).size
@@ -220,7 +220,7 @@ class BrecordsController < ApplicationController
       :order => @order,
       :limit => @limit,
       :offset => @offset,
-      :select =>"bpromdate, blevel, brelproc, buser, bdesc",
+      :select => "bpromdate, blevel, brelproc, buser, bdesc",
       :conditions => @conditions
       
     count = Bpromotion.count :all, :conditions => @conditions
@@ -247,7 +247,7 @@ class BrecordsController < ApplicationController
       :order => @order,
       :limit => @limit,
       :offset => @offset,
-      :select =>"bdate, bcommand, bstatus, bname, buser, bdesc",
+      :select => "bdate, bcommand, bstatus, bname, buser, bdesc",
       :conditions => @conditions
       
     count = Bchkhistory.count :all, :conditions => @conditions
@@ -275,7 +275,7 @@ class BrecordsController < ApplicationController
       :order => @order,
       :limit => @limit,
       :offset => @offset,
-      :select =>"brectype, brecname, brecalt, breclevel, bproject, bowner, bpromdate",
+      :select => "brectype, brecname, brecalt, breclevel, bproject, bowner, bpromdate",
       :conditions => @conditions
       
     count = Brecord.count :all, :conditions => @conditions
