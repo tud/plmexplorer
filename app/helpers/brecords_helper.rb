@@ -27,7 +27,7 @@ module BrecordsHelper
     end
     tabnames
   end
-  
+
   def get_uda_value udas, uda_name
     uda_value = nil
     udas.each do |u|

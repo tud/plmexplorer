@@ -19,3 +19,5 @@ db/*.sqlite3
 *.tmproj
 Capfile
 doc/*.dot
+public/javascripts/cache/*
+public/stylesheets/cache/*

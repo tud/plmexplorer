@@ -29,6 +29,16 @@ jQuery(document).ready(function(){
 		height: '100%',
 		width: 805,
 		pager: 'refsPager',
+		ondblClickRow: function(id) {
+			if (id!=null && id!==lastSel) {
+				lastSel=id;
+				jQuery.ajax({
+					type: "POST",
+					url: ("<%= url_for(:action => 'load_record_base', :controller => 'brecords') %>?id="+id),
+					dataType: "script"
+				});
+			}
+		},
 		postData: {conditions: 'bobjid='+id+' '}
 	})
 	.navGrid('#refsPager', {refresh: true, edit: false, add: false, del: false, search: true})

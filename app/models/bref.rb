@@ -2,7 +2,7 @@ class Bref < ActiveRecord::Base
   belongs_to :brecord, :foreign_key => 'bobjid'
 
   attr_reader :child_id
-  
+
   def name
     self[:brecname].split('&')[0]
   end
@@ -52,5 +52,5 @@ class Bref < ActiveRecord::Base
     refs.each { |ref| ref.resolve }
     refs
   end
-  
+
 end

@@ -1,14 +1,8 @@
 <% content_for(:head) do %>
-	<%= stylesheet_link_tag '../javascripts/themes/basic/grid.css', :cache => true %>
-	<%= stylesheet_link_tag '../javascripts/themes/jqModal.css', :cache => true %>
-	<%= stylesheet_link_tag 'grid_custom.css', :cache => true %>
+	<%= stylesheet_link_tag '../javascripts/themes/basic/grid.css','../javascripts/themes/jqModal.css','grid_custom.css' %>
 
-	<%= javascript_include_tag 'jquery.jqGrid.js', :cache => true %>
-	<%= javascript_include_tag 'js/jqModal.js', :cache => true %>
-	<%= javascript_include_tag 'js/jqDnR.js', :cache => true %>
-	<%= javascript_include_tag 'ui/effects.core.js', :cache => true %>
-	<%= javascript_include_tag 'ui/effects.highlight.js', :cache => true %>
-	<%= javascript_include_tag 'ui/effects.blind.js', :cache => true %>
+	<%= javascript_include_tag 'jquery.jqGrid.js','js/jqModal.js','js/jqDnR.js','ui/effects.core.js','ui/effects.highlight.js','ui/effects.blind.js',:cache => 'cache/show' %>
+
 <% end %>
 
 <% content_for(:search) do %>
@@ -45,6 +39,7 @@
 				if (id!=null && id!==lastSel) {
 					jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
 					lastSel=id;
+					$('#tabs_record').show();
 					jQuery.ajax({
 						type: "POST",
 						url: ("<%= url_for(:action => 'load_record_base', :controller => 'brecords') %>?id="+id),
@@ -64,6 +59,7 @@
 				onClickButton:function() {
 					var id = jQuery('#searchGrid').getGridParam('selrow');
 					if (id) {
+						$('#tabs_record').show();
 						jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
 						jQuery.ajax({
 							type: "POST",

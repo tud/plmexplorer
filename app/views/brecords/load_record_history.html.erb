@@ -4,7 +4,8 @@
 <div id="promotionsPager" class="scroll"></div>
 
 <script type="text/javascript">
-var id = jQuery('#view_record_id').attr('value');
+var id;
+id = jQuery('#view_record_id').attr('value');
 jQuery(document).ready(function(){
 	jQuery('#promotionsGrid').jqGrid({
 		url: '/brecords/grid_promotions',
@@ -18,7 +19,7 @@ jQuery(document).ready(function(){
 			{name:'brelproc',  index:'brelproc',  width:80},
 			{name:'buser',     index:'buser',     width:50},
 			{name:'bdesc',     index:'bdesc',     width:80} ],
-		rowNum: 50,
+		rowNum: 20,
 		rowList: [10,20,30,50,100],
 		sortname: 'bpromdate',
 		sortorder: 'asc',
@@ -40,7 +41,7 @@ jQuery(document).ready(function(){
 <div id="revisionsPager" class="scroll"></div>
 
 <script type="text/javascript">
-var id = jQuery('#view_record_id').attr('value');
+id = jQuery('#view_record_id').attr('value');
 jQuery(document).ready(function(){
 	jQuery('#revisionsGrid').jqGrid({
 		url: '/brecords/grid_revisions',
@@ -54,7 +55,7 @@ jQuery(document).ready(function(){
 			{name:'bproject',  index:'bproject',  width:50},
 			{name:'bowner',    index:'bowner',    width:50},
 			{name:'promdate',  index:'bpromdate', width:80} ],
-		rowNum: 50,
+		rowNum: 20,
 		rowList: [10,20,30,50,100],
 		sortname: 'brecalt',
 		sortorder: 'desc',
@@ -63,6 +64,15 @@ jQuery(document).ready(function(){
 		height: '100%',
 		width: 805,
 		pager: 'revisionsPager',
+		ondblClickRow: function(id) {	
+			if (id!=null) {
+				jQuery.ajax({
+					type: "POST",
+					url: ("<%= url_for(:action => 'load_record_base', :controller => 'brecords') %>?id="+id),
+					dataType: "script"
+				});
+			}
+		},
 		postData: {conditions: 'brectype=\'<%=@record.brectype%>\' AND brecname=\'<%=@record.brecname%>\' '}
 	})
 	.navGrid('#revisionsPager', {refresh: true, edit: false, add: false, del: false, search: true})
@@ -76,7 +86,7 @@ jQuery(document).ready(function(){
 <div id="signoffsPager" class="scroll"></div>
 
 <script type="text/javascript">
-var id = jQuery('#view_record_id').attr('value');
+id = jQuery('#view_record_id').attr('value');
 jQuery(document).ready(function(){
 	jQuery('#signoffsGrid').jqGrid({
 		url: '/brecords/grid_signoffs',
@@ -91,7 +101,7 @@ jQuery(document).ready(function(){
 			{name:'bname',    index:'banme',    width:80},
 			{name:'buser',    index:'buser',    width:50},
 			{name:'bdesc',    index:'bdesc',    width:80} ],
-		rowNum: 50,
+		rowNum: 20,
 		rowList: [10,20,30,50,100],
 		sortname: 'bdate',
 		sortorder: 'asc',

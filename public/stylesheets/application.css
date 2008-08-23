@@ -75,3 +75,10 @@ form div label {
 .title {
 	font-weight: bold;
 }
+#findRecord input, #findRecord textarea, #findRecord select {
+	border: 1px solid #f3a251;
+}
+#findRecord input:focus, #findRecord input:active, #findRecord textarea:focus, #findRecord textarea:active, #findRecord select:focus, #findRecord select:active {
+	border: 1px solid #f3a251;
+	background: #ffeddc;
+}

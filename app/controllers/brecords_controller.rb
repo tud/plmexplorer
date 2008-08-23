@@ -1,9 +1,64 @@
 class BrecordsController < ApplicationController
-  
+
   ESCAPE = '|'
 
   def index
     redirect_to :action => :show, :rectype => '*', :hiddengrid => 'true'
+  end
+  
+  def find
+    @rectype = params[:rectype].upcase
+
+    unless @cageCodes
+      @cageCodes = DynList.build_from('IPD_BUSINESSID', :bdesc)
+    end
+
+    unless @statusList
+      if @rectype == '*'
+        @statusList = Blevel.find(:all).map { |level| level.bname }.sort.uniq
+      else
+        @statusList = Blevel.find(:all,
+                                  :conditions => "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname = '" + @rectype + "'",
+                                  :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
+      end
+      @statusList.unshift('')
+    end
+
+    unless @prjList
+      @prjList = Bproject.find(:all).map { |prj| prj.bname }.sort
+      @prjList.unshift('')
+    end
+
+    unless @userList
+      @userList = Bdbuser.find(:all).map { |user| user.buser }.sort.uniq
+      @userList.unshift('')
+    end
+
+    unless @typeList
+      if @rectype == 'PART'
+        @typeList = DynList.build_from('IPD_PARTSUBTYPE')
+      elsif @rectype == 'DOCUMENT'
+        @typeList = DynList.build_from('IPD_DOCSUBTYPE')
+      elsif @rectype == 'WORKAUTH'
+        @typeList = DynList.build_from('IPD_WORKASUBTYP')
+      elsif @rectype == 'SOFTWARE'
+        @typeList = DynList.sw_types
+      else
+        @typeList = []
+      end
+    end
+
+    unless @docSizes || @rectype != 'DOCUMENT'
+      @docSizes = DynList.build_from('IPD_DOCSIZE', :bdesc)
+    end
+
+    unless @changeClasses || @rectype != 'WORKAUTH'
+      @changeClasses = DynList.build_from('IPD_CHNGCLASS', :bdesc)
+    end
+
+    unless @changeSubClasses || @rectype != 'WORKAUTH'
+      @changeSubClasses = DynList.build_from('IPD_CHNGSUBCLASS', :bdesc)
+    end
   end
 
   def show
@@ -65,57 +120,6 @@ class BrecordsController < ApplicationController
     else
       @rectype = params[:rectype].upcase
       @conditions = "brectype is null"
-    end
-
-    unless @cageCodes
-      @cageCodes = DynList.build_from('IPD_BUSINESSID', :bdesc)
-    end
-
-    unless @statusList
-      if @rectype == '*'
-        @statusList = Blevel.find(:all).map { |level| level.bname }.sort.uniq
-      else
-        @statusList = Blevel.find(:all,
-                                  :conditions => "blevels.bobjid = brelprocs.id AND brelprocs.id = brelrectypes.bobjid AND brelrectypes.bname = '" + @rectype + "'",
-                                  :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
-      end
-      @statusList.unshift('')
-    end
-
-    unless @prjList
-      @prjList = Bproject.find(:all).map { |prj| prj.bname }.sort
-      @prjList.unshift('')
-    end
-
-    unless @userList
-      @userList = Bdbuser.find(:all).map { |user| user.buser }.sort.uniq
-      @userList.unshift('')
-    end
-
-    unless @typeList
-      if @rectype == 'PART'
-        @typeList = DynList.build_from('IPD_PARTSUBTYPE')
-      elsif @rectype == 'DOCUMENT'
-        @typeList = DynList.build_from('IPD_DOCSUBTYPE')
-      elsif @rectype == 'WORKAUTH'
-        @typeList = DynList.build_from('IPD_WORKASUBTYP')
-      elsif @rectype == 'SOFTWARE'
-        @typeList = DynList.sw_types
-      else
-        @typeList = []
-      end
-    end
-
-    unless @docSizes || @rectype != 'DOCUMENT'
-      @docSizes = DynList.build_from('IPD_DOCSIZE', :bdesc)
-    end
-
-    unless @changeClasses || @rectype != 'WORKAUTH'
-      @changeClasses = DynList.build_from('IPD_CHNGCLASS', :bdesc)
-    end
-
-    unless @changeSubClasses || @rectype != 'WORKAUTH'
-      @changeSubClasses = DynList.build_from('IPD_CHNGSUBCLASS', :bdesc)
     end
   end
 
@@ -213,7 +217,7 @@ class BrecordsController < ApplicationController
     # Convert the hash to a json object
     render :text => @return_data.to_json, :layout=>false
   end
-  
+
   def grid_promotions
     prep_query
     @promotions = Bpromotion.find :all,
@@ -240,7 +244,7 @@ class BrecordsController < ApplicationController
     # Convert the hash to a json object
     render :text => @return_data.to_json, :layout=>false
   end
-  
+
   def grid_signoffs
     prep_query
     @signoffs = Bchkhistory.find :all,
@@ -268,24 +272,23 @@ class BrecordsController < ApplicationController
     # Convert the hash to a json object
     render :text => @return_data.to_json, :layout=>false
   end
-  
+
   def grid_revisions
     prep_query
     @revisions = Brecord.find :all,
       :order => @order,
       :limit => @limit,
       :offset => @offset,
-      :select => "brectype, brecname, brecalt, breclevel, bproject, bowner, bpromdate",
+      :select =>"id, brectype, brecname, brecalt, breclevel, bproject, bowner, bpromdate",
       :conditions => @conditions
       
     count = Brecord.count :all, :conditions => @conditions
 
     prep_return_data(count)
-    id = 1
     @return_data[:rows] = @revisions.collect{|u| {
-      :id => id+1,
+      :id => u.id,
       :cell => [
-        id,
+        u.id,
         u.brecalt,
         u.breclevel,
         u.bproject,
@@ -391,7 +394,7 @@ private
       @conditions += ' AND ' + searchField + ' ' + oper
       #puts '----> conditions: ' + @conditions
     end
-      
+
     # Init a hash for the ActiveRecord result
     @return_data = Hash.new()
     @return_data[:page] = page
@@ -406,7 +409,7 @@ private
     session[:prev_limit] = @limit.to_s
 
     total_pages = (count.to_f/@limit).ceil
-      
+
     # Construct a hash from the ActiveRecord result
     @return_data[:total] = total_pages
     @return_data[:records] = count
