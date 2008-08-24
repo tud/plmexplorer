@@ -301,6 +301,14 @@ class BrecordsController < ApplicationController
 
   def load_record_base
     @record = Brecord.find(params[:id])
+    if (TABS["#{@record.brectype}"])
+      @tabs = (render_to_string :partial => 'tabs', :locals => {:record => @record}).gsub!(/(\n|\r)/,'')
+    else
+      @tabs = ""
+    end
+    respond_to do |format|
+      format.js
+    end
   end
 
   def load_record_refs

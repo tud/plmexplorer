@@ -17,7 +17,7 @@
 
 		<%= javascript_include_tag :defaults, :cache => 'cache/defaults' %>
 		<%= javascript_include_tag 'hoverIntent.js','jquery.bgiframe.min.js','superfish.js', :cache => 'cache/superfish' %>
-		<%= javascript_include_tag 'jquery.corner.js','jquery.ifixpng.js','ui/ui.dialog.js', :cache => 'cache/more' %>
+		<%= javascript_include_tag 'jquery.corner.js','jquery.ifixpng.js','ui/ui.dialog.js','ui/ui.tabs.js', :cache => 'cache/more' %>
 		<title>PLM on Rails</title>
 		<%= yield :head %>
 	</head>
@@ -37,7 +37,7 @@
 			<div id="bottomsearch" class="span-24 last">&nbsp;</div>
 			<div class="span-24 last">&nbsp;</div>
 			<div id="content" class="prepend-1 span-22 append-1 last">
-				<%= yield :content%>
+				<div id="tabs_content"></div>
 			</div>
 			<div class="span-24 last">&nbsp;</div>
 			<div id="footer" class="prepend-9 span-15 last">PLM on Rails by Gallelli &amp; Manieri - &copy; 2008</div>

@@ -1,8 +1,6 @@
-<%= javascript_include_tag 'ui/ui.tabs.js', :cache => true %>
 <script type="text/javascript">
 	jQuery(document).ready(function(){
-		$('#tabs_record > ul').tabs({ fx: { height: 'toggle', opacity: 'toggle' }});
-		$('#tabs_record').hide();
+		$("#tabs_record > ul").tabs({ fx: { height: "toggle", opacity: "toggle" }});
 	});
 </script>
 <br/>
@@ -10,20 +8,16 @@
 <br/>
 <div id="tabs_record">
 	<ul>
-		<% (tab_names @rectype).each do |tab| %>
+		<% (tab_names record.brectype).each do |tab| %>
 			<li><%= link_to tab['label'], :anchor => tab['action'] %></li>
 		<% end %>
 		<% (tab_commons).each do |tab| %>
-			<% if (@record) %>
-				<% id = @record.id %>
-			<% else %>
-				<% id = 0 %>
-			<% end %>
+			<% id = record.id %>
 			<li><%= link_to tab['label'], :controller => 'brecords', :action => tab['action'], :id => id %></li>
 		<% end %>
 	</ul>
 	<input type="hidden" id="view_record_id" />
-	<% (tab_names @rectype).each do |tab| %>
+	<% (tab_names record.brectype).each do |tab| %>
 		<div id="<%= tab['action'] %>" class="ui-tabs-hide">
 			<form id="view_<%= tab['action'] %>" action="" method="post">
 				<fieldset>

@@ -75,9 +75,3 @@
 	});
 	</script>
 <% end %>
-
-<% content_for(:content) do %>
-	<% if (TABS["#{@rectype}"]) %>
-		<%=render :partial => 'tabs'%>
-	<% end %>
-<% end %>
