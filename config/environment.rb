@@ -66,6 +66,3 @@ Rails::Initializer.run do |config|
   # Activate observers that should always be running
   # config.active_record.observers = :cacher, :garbage_collector
 end
-
-# inserita by Tud
-TABS = YAML::load(File.open("#{RAILS_ROOT}/config/settings/tabs.yml"))

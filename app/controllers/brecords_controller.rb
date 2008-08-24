@@ -119,7 +119,7 @@ class BrecordsController < ApplicationController
       end
     else
       @rectype = params[:rectype].upcase
-      @conditions = "brectype is null"
+      @conditions = "brectype = '!'"
     end
   end
 
