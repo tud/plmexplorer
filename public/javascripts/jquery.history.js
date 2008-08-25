@@ -23,7 +23,7 @@
 			$.history._queue = [];
 
 			// append to the root window.document.body without the src - uses class for toggleClass debugging - display:none doesn't work
-			$("body").append('<iframe class="__historyFrame" src="blank.html" style="border:0px; width:0px; height:0px; visibility:hidden;" />');
+			$("body").append('<iframe class="__historyFrame" src="/blank.html" style="border:0px; width:0px; height:0px; visibility:hidden;" />');
 
 			// set the src (safari doesnt load the src if set in the append above)  + set the onLoad event for the iframe
 			$('.__historyFrame').load(function () {
