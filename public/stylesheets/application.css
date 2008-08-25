@@ -72,6 +72,9 @@ form div label {
 	margin-bottom:1.875em;
 	line-height:1.875em;
 }
+.uppercase {
+	text-transform: uppercase;
+}
 .title {
 	font-weight: bold;
 }
