@@ -1,11 +1,10 @@
 /*
- * jqGrid 3.2.3
+ * jqGrid 3.2.4
  * Tony Tomov.
  * http://www.trirand.com/blog
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
- * 
  */
 
 ;(function($){$.fn.extend({setTreeNode:function(rd,row){return this.each(function(){var $t=this;if(!$t.grid||!$t.p.treeGrid){return;}

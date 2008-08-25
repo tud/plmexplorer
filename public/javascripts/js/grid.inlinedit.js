@@ -92,7 +92,7 @@ $.fn.extend({
 				case "text" :
 					elem = document.createElement("input");
 					elem.type = "text";
-					if (!options.size) options.size = vl.length;
+					if (!options.size) options.size = vl.length || 10;
 					$(elem).attr(options);
 					elem.value = vl;
 					break;

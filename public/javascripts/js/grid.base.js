@@ -1,11 +1,11 @@
 ;(function ($) {
 /*
- * jqGrid  3.2.3-jQuery Grid
+ * jqGrid  3.2.4-jQuery Grid
  * Copyright (c) 2008, Tony Tomov, tony@trirand.com
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
- * Date: 2008-08-13 rev 51
+ * Date: 2008-08-20 rev 52
  */
 $.jgrid = $.jgrid || {};
 $.jgrid.defaults = {
@@ -623,7 +623,7 @@ $.fn.jqGrid = function( p ) {
 			for (var i=0;i<drows.length;i++) {
 				cur = drows[i];
 				row = document.createElement("tr");
-				row.id = cur[idn] || cur[ts.p.jsonReader.cell][idn] || i+1;
+				row.id = cur[idn] || cur[ts.p.colModel[idn].jsonmap] || cur[ts.p.colModel[idn].name] || i+1;
 				if(ts.p.multiselect){
 					addMulti(t,row);
 					gi = 1;
