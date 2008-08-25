@@ -1,14 +1,3 @@
-function pageload(hash) {
-		// hash doesn't contain the first # character.
-		if(hash) {
-			// restore ajax loaded state
-			$j("#load").load(hash + ".html");
-		} else {
-			// start page
-			$j("#load").empty();
-		}
-	}
-
 jQuery(document).ready(function(){
 	// round corners
 	jQuery('#topsearch').corner("20px top");

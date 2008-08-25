@@ -32,6 +32,7 @@ jQuery(document).ready(function(){
 		ondblClickRow: function(id) {
 			if (id!=null && id!==lastSel) {
 				lastSel=id;
+				jQuery.history(id);
 				jQuery.ajax({
 					type: "POST",
 					url: ("<%= url_for(:action => 'load_record_base', :controller => 'brecords') %>?id="+id),

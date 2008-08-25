@@ -1,11 +1,10 @@
 /*
- * jqGrid 3.2.3
+ * jqGrid 3.2.4
  * Tony Tomov.
  * http://www.trirand.com/blog
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
- * 
  */
 
 ;(function($){$.fn.extend({getColProp:function(colname){var ret={},$t=this[0];if(!$t.grid)return;var cM=$t.p.colModel;for(var i=0;i<cM.length;i++){if(cM[i].name==colname){ret=cM[i];break;};};return ret;},setColProp:function(colname,obj){return this.each(function(){if(this.grid)

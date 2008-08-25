@@ -17,7 +17,8 @@
 
 		<%= javascript_include_tag :defaults, :cache => 'cache/defaults' %>
 		<%= javascript_include_tag 'hoverIntent.js','jquery.bgiframe.min.js','superfish.js', :cache => 'cache/superfish' %>
-		<%= javascript_include_tag 'jquery.corner.js','jquery.ifixpng.js','ui/ui.dialog.js','ui/ui.tabs.js', :cache => 'cache/more' %>
+		<%= javascript_include_tag 'jquery-ui.widgets.min.js','jquery.corner.js','jquery.ifixpng.js', :cache => 'cache/more' %>
+		<%= javascript_include_tag 'jquery.history.js','jquery.history.custom.js', :cache => 'cache/history' %>
 		<title>PLM on Rails</title>
 		<%= yield :head %>
 	</head>

@@ -1,11 +1,10 @@
 /*
- * jqGrid 3.2.3
+ * jqGrid 3.2.4
  * Tony Tomov.
  * http://www.trirand.com/blog
  * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
- * 
  */
 
 ;(function($){$.jgrid=$.jgrid||{};$.jgrid.defaults={recordtext:"Rows",loadtext:"Loading...",loadui:"enable",pgbuttons:true,pginput:true,pgtext:"/"};$.fn.jqGrid=function(p){p=$.extend(true,{url:'',height:150,page:1,rowNum:20,records:0,pager:"",colModel:[],rowList:[],colNames:[],sortorder:"asc",sortname:"",datatype:"xml",mtype:"GET",imgpath:"",sortascimg:"sort_asc.gif",sortdescimg:"sort_desc.gif",firstimg:"first.gif",previmg:"prev.gif",nextimg:"next.gif",lastimg:"last.gif",altRows:true,selarrrow:[],savedRow:[],shrinkToFit:true,xmlReader:{},jsonReader:{},subGrid:false,subGridModel:[],lastpage:0,lastsort:0,selrow:null,onSelectRow:null,onSortCol:null,ondblClickRow:null,onRightClickRow:null,onPaging:null,onSelectAll:null,loadComplete:null,loadError:null,loadBeforeSend:null,afterInsertRow:null,viewrecords:false,loadonce:false,multiselect:false,multikey:false,editurl:null,search:false,searchdata:{},caption:"",hidegrid:true,hiddengrid:false,postData:{},userData:{},treeGrid:false,treeANode:0,treedatatype:null,treeReader:{level_field:"level",left_field:"lft",right_field:"rgt",leaf_field:"isLeaf",expanded_field:"expanded"},tree_root_level:0,ExpandColumn:null,toolbar:[false,"top"]},$.jgrid.defaults,p||{});var grid={headers:[],cols:[],dragStart:function(i,x){this.resizing={idx:i,startX:x};this.hDiv.style.cursor="e-resize";},dragMove:function(x){if(this.resizing){var diff=x-this.resizing.startX;var h=this.headers[this.resizing.idx];var newWidth=h.width+diff;var msie=$.browser.msie;if(newWidth>30){h.el.style.width=newWidth+"px";h.newWidth=newWidth;this.cols[this.resizing.idx].style.width=newWidth+"px";this.newWidth=this.width+diff;$('table:first',this.bDiv).css("width",this.newWidth+"px");$('table:first',this.hDiv).css("width",this.newWidth+"px");var scrLeft=this.bDiv.scrollLeft;this.hDiv.scrollLeft=this.bDiv.scrollLeft;if(msie){if(scrLeft-this.hDiv.scrollLeft>=5){this.bDiv.scrollLeft=this.bDiv.scrollLeft-17;}}}}},dragEnd:function(){this.hDiv.style.cursor="default";if(this.resizing){var idx=this.resizing.idx;this.headers[idx].width=this.headers[idx].newWidth||this.headers[idx].width;this.cols[idx].style.width=this.headers[idx].newWidth||this.headers[idx].width;if(this.newWidth){this.width=this.newWidth;}
@@ -80,7 +79,7 @@ $(ts.rows[j+fpos]).after(row);if(afterInsRow){ts.p.afterInsertRow(row.id,rd);}
 rd=[];});xml=null;if(isSafari||isOpera){resizeFirstRow(t,1);}
 ts.grid.bDiv.scrollTop=0;endReq();updatepager();};var addJSONData=function(data,t){if(data){$("tbody tr:gt(0)",t).remove();}else{return;}
 var row,f=[],cur,gi=0,si=0,drows,idn,rd=[],cn=(ts.p.altRows===true)?'alt':'';ts.p.page=data[ts.p.jsonReader.page];ts.p.lastpage=data[ts.p.jsonReader.total];ts.p.records=data[ts.p.jsonReader.records];ts.p.userData=data[ts.p.jsonReader.userdata]||{};if(!ts.p.jsonReader.repeatitems){f=reader("json");}
-idn=(ts.p.keyIndex===false)?ts.p.jsonReader.id:ts.p.keyIndex;drows=data[ts.p.jsonReader.root];if(drows){for(var i=0;i<drows.length;i++){cur=drows[i];row=document.createElement("tr");row.id=cur[idn]||cur[ts.p.jsonReader.cell][idn]||i+1;if(ts.p.multiselect){addMulti(t,row);gi=1;}
+idn=(ts.p.keyIndex===false)?ts.p.jsonReader.id:ts.p.keyIndex;drows=data[ts.p.jsonReader.root];if(drows){for(var i=0;i<drows.length;i++){cur=drows[i];row=document.createElement("tr");row.id=cur[idn]||cur[ts.p.colModel[idn].jsonmap]||cur[ts.p.colModel[idn].name]||i+1;if(ts.p.multiselect){addMulti(t,row);gi=1;}
 if(ts.p.subGrid){$(ts).addSubGrid(t,row,gi);si=1;}
 if(ts.p.jsonReader.repeatitems===true){if(ts.p.jsonReader.cell){cur=cur[ts.p.jsonReader.cell];}
 for(var j=0;j<cur.length;j++){addCell(t,row,cur[j]||'&#160;',j+gi+si);rd[ts.p.colModel[j+gi+si].name]=cur[j];}}else{for(var j=0;j<f.length;j++){addCell(t,row,cur[f[j]]||'&#160;',j+gi+si);rd[ts.p.colModel[j+gi+si].name]=cur[f[j]];}}
