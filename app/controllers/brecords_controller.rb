@@ -87,7 +87,7 @@ class BrecordsController < ApplicationController
           else
             if field == 'brecalt' and value[-1,1] == '#'
               value[-1,1] = '*'
-              @group = 'brectype,brecname'
+              @group = 'brectype,brecname,breclevel,bdesc'
             end
             add_condition(field, value)
           end
