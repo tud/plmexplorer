@@ -58,7 +58,8 @@
 				onClickButton:function() {
 					var id = jQuery('#searchGrid').getGridParam('selrow');
 					if (id) {
-						jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
+						//jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
+						jQuery.history(id);
 						jQuery.ajax({
 							type: "POST",
 							url: ("<%= url_for(:action => 'load_record_base', :controller => 'brecords') %>?id="+id),
