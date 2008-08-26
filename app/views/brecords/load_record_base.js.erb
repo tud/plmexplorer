@@ -1,3 +1,4 @@
+jQuery('#tabs_content').hide();
 jQuery('#tabs_content').html('<%=@tabs%>');
 <%
 	if (TABS["#{@record.brectype}"])
@@ -57,16 +58,15 @@ jQuery('#tabs_content').html('<%=@tabs%>');
 		end
 %>
 
-		jQuery('#view_record_id').val('<%= escape_javascript h @record.id  %>')
+		jQuery('#view_record_id').val('<%= escape_javascript h @record.id  %>');
 
-		jQuery('#record_title').html("<%= escape_javascript h @record.title %>")
-		jQuery('#record_title').show()
-		jQuery('#record_title').corner("10px")
+		jQuery('#record_title').html("<%= icon_span @record.brectype %><%= escape_javascript h @record.title %>");
+		jQuery('#record_title').corner("10px");
+		jQuery('#record_title').show();
 
-		jQuery('#tabs_record > ul').tabs("select", 0)
-
-		jQuery('#record_base').effect("highlight", {}, 1000);
-
+		jQuery('#tabs_record > ul').tabs("select", 0);
+		
+		jQuery('#tabs_content').BlindDown();
 <%
 	end
 %>

@@ -1,4 +1,13 @@
 .jqmWindow table {margin: 0; width: 300px;}
 .jqmWindow td, tr {padding:0;}
+
+.jqmClose img {padding-left: 282px;}
+
+select.selbox {height: 19px;margin: 0; padding: 1px 0 0 0;}
+input.selbox {height: 13px; padding: 0;}
+
+.nav-button {padding-top: 0;}
+
 .HeaderLeft {background-image: none;}
 div.loading {background: #FFBC0B;}
+table.scroll th div {font-weight: bold;}
