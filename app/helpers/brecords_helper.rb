@@ -1,7 +1,7 @@
 module BrecordsHelper
 
   def tab_names rectype
-    tabs = TABS["#{rectype}"]
+    tabs = TABS["#{rectype.upcase}"]
     tabnames = Array.new
     if (tabs)
       tabs.each do |htab|
@@ -38,5 +38,35 @@ module BrecordsHelper
     end
     uda_value
   end
+
+  def icon_span rectype
+    classname = ""
+    if (rectype != "*")
+      MENU['FIND'].each do |entry|
+        if (entry['type'] == rectype.upcase)
+          classname = "<span class='ss_sprite "+entry['iconclass']+"'>&nbsp;</span>"
+          break
+        end
+      end
+    end
+    classname
+  end
+
+  def find_result_table_title rectype
+    if (rectype != "*")
+      "Find result table -- " + (icon_span(rectype)) + " " + rectype.capitalize.pluralize
+    else
+      ""
+    end
+  end
+  
+  def find_menu_items
+    items = Array.new
+    MENU['FIND'].each do |entry|
+      items << "<a href='#' class='find_rec' title='"+entry['type'].downcase+"'>"+icon_span(entry['type'])+entry['label']+"</a>"
+    end
+    items
+  end
+  
 
 end

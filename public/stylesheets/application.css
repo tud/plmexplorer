@@ -36,7 +36,7 @@ body {
 	display: none;
 }
 .ss_sprite {
-	padding-left: 18px;
+	padding: 0 0 0 18px;
 }
 
 form div {
@@ -55,17 +55,6 @@ form div label {
 	margin: 0 0 5px 0;
 	text-align: right;
 }
-.button {
-	cursor:pointer;
-	border:outset 1px #ccc;
-	background:#222222;
-	color:#FFFFFF;
-	font-weight:bold;
-	padding: 2px 15px;
-}
-.button:hover {
-    background: #FFBC0B;
-}
 
 #brecord_find_rec_bname1 optgroup {
 	font-size:.8em;
@@ -78,10 +67,26 @@ form div label {
 .title {
 	font-weight: bold;
 }
-#findRecord input, #findRecord textarea, #findRecord select {
+
+#find_submit_btn, #find_reset_btn, #find_cancel_btn {
+	cursor:pointer;
+	border: 1px solid #f3a251;
+	background:#222222;
+	color:#FFFFFF;
+	font-weight:bold;
+	padding: 2px 15px;
+}
+#find_submit_btn:hover, #find_reset_btn:hover, #find_cancel_btn:hover {
+	background: #FFBC0B;
+}
+#find_submit_btn:focus, #find_reset_btn:focus, #find_cancel_btn:focus, #find_submit_btn:active, #find_reset_btn:active, #find_cancel_btn:active {
+	background: #222222;
+}
+#findRecord input[type="text"], #findRecord textarea, #findRecord select {
 	border: 1px solid #f3a251;
 }
-#findRecord input:focus, #findRecord input:active, #findRecord textarea:focus, #findRecord textarea:active, #findRecord select:focus, #findRecord select:active {
+#findRecord input[type="text"]:focus, #findRecord input[type="text"]:active, #findRecord textarea:focus, #findRecord textarea:active, #findRecord select:focus, #findRecord select:active {
 	border: 1px solid #f3a251;
 	background: #ffeddc;
 }
+
