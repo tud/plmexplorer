@@ -64,7 +64,6 @@ class BrecordsController < ApplicationController
   def show
     @hiddengrid = params[:hiddengrid] || "false"
     @joins = ''
-    @group = ''
     uda_ref = 'u0'
     if request.post?
       brecord = params[:brecord]
@@ -86,10 +85,11 @@ class BrecordsController < ApplicationController
             cage_code = value
           else
             if field == 'brecalt' and value[-1,1] == '#'
-              value[-1,1] = '*'
-              @group = 'brectype,brecname,breclevel,bdesc'
+              value[-1,1] = '%'
+              @conditions += " AND (brectype,brecname,brecalt) IN (SELECT brectype,brecname,MAX(brecalt) FROM brecords WHERE brectype = '#{@rectype}' AND brecalt LIKE '#{value}' GROUP BY brectype,brecname)"
+            else
+              add_condition(field, value)
             end
-            add_condition(field, value)
           end
         when /find_uda_(.+)/
           if !matches_any(value)
@@ -125,54 +125,19 @@ class BrecordsController < ApplicationController
 
   def grid_records
     prep_query
-    if @group.empty?
-      # Ricerca di tutte le revisioni del record (senza GROUP BY)
-      @brecords = Brecord.find :all,
-        :order => @order,
-        :limit => @limit,
-        :offset => @offset,
-        :select => "id, brecname, brecalt, breclevel, bdesc, bname1",
-        :conditions => @conditions,
-        :joins => @joins
+    @brecords = Brecord.find :all,
+      :order => @order,
+      :limit => @limit,
+      :offset => @offset,
+      :select => "id, brecname, brecalt, breclevel, bdesc, bname1",
+      :conditions => @conditions,
+      :joins => @joins
         
-      # Ricalcolo count solo quando necessario
-      if (@conditions == @prev_conditions && @prev_group.empty?)
-        count = @prev_count
-      else
-        count = Brecord.count :all,
-          :conditions => @conditions,
-          :joins => @joins
-      end
+    # Ricalcolo count solo quando necessario
+    if (@conditions == @prev_conditions)
+      count = @prev_count
     else
-      # Ricerca della revisione piu' recente del record (con GROUP BY)
-      latest = Brecord.find(:all,
-        :order => @order,
-        :limit => @limit,
-        :offset => @offset,
-        :select => "brectype, brecname, MAX(brecalt) AS brecalt",
-        :conditions => @conditions,
-        :joins => @joins,
-        :group => @group).map { |rec| [ "('#{rec.brectype}','#{rec.brecname}','#{rec.brecalt}')" ] }.join(',')
-
-      if latest.empty?
-        @brecords = []
-      else
-        @brecords = Brecord.find(:all,
-          :order => @order,
-          :select => "id, brectype, brecname, brecalt, breclevel, bdesc, bname1",
-          :conditions => [ "(brectype,brecname,brecalt) IN (#{latest})" ])
-      end
-
-      # Ricalcolo count solo quando necessario
-      if (@conditions == @prev_conditions && @prev_group == @group)
-        count = @prev_count
-      else
-        count = Brecord.find(:all,
-          :select => "brectype, brecname, MAX(brecalt) AS brecalt",
-          :conditions => @conditions,
-          :joins => @joins,
-          :group => @group).size
-      end
+      count = Brecord.count :all, :conditions => @conditions, :joins => @joins
     end
 
     prep_return_data(count)
@@ -358,10 +323,8 @@ private
     @order = sidx + ' ' + sord
     @conditions = params[:conditions]
     @joins = params[:joins]
-    @group = params[:group]
 
     @prev_conditions = session[:prev_conditions] || ''
-    @prev_group = session[:prev_group] || ''
     @prev_count = session[:prev_count].to_i
     prev_limit = session[:prev_limit].to_i
 
@@ -378,6 +341,9 @@ private
     searchOper   = params[:searchOper]
     searchString = params[:searchString]
 
+    if searchField != 'bdesc'
+      searchString.upcase! if searchString
+    end
     if (isSearch == 'true')
       if (searchOper == 'eq')
         oper = "= '" + searchString +"'"
@@ -412,7 +378,6 @@ private
 
   def prep_return_data(count)
     session[:prev_conditions] = @conditions
-    session[:prev_group] = @group
     session[:prev_count] = count.to_s
     session[:prev_limit] = @limit.to_s
 
