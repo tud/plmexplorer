@@ -7,6 +7,9 @@
 		<meta name="Copyright" content="Copyright (c) 2008 Tud &amp; Taurus" />
 		<meta name="author" content="Tud &amp; Taurus" />
 		<meta name="publisher" content="Tud &amp; Taurus" />
+		
+		<link rel="shortcut icon" href="/images/favicon.ico" />
+		<link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
 
 		<%= stylesheet_link_tag 'blueprint/screen.css', :media => "screen, projection", :cache => 'cache/screen' %>
 		<%= stylesheet_link_tag 'blueprint/print.css', :media => "print", :cache => 'cache/print' %>
@@ -24,9 +27,12 @@
 	</head>
 	<body>
 		<div class="container">
-			<div id="header" class="prepend-9 span-15 last">
-				<h1><strong>PLM</strong> on Rails<img id="badge" src="/images/badge.png" alt="PLM on Rails"/></h1>
-				<div id="menu" class="span-15 last">
+			<div id="header" class="span-24 last">
+				<div class="prepend-6 span-17 last">
+					<img id="logo" src="/images/logo2.png" alt="PLM on Rails"/>
+					<img id="badge" src="/images/badge.png" alt="PLM on Rails - beta"/>
+				</div>
+				<div id="menu" class="prepend-8 span-14 last">
 					<%= render :partial => 'shared/menu'%>
 				</div>
 			</div>
