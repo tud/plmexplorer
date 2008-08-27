@@ -15,7 +15,7 @@
 			<label for="brecord_find_rec_bname1">Bus. ID :</label>
 			<select id="brecord_find_rec_bname1" name="brecord[find_rec_bname1]" tabindex="2">
 				<option value="" />
-				<%= option_groups_from_collection_for_select(@cageCodes, :options, :label, :value, :key) %>
+				<%= option_groups_from_collection_for_select(CAGE_CODES, :options, :label, :value, :key) %>
 			</select>
 		</div>
 		<div>
@@ -28,15 +28,15 @@
 		</div>
 		<div>
 			<label for="brecord_find_rec_bproject">Project :</label>
-			<%= f.select :find_rec_bproject, @prjList, {}, {:tabindex => "5"} %>
+			<%= f.select :find_rec_bproject, PROJECT_LIST, {}, {:tabindex => "5"} %>
 		</div>
 		<div>
 			<label for="brecord_find_rec_bowner">Owner :</label>
-			<%= f.select :find_rec_bowner, @userList, {}, {:tabindex => "6", :class => "uppercase editableCombobox"} %>
+			<%= f.select :find_rec_bowner, USER_LIST, {}, {:tabindex => "6", :class => "uppercase editableCombobox"} %>
 		</div>
 		<div>
 			<label for="brecord_find_rec_bcreateuser">Created By :</label>
-			<%= f.select :find_rec_bcreateuser, @userList, {}, {:tabindex => "7", :class => "uppercase editableCombobox"} %>
+			<%= f.select :find_rec_bcreateuser, USER_LIST, {}, {:tabindex => "7", :class => "uppercase editableCombobox"} %>
 		</div>
 		<div>
 			<label for="brecord_find_rec_bfamily">Type :</label>
@@ -72,7 +72,7 @@
 				<label for="brecord_find_rec_btype4">Document Size :</label>
 				<select id="brecord_find_rec_btype4" name="brecord[find_rec_btype4]" tabindex="21">
 					<option value="" />
-					<%= option_groups_from_collection_for_select(@docSizes, :options, :label, :value, :key) %>
+					<%= option_groups_from_collection_for_select(DOCUMENT_SIZES, :options, :label, :value, :key) %>
 				</select>
 			</div>
 		<% end %>
@@ -81,14 +81,14 @@
 				<label for="brecord_find_rec_btype3">Change Class :</label>
 				<select id="brecord_find_rec_btype3" name="brecord[find_rec_btype3]" tabindex="21">
 					<option value="" />
-					<%= option_groups_from_collection_for_select(@changeClasses, :options, :label, :value, :key) %>
+					<%= option_groups_from_collection_for_select(CHANGE_CLASSES, :options, :label, :value, :key) %>
 				</select>
 			</div>
 			<div>
 				<label for="brecord_find_uda_change_subclass">Sub-Class :</label>
 				<select id="brecord_find_uda_change_subclass" name="brecord[find_uda_change_subclass]" tabindex="22">
 					<option value="" />
-					<%= option_groups_from_collection_for_select(@changeSubClasses, :options, :label, :value, :key) %>
+					<%= option_groups_from_collection_for_select(CHANGE_SUBCLASSES, :options, :label, :value, :key) %>
 				</select>
 			</div>
 			<div>

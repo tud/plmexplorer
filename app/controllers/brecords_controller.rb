@@ -1,7 +1,5 @@
 class BrecordsController < ApplicationController
 
-  ESCAPE = '|'
-
   def index
     redirect_to :action => :show, :rectype => '*', :hiddengrid => 'true'
   end
@@ -9,55 +7,25 @@ class BrecordsController < ApplicationController
   def find
     @rectype = params[:rectype].upcase
 
-    unless @cageCodes
-      @cageCodes = DynList.build_from('IPD_BUSINESSID', :bdesc)
+    if @rectype == '*'
+      @statusList = Blevel.find(:all).map { |level| level.bname }.sort.uniq
+    else
+      @statusList = Blevel.find(:all,
+                                :conditions => "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname = '" + @rectype + "'",
+                                :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
     end
+    @statusList.unshift('')
 
-    unless @statusList
-      if @rectype == '*'
-        @statusList = Blevel.find(:all).map { |level| level.bname }.sort.uniq
-      else
-        @statusList = Blevel.find(:all,
-                                  :conditions => "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname = '" + @rectype + "'",
-                                  :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
-      end
-      @statusList.unshift('')
-    end
-
-    unless @prjList
-      @prjList = Bproject.find(:all).map { |prj| prj.bname }.sort
-      @prjList.unshift('')
-    end
-
-    unless @userList
-      @userList = Bdbuser.find(:all).map { |user| user.buser }.sort.uniq
-      @userList.unshift('')
-    end
-
-    unless @typeList
-      if @rectype == 'PART'
-        @typeList = DynList.build_from('IPD_PARTSUBTYPE')
-      elsif @rectype == 'DOCUMENT'
-        @typeList = DynList.build_from('IPD_DOCSUBTYPE')
-      elsif @rectype == 'WORKAUTH'
-        @typeList = DynList.build_from('IPD_WORKASUBTYP')
-      elsif @rectype == 'SOFTWARE'
-        @typeList = DynList.sw_types
-      else
-        @typeList = []
-      end
-    end
-
-    unless @docSizes || @rectype != 'DOCUMENT'
-      @docSizes = DynList.build_from('IPD_DOCSIZE', :bdesc)
-    end
-
-    unless @changeClasses || @rectype != 'WORKAUTH'
-      @changeClasses = DynList.build_from('IPD_CHNGCLASS', :bdesc)
-    end
-
-    unless @changeSubClasses || @rectype != 'WORKAUTH'
-      @changeSubClasses = DynList.build_from('IPD_CHNGSUBCLASS', :bdesc)
+    if @rectype == 'PART'
+      @typeList = DynList.build_from('IPD_PARTSUBTYPE')
+    elsif @rectype == 'DOCUMENT'
+      @typeList = DynList.build_from('IPD_DOCSUBTYPE')
+    elsif @rectype == 'WORKAUTH'
+      @typeList = DynList.build_from('IPD_WORKASUBTYP')
+    elsif @rectype == 'SOFTWARE'
+      @typeList = DynList.sw_types
+    else
+      @typeList = []
     end
   end
 
@@ -68,14 +36,15 @@ class BrecordsController < ApplicationController
     if request.post?
       brecord = params[:brecord]
       @rectype = brecord[:find_rec_brectype].upcase
-      @conditions = 'id = blatest'
+      condition = Condition.new('id = blatest')  # considero solo l'ultima versione
+      latest_rev = false
       name = nil
       cage_code = nil
       brecord.each do |key, value|
         downkey = key.downcase
         case downkey
         when /find_rec_(.+)/
-          field = $1.downcase
+          field = $1
           if field != 'bdesc'
             normalize(value)
           end
@@ -85,37 +54,40 @@ class BrecordsController < ApplicationController
             cage_code = value
           else
             if field == 'brecalt' and value[-1,1] == '#'
-              value[-1,1] = '%'
-              @conditions += " AND (brectype,brecname,brecalt) IN (SELECT brectype,brecname,MAX(brecalt) FROM brecords WHERE brectype = '#{@rectype}' AND brecalt LIKE '#{value}' GROUP BY brectype,brecname)"
-            else
-              add_condition(field, value)
+              value[-1,1] = '*'
+              latest_rev = true
             end
+            condition.add(field, value)
           end
         when /find_uda_(.+)/
-          if !matches_any(value)
+          if !Condition.matches_any(value)
             field = $1.upcase
             uda_ref.next!
-            @joins += ', budas ' + uda_ref
-            add_condition(uda_ref+'.bname', field)
-            add_condition(uda_ref+'.bvalue', value)
-            @conditions += ' AND ' + uda_ref + '.bobjid = brecords.id'
+            @joins += ',budas ' + uda_ref
+            condition.add(uda_ref+'.bname', field)
+            condition.add(uda_ref+'.bvalue', value)
+            condition << uda_ref+'.bobjid = brecords.id'
           end
         else
-          print "Illegal field name: #{key}"
+          raise "Illegal field name: #{key}"
         end
       end
       if name.nil?
         # Il recname non contiene il Cage Code (es. WORKAUTH)
-        unless matches_any(cage_code)
-          add_condition("bname1", cage_code)
-        end
+        condition.add("bname1", cage_code)
       else
         # Il recname contiene il Cage Code (es. PART)
-        unless matches_any(name) && matches_any(cage_code)
+        unless Condition.matches_any(name) && Condition.matches_any(cage_code)
           value = name
           value += ('&' + cage_code) unless cage_code.nil?
-          add_condition('brecname', value)
+          condition.add('brecname', value)
         end
+      end
+      if latest_rev
+        @conditions = "(brectype,brecname,brecalt) IN (SELECT brectype,brecname,MAX(brecalt) FROM brecords#{@joins} WHERE #{condition.to_s} GROUP BY brectype,brecname)"
+        @joins = ''
+      else
+        @conditions = condition.to_s
       end
     else
       @rectype = params[:rectype].upcase
@@ -291,28 +263,6 @@ private
     string.sub!(/^$/,'*')
     string.upcase!
     return string
-  end
-
-  def matches_any(string)
-    string.nil? || /^\**$/.match(string)
-  end
-
-  def add_condition(field, value)
-    if !matches_any(value)
-      @conditions ||= ''
-      @conditions += ' AND ' unless @conditions.empty?
-      if value.index(/[*?]/).nil?
-        # there are no wildcards in value
-        @conditions += "#{field} = '#{value}'"
-      else
-        # translate wildcards into SQL
-        value.gsub!(/%/,ESCAPE+'%')
-        value.gsub!(/_/,ESCAPE+'_')
-        value.gsub!(/\*/,'%')
-        value.gsub!(/\?/,'_')
-        @conditions += "#{field} LIKE '#{value}' ESCAPE '#{ESCAPE}'"
-      end
-    end
   end
 
   def prep_query
