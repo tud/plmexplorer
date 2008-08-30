@@ -13,7 +13,7 @@ class Bref < ActiveRecord::Base
 
   def resolve
     # Forzo REF.RECALT a 4 caratteri max (standard Oto)
-    self.brecalt.slice!(4..-1)
+    #self.brecalt.slice!(4..-1)
 
     # Personalizzazione Oto per legami di tipo FROZEN:
     # REF.TYPE1 vale LATEST nel DB, ma dovrebbe essere SPECIFIC!
@@ -25,6 +25,7 @@ class Bref < ActiveRecord::Base
 
     if self.btype1 == 'LATEST' || (self.brecalt[-1,1] == '#' && self.btype1 != 'SPECIFIC')
       relop = '>='
+      self.brecalt[-1,1] = ' ' if self.brecalt[-1,1] == '#'
     else
       relop = '='
     end

@@ -45,7 +45,7 @@ $.jgrid.nav = {
     deltext: " ",
     deltitle: "Delete selected row",
     searchtext: " ",
-    searchtitle: "Find records",
+    searchtitle: "Filter result",
     refreshtext: "",
     refreshtitle: "Reload Grid",
     alertcap: "Warning!",
