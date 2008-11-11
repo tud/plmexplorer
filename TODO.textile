@@ -1,0 +1,13 @@
+h1. TODO
+
+h4. (aggiornata al 11-11-2008)
+
+# documento specifiche _(*Taurus*)_
+# far funzionare e fare test per IE6 _(*Tud*)_
+# controllare che funzioni con Rails 2.1.2 _(*Taurus* + *Tud*)_
+# gestione tabs per relazioni specifiche configurabili _(*Tud*)_
+# where-used _(backend *Taurus* + ui *Tud*)_
+# gestione file _(backend *Taurus* + ui *Tud*)_
+# aggiornamento versioni librerie usate _(*Tud*)_
+# gestione login _(backend *Taurus* + ui *Tud*)_
+# gestione reports _(*Taurus*)_
