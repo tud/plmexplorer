@@ -1,0 +1,33 @@
+h1. PLM on Rails
+
+h4((. Visualizzatore dati PLM
+
+<hr/>
+
+h2. History
+
+h4((. *0.1 - _visualizzatore dati Sherpa_*
+
+<hr/>
+
+h2. Software utilizzato
+
+h4(. "Ruby on Rails _2.1.2_":http://rubyonrails.org/
+
+* plugins:
+** "jRails _0.4_":http://ennerchi.com/projects/jrails
+
+h4(. "jQuery _1.2.6_":http://jquery.com/
+
+* plugins:
+** "jQuery UI _1.5.2_":http://ui.jquery.com/
+** "jQuery Grid _3.2.4_":http://www.trirand.com/blog/  
+** "Superfish Menu _1.4.8_":http://users.tpg.com.au/j_birch/plugins/superfish/
+** "bgIframe _2.1_":http://brandonaaron.net/jquery/plugins/bgiframe/docs/
+** "hoverIntent _r5_":http://cherne.net/brian/resources/jquery.hoverIntent.html
+** "jQuery Corner":http://malsup.com/jquery/corner/
+** "jQuery.ifixpng":http://jquery.khurshid.com/ifixpng.php
+** "jQuery History Plugin _0.3_":http://www.overset.com/2008/06/18/jquery-history-plugin/
+** "jQuery Editable Combobox _0.4.1_":http://code.google.com/p/jquery-jec/
+
+h4(. "Blueprint CSS _0.71_":http://code.google.com/p/blueprintcss/
