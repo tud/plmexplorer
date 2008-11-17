@@ -20,7 +20,7 @@ h4(. "Ruby on Rails _2.1.2_":http://rubyonrails.org/
 h4(. "jQuery _1.2.6_":http://jquery.com/
 
 * plugins:
-** "jQuery UI _1.5.2_":http://ui.jquery.com/
+** "jQuery UI _1.6rc2_":http://ui.jquery.com/
 ** "jQuery Grid _3.3.1_":http://www.trirand.com/blog/  
 ** "Superfish Menu _1.4.8_":http://users.tpg.com.au/j_birch/plugins/superfish/
 ** "bgIframe _2.1_":http://brandonaaron.net/jquery/plugins/bgiframe/docs/
