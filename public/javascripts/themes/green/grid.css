@@ -207,6 +207,7 @@ div.userdata {
 	height : 20px;
 	border-left: 1px solid #3c964b;
 	border-right: 1px solid #3c964b;
+	overflow: hidden;
 }
 /* end toolbar */
 /*Subgrid  text mode*/
@@ -439,4 +440,10 @@ img.jqResize {
 .treeclick
 {
 	cursor: pointer;
+}
+.edit-cell {
+	background-color: #FFDEAD !important;
+}
+.selected-row, .selected-row TD {
+	background-color: #3c964b; 
 }

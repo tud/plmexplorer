@@ -21,7 +21,7 @@ h4(. "jQuery _1.2.6_":http://jquery.com/
 
 * plugins:
 ** "jQuery UI _1.5.2_":http://ui.jquery.com/
-** "jQuery Grid _3.2.4_":http://www.trirand.com/blog/  
+** "jQuery Grid _3.3.1_":http://www.trirand.com/blog/  
 ** "Superfish Menu _1.4.8_":http://users.tpg.com.au/j_birch/plugins/superfish/
 ** "bgIframe _2.1_":http://brandonaaron.net/jquery/plugins/bgiframe/docs/
 ** "hoverIntent _r5_":http://cherne.net/brian/resources/jquery.hoverIntent.html

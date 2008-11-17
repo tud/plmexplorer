@@ -196,6 +196,7 @@ div.userdata {
 	margin-top: 0px;
 	background-color : #EAF9F9;
 	height : 20px;
+	overflow: hidden;	
 }
 /* end toolbar */
 /*Subgrid  text mode*/
@@ -430,4 +431,9 @@ img.jqResize {
 {
 	cursor: pointer;
 }
-
+.edit-cell {
+	background-color: #E1DCF4 !important;
+}
+.selected-row, .selected-row TD {
+	background-color: #3d84cc; 
+}
