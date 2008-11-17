@@ -1,6 +1,6 @@
 h1. TODO
 
-h4. (aggiornata al 11-11-2008)
+h4. (aggiornata al 17-11-2008)
 
 # documento specifiche _(*Taurus*)_
 # far funzionare e fare test per IE6 _(*Tud*)_
@@ -11,3 +11,4 @@ h4. (aggiornata al 11-11-2008)
 # aggiornamento versioni librerie usate _(*Tud*)_
 # gestione login _(backend *Taurus* + ui *Tud*)_
 # gestione reports _(*Taurus*)_
+# ? tree grid grafica per espansione relazioni _(*Tud*)_
