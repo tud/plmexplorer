@@ -2,13 +2,9 @@ h1. PLM on Rails
 
 h4((. Visualizzatore dati PLM
 
-<hr/>
-
 h2. History
 
 h4((. *0.1 - _visualizzatore dati Sherpa_*
-
-<hr/>
 
 h2. Software utilizzato
 
@@ -30,4 +26,7 @@ h4(. "jQuery _1.2.6_":http://jquery.com/
 ** "jQuery History Plugin _0.4_":http://www.overset.com/2008/06/18/jquery-history-plugin/
 ** "jQuery Editable Combobox _0.4.1_":http://code.google.com/p/jquery-jec/
 
-h4(. "Blueprint CSS _0.71_":http://code.google.com/p/blueprintcss/
+h4(. "BlueprintCSS _0.8_":http://blueprintcss.org/
+
+* plugins:
+** "SilkSprite":http://www.ajaxbestiary.com/Labs/SilkSprite/
