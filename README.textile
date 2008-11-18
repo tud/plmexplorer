@@ -23,7 +23,7 @@ h4(. "jQuery _1.2.6_":http://jquery.com/
 ** "hoverIntent _r5_":http://cherne.net/brian/resources/jquery.hoverIntent.html
 ** "jQuery Corner":http://malsup.com/jquery/corner/
 ** "jQuery.ifixpng":http://jquery.khurshid.com/ifixpng.php
-** "jQuery History Plugin _0.4_":http://www.overset.com/2008/06/18/jquery-history-plugin/
+** "jQuery History Plugin _0.3_":http://www.overset.com/2008/06/18/jquery-history-plugin/
 ** "jQuery Editable Combobox _0.4.1_":http://code.google.com/p/jquery-jec/
 
 h4(. "BlueprintCSS _0.8_":http://blueprintcss.org/
