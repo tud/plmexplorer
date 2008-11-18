@@ -1,8 +1,8 @@
 h1. TODO
 
-h4. (aggiornata al 17-11-2008)
+h4. (aggiornata al 18-11-2008)
 
-# documento specifiche _(*Taurus*)_
+-# documento specifiche _(*Taurus*)_-
 # far funzionare e fare test per IE6 _(*Tud*)_
 # controllare che funzioni con Rails 2.1.2 _(*Taurus* + *Tud*)_
 # gestione tabs per relazioni specifiche configurabili _(*Tud*)_
@@ -12,3 +12,4 @@ h4. (aggiornata al 17-11-2008)
 # gestione login _(backend *Taurus* + ui *Tud*)_
 # gestione reports _(*Taurus*)_
 # ? tree grid grafica per espansione relazioni _(*Tud*)_
+# inserire limite records ricercati _(*Taurus*)_

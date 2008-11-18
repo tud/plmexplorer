@@ -1,5 +1,5 @@
 <% content_for(:head) do %>
-	<%= stylesheet_link_tag '../javascripts/themes/basic/grid.css','../javascripts/themes/jqModal.css','grid_custom.css' %>
+	<%= stylesheet_link_tag '../javascripts/themes/plmexplorer/grid.css','../javascripts/themes/jqModal.css','grid_custom.css', :cache => 'cache/grid' %>
 	<%= javascript_include_tag 'jquery.jqGrid.js','js/jqModal.js','js/jqDnR.js',:cache => 'cache/grid' %>
 <% end %>
 
@@ -27,7 +27,7 @@
 			sortname: 'brecname,brecalt',
 			sortorder: 'asc',
 			viewrecords: true,
-			imgpath: '/javascripts/themes/basic/images',
+			imgpath: '/javascripts/themes/plmexplorer/images',
 			caption: "<%=find_result_table_title @rectype%>",
 			height: '100%',
 			width: 925,
@@ -52,7 +52,7 @@
 		})
 		.navGrid('#searchPager', {refresh: true, edit: false, add: false, del: false, search: true})
 		.navButtonAdd('#searchPager',
-			{ caption:"", buttonimg: '/javascripts/themes/basic/images/row_edit.gif', 
+			{ caption:"", buttonimg: '/javascripts/themes/plmexplorer/images/row_edit.gif', 
 				onClickButton:function() {
 					var id = jQuery('#searchGrid').getGridParam('selrow');
 					if (id) {
