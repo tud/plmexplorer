@@ -1,8 +1,11 @@
 body {
 	background-color: #222222;
 }
-#header, #menu, #footer, #topsearch, #bottomsearch, #search {
+#footer, #topsearch, #bottomsearch, #search {
 	background-color: #3D83CC;
+}
+#header, #menu {
+	background-color: #FFFFFF;
 }
 #header {
 	z-index: 100;
@@ -33,7 +36,6 @@ body {
 #record_base {
 	display: none;
 }
-
 
 form div {
 	clear: left;
@@ -91,4 +93,5 @@ form div label {
 }
 .ss_sprite {
 	padding: 0 0 0 18px;
+	margin: 0;
 }

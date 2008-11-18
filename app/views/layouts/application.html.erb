@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<meta name="description" content="PLM on Rails, PLM, PDM, PLM viewer, Sherpa viewer, Sherpa" />
-		<meta name="keywords" content="PLM on Rails, PLM, PDM, PLM viewer, Sherpa viwer, Sherpa, Ruby on Rails,jQuery, jqGrid, Blueprintcss" />
-		<meta name="Copyright" content="Copyright (c) 2008 Tud &amp; Taurus" />
+		<meta name="description" content="PlmExplorer,PLM Explorer, PLM, PDM, PLM viewer, Sherpa viewer, Sherpa" />
+		<meta name="keywords" content="PlmExplorer,PLM on Rails, PLM, PDM, PLM viewer, Sherpa viwer, Sherpa, Ruby on Rails,jQuery, jqGrid, Blueprintcss" />
+		<meta name="Copyright" content="Copyright (c) 2008-2009 Tud &amp; Taurus" />
 		<meta name="author" content="Tud &amp; Taurus" />
 		<meta name="publisher" content="Tud &amp; Taurus" />
 		
@@ -22,15 +22,14 @@
 		<%= javascript_include_tag 'hoverIntent.js','jquery.bgiframe.min.js','superfish.js', :cache => 'cache/superfish' %>
 		<%= javascript_include_tag 'jquery-ui.js','jquery.corner.js','jquery.ifixpng.js', :cache => 'cache/more' %>
 		<%= javascript_include_tag 'jquery.history.js','jquery.history.custom.js','jquery.jec.min-0.4.1.js', :cache => 'cache/history' %>
-		<title>PLM on Rails</title>
+		<title>PlmExplorer</title>
 		<%= yield :head %>
 	</head>
 	<body>
 		<div class="container">
 			<div id="header" class="span-24 last">
-				<div class="prepend-6 span-17 last">
-					<img id="logo" src="/images/logo2.png" alt="PLM on Rails"/>
-					<img id="badge" src="/images/badge.png" alt="PLM on Rails - beta"/>
+				<div class="prepend-7 span-16 last">
+					<img id="logo" src="/images/logo_trans.png" alt="PlmExplorer"/>
 				</div>
 				<div id="menu" class="prepend-8 span-14 last">
 					<%= render :partial => 'shared/menu'%>
@@ -47,7 +46,12 @@
 				<div id="tabs_content"></div>
 			</div>
 			<div class="span-24 last">&nbsp;</div>
-			<div id="footer" class="prepend-9 span-15 last">PLM on Rails by Gallelli &amp; Manieri - &copy; 2008</div>
+			<div id="footer" class="prepend-5 span-19 last">
+				<a href="http://www.plmexplorer.com" onclick="window.open(this.href,'window_name','options'); return false;"><img src="/images/plmexplorer_button.gif"></a>&nbsp;&nbsp; by Gallelli &amp; Manieri - &copy; 2008-2009 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				<a href="http://www.rubyonrails.org" onclick="window.open(this.href,'window_name','options'); return false;"><img src="/images/ruby_on_rails_button.gif"></a>
+				<a href="http://www.jquery.com" onclick="window.open(this.href,'window_name','options'); return false;"><img src="/images/jquery_button.png"></a>
+				<a href="http://www.blueprintcss.org/" onclick="window.open(this.href,'window_name','options'); return false;"><img src="/images/blueprint_button.png"></a>
+			</div>
 		</div>
 	</body>
 </html>
