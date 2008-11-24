@@ -27,6 +27,7 @@ class BrecordsController < ApplicationController
     else
       @typeList = []
     end
+    render :layout => false
   end
 
   def show
