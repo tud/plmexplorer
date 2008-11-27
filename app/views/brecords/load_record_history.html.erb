@@ -43,6 +43,7 @@ jQuery(document).ready(function(){
 
 <script type="text/javascript">
 id = jQuery('#view_record_id').attr('value');
+var centerWidth = pexLayout.cssWidth('center') - 90;
 jQuery(document).ready(function(){
 	jQuery('#revisionsGrid').jqGrid({
 		url: '/brecords/grid_revisions',
@@ -89,6 +90,7 @@ jQuery(document).ready(function(){
 
 <script type="text/javascript">
 id = jQuery('#view_record_id').attr('value');
+var centerWidth = pexLayout.cssWidth('center') - 90;
 jQuery(document).ready(function(){
 	jQuery('#signoffsGrid').jqGrid({
 		url: '/brecords/grid_signoffs',

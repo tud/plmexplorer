@@ -15,14 +15,16 @@ $(document).ready(function () {
 	,	north__size: "auto"
 	,	north__spacing_open: 0
 	,	west__spacing_closed: 10
-	,	onresize: function(){
+	,	west__onresize: function(){
 			jQuery('#wNavigation').accordion('size');
+		}
+	,	center__onresize: function(){
 			var centerWidth = pexLayout.cssWidth('center');
-			jQuery('#searchGrid').setGridWidth(centerWidth - 50);
-			jQuery('#promotionsGrid').setGridWidth(centerWidth - 90);
-			jQuery('#revisionsGrid').setGridWidth(centerWidth - 90);
-			jQuery('#signoffsGrid').setGridWidth(centerWidth - 90);
-			jQuery('#refsGrid').setGridWidth(centerWidth - 90);
+			jQuery('#searchGrid').setGridWidth(centerWidth -25);
+			jQuery('#promotionsGrid').setGridWidth(centerWidth-45);
+			jQuery('#revisionsGrid').setGridWidth(centerWidth-45);
+			jQuery('#signoffsGrid').setGridWidth(centerWidth-45);
+			jQuery('#refsGrid').setGridWidth(centerWidth-45);
 		}
 	});
 

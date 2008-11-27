@@ -13,8 +13,10 @@
 		<link rel="shortcut icon" href="/images/favicon.ico" />
 		<link rel="icon" href="/images/favicon.ico" type="image/x-icon" />
 
-		<%= stylesheet_link_tag 'tripoli/tripoli.simple.css' %> 
-		<!--[if IE]><%= stylesheet_link_tag 'tripoli/tripoli.simple.ie.css' %><![endif]-->
+		<%= stylesheet_link_tag 'blueprint/screen.css', :media => "screen, projection" %>
+		<%= stylesheet_link_tag 'blueprint/print.css', :media => "print" %>
+		<!--[if IE]><%= stylesheet_link_tag 'blueprint/ie.css', :media => "screen, projection" %><![endif]-->
+
 		<%= stylesheet_link_tag 'dialog_custom.css','tabs_custom.css' %>
 		<%= stylesheet_link_tag 'themes/flora/flora.all.css' %>
 		<%= stylesheet_link_tag '../javascripts/themes/plmexplorer/grid.css','../javascripts/themes/jqModal.css','grid_custom.css' %>

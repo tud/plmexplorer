@@ -29,7 +29,7 @@
 /**************************************/
 
 #wNavigation {
-	font-size: 1.5em;
+	font-size: 1.2em;
 }
 
 /**************************************/
@@ -39,14 +39,11 @@
 .ui-tabs-hide {
 	display: none;
 }
-.ui-layout-center {
-	font-size: 1.2em;
-}
 #record_title {
 	font-weight: bold;
 	background-color: #3D83CC;
 	color: #FFFFFF;
-	padding: 5px 0px 5px 20px;
+	padding: 0px 0px 0px 20px;
 	display:  none;
 }
 #record_base {
@@ -101,12 +98,10 @@ form div label {
 	background: #ffeddc;
 }
 
-
 /**************************************/
 /*              SOUTH                 */
 /**************************************/
 
 .ui-layout-south {
 	text-align: center;
-	font-size: 1.2em;
 }
