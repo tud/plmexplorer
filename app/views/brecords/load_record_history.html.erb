@@ -6,9 +6,9 @@
 <script type="text/javascript">
 var id;
 id = jQuery('#view_record_id').attr('value');
+var centerWidth = pexLayout.cssWidth('center') - 90;
 jQuery(document).ready(function(){
 	jQuery('#promotionsGrid').jqGrid({
-		var centerWidth = pexLayout.cssWidth('center') - 90;
 		url: '/brecords/grid_promotions',
 		datatype: 'json',
 		mtype: 'GET',
@@ -63,7 +63,7 @@ jQuery(document).ready(function(){
 		viewrecords: true,
 		imgpath: '/javascripts/themes/plmexplorer/images',
 		height: '100%',
-		width: 805,
+		width: centerWidth,
 		pager: 'revisionsPager',
 		ondblClickRow: function(id) {	
 			if (id!=null) {
@@ -110,7 +110,7 @@ jQuery(document).ready(function(){
 		viewrecords: true,
 		imgpath: '/javascripts/themes/plmexplorer/images',
 		height: '100%',
-		width: 805,
+		width: centerWidth,
 		pager: 'signoffsPager',
 		postData: {conditions: 'bobjid='+id+' '}
 	})

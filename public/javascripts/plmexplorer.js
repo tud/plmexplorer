@@ -17,9 +17,12 @@ $(document).ready(function () {
 	,	west__spacing_closed: 10
 	,	onresize: function(){
 			jQuery('#wNavigation').accordion('size');
-			jQuery('#searchGrid').setGridWidth(pexLayout.cssWidth('center') - 50);
-			jQuery('#promotionsGrid').setGridWidth(pexLayout.cssWidth('center') - 90);
-			jQuery('#refsGrid').setGridWidth(pexLayout.cssWidth('center') - 90);
+			var centerWidth = pexLayout.cssWidth('center');
+			jQuery('#searchGrid').setGridWidth(centerWidth - 50);
+			jQuery('#promotionsGrid').setGridWidth(centerWidth - 90);
+			jQuery('#revisionsGrid').setGridWidth(centerWidth - 90);
+			jQuery('#signoffsGrid').setGridWidth(centerWidth - 90);
+			jQuery('#refsGrid').setGridWidth(centerWidth - 90);
 		}
 	});
 
