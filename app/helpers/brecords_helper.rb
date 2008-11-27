@@ -44,7 +44,7 @@ module BrecordsHelper
     if (rectype != "*")
       MENU['FIND'].each do |entry|
         if (entry['type'] == rectype.upcase)
-          classname = "<span class='ss_sprite "+entry['iconclass']+"'>&nbsp;</span>"
+          classname = "<img src='/images/fam/"+entry['iconclass']+".png'/>&nbsp;"
           break
         end
       end
@@ -68,5 +68,8 @@ module BrecordsHelper
     items
   end
   
+  def fam_img_tag famimg
+    "<img src='/images/fam/"+famimg+".png'/>"
+  end
 
 end

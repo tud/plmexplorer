@@ -90,6 +90,7 @@ class BrecordsController < ApplicationController
       else
         @conditions = condition.to_s
       end
+      render :layout => false
     else
       @rectype = params[:rectype].upcase
       @conditions = "brectype = '!'"
@@ -250,10 +251,12 @@ class BrecordsController < ApplicationController
   end
 
   def load_record_refs
+    render :layout => false
   end
 
   def load_record_history
     @record = Brecord.find(params[:id])
+    render :layout => false
   end
 
 private

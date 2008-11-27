@@ -100,7 +100,6 @@
 			<label>&nbsp;</label>
 			<button type="submit" id="find_submit_btn"><span class="ss_sprite ss_confirm">&nbsp;</span>Find</button>
 			<button type="reset" id="find_reset_btn"><span class="ss_sprite ss_cross">&nbsp;</span>Reset</button>
-			<button type="button" id="find_cancel_btn"><span class="ss_sprite ss_cancel">&nbsp;</span>Cancel</button>
 		</div>
 	</fieldset>
 <% end %>
@@ -111,11 +110,14 @@
 	jQuery('#legend_find_record').html(title);
 	jQuery('#brecord_find_rec_brectype').val(rectype);
 	
-	jQuery('#find_cancel_btn').click(function() {
-		jQuery('#findRecord').dialog("close");
-	});
-	
-	jQuery('#find_records').attr('action', '/rectype/'+rectype);
+	var formOptions = { 
+	    target: 	'#cResult'
+	,	url: 		'/rectype/'+rectype
+	,	success: 	function() {
+			$("#cMenu > ul").tabs("select",1);
+		}
+	};
+	jQuery('#find_records').ajaxForm(formOptions);
 	
 	jQuery('.editableCombobox').editableCombobox();
 </script>

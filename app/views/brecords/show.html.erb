@@ -1,15 +1,10 @@
-<% content_for(:head) do %>
-	<%= stylesheet_link_tag '../javascripts/themes/plmexplorer/grid.css','../javascripts/themes/jqModal.css','grid_custom.css', :cache => 'cache/grid' %>
-	<%= javascript_include_tag 'jquery.jqGrid.js','js/jqModal.js','js/jqDnR.js',:cache => 'cache/grid' %>
-<% end %>
-
-<% content_for(:search) do %>
 	<table id="searchGrid" class="scroll"></table>
 	<div id="searchPager" class="scroll"></div>
 
 	<script type="text/javascript">
 	var lastSel;
 	jQuery(document).ready(function(){
+		var centerWidth = pexLayout.cssWidth('center') - 50;
 		jQuery('#searchGrid').jqGrid({
 			url: '/brecords/grid_records',
 			datatype: 'json',
@@ -30,12 +25,12 @@
 			imgpath: '/javascripts/themes/plmexplorer/images',
 			caption: "<%=find_result_table_title @rectype%>",
 			height: '100%',
-			width: 925,
+			width: centerWidth,
 			pager: 'searchPager',
 			hiddengrid: <%= @hiddengrid %>,
 			ondblClickRow: function(id) {
 				if (id!=null && id!==lastSel) {
-					jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
+					//jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
 					lastSel=id;
 					jQuery.history(id);
 					jQuery.ajax({
@@ -43,6 +38,7 @@
 						url: ("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>?id="+id),
 						dataType: "script"
 					});
+					jQuery("#cMenu > ul").tabs("select",2);
 				}
 			},
 			postData: {
@@ -63,6 +59,7 @@
 							url: ("<%= url_for(:action => 'load_record_base', :controller => 'brecords') %>?id="+id),
 							dataType: "script"
 						});
+						jQuery("#cMenu > ul").tabs("select",2);
 					} else {
 						alert("Please select Row");
 					}
@@ -74,4 +71,3 @@
 	});
 	
 	</script>
-<% end %>

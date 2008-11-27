@@ -1,13 +1,13 @@
 FIND:
   - type: PART
     label: Part
-    iconclass: ss_page_white_gear
+    iconclass: page_white_gear
   - type: DOCUMENT
     label: Document
-    iconclass: ss_page_white_word
+    iconclass: page_white_word
   - type: WORKAUTH
     label: Workauth
-    iconclass: ss_application_form_edit
+    iconclass: application_form_edit
   - type: SOFTWARE
     label: Software
-    iconclass: ss_page_white_code
+    iconclass: page_white_code

@@ -5,6 +5,7 @@
 var lastSel;
 var id = jQuery('#view_record_id').attr('value');
 jQuery(document).ready(function(){
+	var centerWidth = pexLayout.cssWidth('center') - 90;
 	jQuery('#refsGrid').jqGrid({
 		url: '/brecords/grid_refs',
 		datatype: 'json',
@@ -27,7 +28,7 @@ jQuery(document).ready(function(){
 		viewrecords: true,
 		imgpath: '/javascripts/themes/plmexplorer/images',
 		height: '100%',
-		width: 805,
+		width: centerWidth,
 		pager: 'refsPager',
 		ondblClickRow: function(id) {
 			if (id!=null && id!==lastSel) {

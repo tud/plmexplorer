@@ -1,5 +1,5 @@
-jQuery('#tabs_content').hide();
-jQuery('#tabs_content').html('<%=@tabs%>');
+jQuery('#cRecord').hide();
+jQuery('#cRecord').html('<%=@tabs%>');
 <%
 	if (TABS["#{@record.brectype}"])
 		udas = @record.budas
@@ -52,7 +52,7 @@ jQuery('#tabs_content').html('<%=@tabs%>');
 		itabs = TABS["#{@record.brectype}"].size
 		TABS["COMMONS"].each do |tab|
 %>
-			jQuery('#tabs_record > ul').tabs("url", <%= itabs %> , "/<%= controller.controller_name %>/<%= tab['action'] %>?id=<%= @record.id %>")
+			jQuery('#cRecord > ul').tabs("url", <%= itabs %> , "/<%= controller.controller_name %>/<%= tab['action'] %>?id=<%= @record.id %>")
 <%
 			itabs=itabs+1
 		end
@@ -61,12 +61,13 @@ jQuery('#tabs_content').html('<%=@tabs%>');
 		jQuery('#view_record_id').val('<%= escape_javascript h @record.id  %>');
 
 		jQuery('#record_title').html("<%= icon_span @record.brectype %><%= escape_javascript h @record.title %>");
-		jQuery('#record_title').corner("10px");
 		jQuery('#record_title').show();
-
-		jQuery('#tabs_record > ul').tabs("select", 0);
 		
-		jQuery('#tabs_content').BlindDown();
+		jQuery('#recordTabName').html("<span><%= icon_span @record.brectype %> <%=@record.name%>-<%=@record.brecalt%></span>")
+
+		jQuery('#cRecord > ul').tabs("select", 0);
+		
+		jQuery('#cRecord').show();
 <%
 	end
 %>

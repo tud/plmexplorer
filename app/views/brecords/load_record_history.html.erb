@@ -8,6 +8,7 @@ var id;
 id = jQuery('#view_record_id').attr('value');
 jQuery(document).ready(function(){
 	jQuery('#promotionsGrid').jqGrid({
+		var centerWidth = pexLayout.cssWidth('center') - 90;
 		url: '/brecords/grid_promotions',
 		datatype: 'json',
 		mtype: 'GET',
@@ -26,7 +27,7 @@ jQuery(document).ready(function(){
 		viewrecords: true,
 		imgpath: '/javascripts/themes/plmexplorer/images',
 		height: '100%',
-		width: 805,
+		width: centerWidth,
 		pager: 'promotionsPager',
 		postData: {conditions: 'bobjid='+id+' '}
 	})
