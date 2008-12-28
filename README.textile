@@ -1,4 +1,4 @@
-h1. PLM on Rails
+h1. PlmExplorer
 
 h4((. Visualizzatore dati PLM
 
@@ -16,15 +16,17 @@ h4(. "Ruby on Rails _2.2.2_":http://rubyonrails.org/
 h4(. "jQuery _1.2.6_":http://jquery.com/
 
 * plugins:
-** "jQuery UI _1.6rc2_":http://ui.jquery.com/
-** "jQuery Grid _3.3.1_":http://www.trirand.com/blog/  
-** "jQuery Ui.Layout _1.1.0_":http://layout.jquery-dev.net/
+** "jQuery UI _svn_":http://ui.jquery.com/
+** "jQuery Grid _3.3.2_":http://www.trirand.com/blog/  
+** "jQuery Ui.Layout _1.2.0_":http://layout.jquery-dev.net/
 ** "jQuery Form Plugin":http://malsup.com/jquery/form/
-** "jQuery.ifixpng":http://jquery.khurshid.com/ifixpng.php
+** "jQuery.pngFix _1.1_":http://jquery.andreaseberhard.de/pngFix/
 ** "jQuery History Plugin _0.3_":http://www.overset.com/2008/06/18/jquery-history-plugin/
 ** "jQuery Editable Combobox _0.5.2_":http://code.google.com/p/jquery-jec/
 
-h4(. "Tripoli beta":http://devkick.com/lab/tripoli/
+h4(. "Blueprint _0.8_":http://blueprintcss.org/
 
-h4(. "FamFamFam Silk Icons 1.3":http://www.famfamfam.com/lab/icons/silk/
+h4(. "UniForm _1.3_":http://sprawsm.com/uni-form
+
+h4(. "FamFamFam Silk Icons _1.3_":http://www.famfamfam.com/lab/icons/silk/
 

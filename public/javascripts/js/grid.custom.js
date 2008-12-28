@@ -122,12 +122,22 @@ $.fn.extend({
 			if(gcolMod) {
 				if( this.p.gridModel === true) {
 					var thegrid = $(this.p.gridid)[0];
+					var sh;
 					// we should use the options search, edittype, editoptions
 					// additionally surl and defval can be added in grid colModel
 					$.each(gcolMod, function (i,n) {
 						var tmpFil = [];
-						this.search = this.search ===false ? false : true;
-						if( this.search === true && !this.hidden) {
+						this.search = this.search === false ? false : true;
+						if(this.editrules && this.editrules.searchhidden === true) {
+							sh = true;
+						} else {
+							if(this.hidden === true ) {
+								sh = false;
+							} else {
+								sh = true;
+							}
+						}
+						if( this.search === true && sh === true) {
 							if(self.p.gridNames===true) {
 								tmpFil.label = thegrid.p.colNames[i];
 							} else {

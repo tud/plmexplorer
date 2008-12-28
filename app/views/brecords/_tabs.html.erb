@@ -19,18 +19,18 @@
 	<input type="hidden" id="view_record_id" />
 	<% (tab_names record.brectype).each do |tab| %>
 		<div id="<%= tab['action'] %>" class="ui-tabs-hide">
-			<form id="view_<%= tab['action'] %>" action="" method="post">
-				<fieldset>
+			<form id="view_<%= tab['action'] %>" action="" method="post" class="uniForm">
+				<fieldset class="inlineLabels">
 					<legend></legend>
 					<% tab['fields'].each do |field| %>
 						<% if (field['type'] == nil) %>
-							<div>
+							<div class="ctrlHolder">
 								<label for="view_<%= field['id'] %>"><%= field['label'] %>:</label>
 								<input type="text" id="view_<%= field['id'] %>" readonly="readonly" size="<%= field['size'] %>"/>
 							</div>
 						<% elsif (field['type'].starts_with? "multi") %>
 							<% rows = (field['type']).gsub(/multi_/,'') %>
-							<div>
+							<div class="ctrlHolder">
 								<label for="view_<%= field['id'] %>"><%= field['label'] %>:</label>
 								<textarea id="view_<%= field['id'] %>" readonly="readonly" cols="<%= field['size'] %>" rows="<%= rows %>"></textarea>
 							</div>

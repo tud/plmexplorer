@@ -15,7 +15,6 @@ $.fn.addSubGrid = function(t,row,pos,rowelem) {
 		td = document.createElement("td");
 		$(td,t).html("<img src='"+ts.p.imgpath+"plus.gif'/>")
 			.toggle( function(e) {
-				$(this).html("<img src='"+ts.p.imgpath+"minus.gif'/>");
 				pID = $("table:first",ts.grid.bDiv).attr("id");
 				res = $(this).parent();
 				var atd= pos==1?'<td></td>':'';
@@ -32,6 +31,7 @@ $.fn.addSubGrid = function(t,row,pos,rowelem) {
 				} else {
 					populatesubgrid(res);
 				}
+				$(this).html("<img src='"+ts.p.imgpath+"minus.gif'/>");
 			}, function(e) {
 				if( typeof ts.p.subGridRowColapsed === 'function') {
 					res = $(this).parent();

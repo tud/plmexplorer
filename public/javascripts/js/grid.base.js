@@ -1,11 +1,11 @@
 ;(function ($) {
 /*
- * jqGrid  3.3.1 - jQuery Grid
+ * jqGrid  3.3.2 - jQuery Grid
  * Copyright (c) 2008, Tony Tomov, tony@trirand.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
- * Date: 2008-11-01 rev 67
+ * Date: 2008-12-14 rev 74
  */
 $.fn.jqGrid = function( p ) {
 	p = $.extend(true,{
@@ -42,6 +42,7 @@ $.fn.jqGrid = function( p ) {
 	lastpage: 0,
 	lastsort: 0,
 	selrow: null,
+	beforeSelectRow: null,
 	onSelectRow: null,
 	onSortCol: null,
 	ondblClickRow: null,
@@ -247,7 +248,7 @@ $.fn.jqGrid = function( p ) {
 				$('td:nth-child',$t.rows[ind]).each( function(i) {
 					nm = $t.p.colModel[i].name; 
 					if ( nm !== 'cb' && nm !== 'subgrid') {
-						res[nm] = $(this).html().replace(/\&nbsp\;/ig,'');
+						res[nm] = $(this).html().replace(/\&nbsp\;/ig,'').replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"');
 					}
 				});
 			});
@@ -325,7 +326,7 @@ $.fn.jqGrid = function( p ) {
 					td  = $('<td></td>');
 					$(td[0]).html('&#160;');
 					if(data[nm] !== 'undefined') {
-						$(td[0]).html(data[nm] || '&#160;');
+						$(td[0]).html(data[nm]);
 					}
 					t.formatCol($(td[0],t.grid.bDiv),i);
 					row.appendChild(td[0]);
@@ -513,7 +514,7 @@ $.fn.jqGrid = function( p ) {
 	$.fn.setCaption = function (newcap){
 		return this.each(function(){
 			this.p.caption=newcap;
-			$("table:first th",this.grid.cDiv).text(newcap);
+			$("table:first th",this.grid.cDiv).html(newcap);
 			$(this.grid.cDiv).show();
 		});
 	};
@@ -581,8 +582,8 @@ $.fn.jqGrid = function( p ) {
 			var $t = this;
 			if(!$t.grid) {return;}
 			$("tbody tr:gt(0)", $t.grid.bDiv).remove();
-			$t.p.selrow = null; $t.p.selarrrow= [];
-			$t.p.records = 0;$t.p.page=0;$t.p.lastpage=0;
+			$t.p.selrow = null; $t.p.selarrrow= []; $t.p.savedRow = [];
+			$t.p.records = '0';$t.p.page='0';$t.p.lastpage='0';
 			$t.updatepager();
 		});
 	};
@@ -607,6 +608,7 @@ $.fn.jqGrid = function( p ) {
 		var ts = this;
 		$("<div class='loadingui' id=lui_"+this.id+"/>").insertBefore(this);
 		$(this).attr({cellSpacing:"0",cellPadding:"0",border:"0"});
+		var bSR = $.isFunction(this.p.beforeSelectRow) ? this.p.beforeSelectRow :false;
 		var onSelectRow = $.isFunction(this.p.onSelectRow) ? this.p.onSelectRow :false;
 		var ondblClickRow = $.isFunction(this.p.ondblClickRow) ? this.p.ondblClickRow :false;
 		var onSortCol = $.isFunction(this.p.onSortCol) ? this.p.onSortCol : false;
@@ -626,8 +628,8 @@ $.fn.jqGrid = function( p ) {
 			else {return val;}
 		};
 		var formatCol = function (elem, pos){
-			var rowalign1 = ts.p.colModel[pos].align || "left";
-			$(elem).css("text-align",rowalign1);
+			var rowalgn = ts.p.colModel[pos].align;
+			if(rowalgn) { $(elem).css("text-align",rowalgn);}
 			if(ts.p.colModel[pos].hidden) {$(elem).css("display","none");}
 		};
 		var resizeFirstRow = function (t,er){
@@ -802,7 +804,9 @@ $.fn.jqGrid = function( p ) {
 					$('input.selbox',ts.p.pager).val(ts.p.page);
 				}
 				if (ts.p.viewrecords){
-					$('#sp_1',ts.p.pager).html(ts.p.pgtext+"&#160;"+ts.p.lastpage );
+					if(ts.p.pgtext) {
+						$('#sp_1',ts.p.pager).html(ts.p.pgtext+"&#160;"+ts.p.lastpage );
+					}
 					$('#sp_2',ts.p.pager).html(ts.p.records+"&#160;"+ts.p.recordtext+"&#160;");
 				}
 				if(ts.p.pgbuttons===true) {
@@ -1104,6 +1108,13 @@ $.fn.jqGrid = function( p ) {
 				}
 			});
 		}
+		ts.p.keyIndex=false;
+		for (var i=0; i<ts.p.colModel.length;i++) {
+			if (ts.p.colModel[i].key===true) {
+				ts.p.keyIndex = i;
+				break;
+			}
+		}
 		if(this.p.subGrid) {
 			this.p.colNames.unshift("");
 			this.p.colModel.unshift({name:'subgrid',width:25,sortable: false,resizable:false,hidedlg:true,search:false});
@@ -1143,13 +1154,6 @@ $.fn.jqGrid = function( p ) {
 		var trow = document.createElement("tr");
 		thead.appendChild(trow); 
 		var i=0, th, idn, thdiv;
-		ts.p.keyIndex=false;
-		for (var i=0; i<ts.p.colModel.length;i++) {
-			if (ts.p.colModel[i].key===true) {
-				ts.p.keyIndex = i;
-				break;
-			}
-		}
 		if(ts.p.shrinkToFit===true && ts.p.forceFit===true) {
 			for (i=ts.p.colModel.length-1;i>=0;i--){
 				if(!ts.p.colModel[i].hidden) {
@@ -1302,32 +1306,42 @@ $.fn.jqGrid = function( p ) {
 		});
 		}
 		var ri,ci;
+		
 		$(ts).before(grid.hDiv).css("width", grid.width+"px").click(function(e) {
 			td = (e.target || e.srcElement);
+			if (td.href) { return true; }
 			var scb = $(td).hasClass("cbox");
 			ptr = $(td,ts.rows).parent("tr");
 			if($(ptr).length === 0 ){
 				ptr = $(td,ts.rows).parents("tr:first");
 				td = $(td).parents("td:first")[0];
 			}
-			if(ts.p.cellEdit === true) {
-				ri = ptr[0].rowIndex;
-				ci = td.cellIndex;
-				try {$(ts).editCell(ri,ci,true,true);} catch (e) {}
-			} else 
-			if ( !ts.p.multikey ) {
-				$(ts).setSelection(false,ptr);
-				if(onSC) {
-					ri = ptr[0].id;
-					ci = td.cellIndex;
-					onSC(ri,ci,$(td).html());
-				}
-			} else {
-				if(e[ts.p.multikey]) {
+			var cSel = true;
+			if(bSR) { cSel = bSR(ptr.attr("id"));}
+			if(cSel === true) {
+				if(ts.p.cellEdit === true) {
+					if(ts.p.multiselect && scb){
+						$(ts).setSelection(false,ptr);
+					} else {
+						ri = ptr[0].rowIndex;
+						ci = td.cellIndex;
+						try {$(ts).editCell(ri,ci,true,true);} catch (e) {}
+					}
+				} else 
+				if ( !ts.p.multikey ) {
 					$(ts).setSelection(false,ptr);
-				} else if(ts.p.multiselect) {
-					if(scb) { scb = $("[@id^=jqg_]",ptr).attr("checked");
-						$("[@id^=jqg_]",ptr).attr("checked",!scb);
+					if(onSC) {
+						ri = ptr[0].id;
+						ci = td.cellIndex;
+						onSC(ri,ci,$(td).html());
+					}
+				} else {
+					if(e[ts.p.multikey]) {
+						$(ts).setSelection(false,ptr);
+					} else if(ts.p.multiselect) {
+						if(scb) { scb = $("[@id^=jqg_]",ptr).attr("checked");
+							$("[@id^=jqg_]",ptr).attr("checked",!scb);
+						}
 					}
 				}
 			}
@@ -1338,6 +1352,7 @@ $.fn.jqGrid = function( p ) {
 			if(ts.p.cellEdit) {ts.p.savedRow = []; }
 			populate();
 		});
+		
 		if( ondblClickRow ) {
 			$(this).dblclick(function(e) {
 				td = (e.target || e.srcElement);
@@ -1421,7 +1436,7 @@ $.fn.jqGrid = function( p ) {
 			if(grid.resizing) {
 				grid.dragEnd();
 				if(grid.newWidth && ts.p.forceFit===false){
-					var gwdt = (grid.width <= ts.p._width) ? grid.width : ts.p._width;
+					var gwdt = (grid.width <= ts.p._width) ? grid.width: ts.p._width;
 					var overfl = (grid.width <= ts.p._width) ? "hidden" : "auto";
 					if(ts.p.pager && $(ts.p.pager).hasClass("scroll") ) {
 						$(ts.p.pager).width(gwdt);

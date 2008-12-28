@@ -17,14 +17,14 @@
 		<%= stylesheet_link_tag 'blueprint/print.css', :media => "print" %>
 		<!--[if IE]><%= stylesheet_link_tag 'blueprint/ie.css', :media => "screen, projection" %><![endif]-->
 
-		<%= stylesheet_link_tag 'dialog_custom.css','tabs_custom.css' %>
-		<%= stylesheet_link_tag 'themes/flora/flora.all.css' %>
-		<%= stylesheet_link_tag '../javascripts/themes/plmexplorer/grid.css','../javascripts/themes/jqModal.css','grid_custom.css' %>
+		<%= stylesheet_link_tag 'themes/default/ui.all.css', 'uni-form.css' %>
+		<!--[if IE]><%= stylesheet_link_tag 'uni-form.ie.css', :media => "screen, projection" %><![endif]-->
+		<%= stylesheet_link_tag '../javascripts/themes/basic/grid.css','../javascripts/themes/jqModal.css','grid_custom.css' %>
 		<%= stylesheet_link_tag 'plmexplorer.css' %>
 		
 		<%= javascript_include_tag :defaults %>
-		<%= javascript_include_tag 'ui.accordion.js' %>
-		<%= javascript_include_tag 'jquery.layout.min.js','jquery.ifixpng.js', 'jquery.form.js' %>
+		<%= javascript_include_tag 'ui.accordion.js', 'ui.tabs.js', 'uni-form.jquery.js' %>
+		<%= javascript_include_tag 'jquery.layout.min.js','jquery.pngFix.pack.js', 'jquery.form.js' %>
 		<%= javascript_include_tag 'jquery.history.js','jquery.history.custom.js','jquery.jec.min-0.5.2.js' %>
 		<%= javascript_include_tag 'jquery.jqGrid.js','js/jqModal.js','js/jqDnR.js' %>
 		<%= javascript_include_tag 'plmexplorer.js' %>

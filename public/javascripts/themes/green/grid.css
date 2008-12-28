@@ -360,7 +360,7 @@ td.EditButton {
 	
 }
 .FormElement {
-	font-size: 10px;	
+	font-size: 10px;
 }
 input[type="text"].FormElement{
 	color: #15428B;		
@@ -369,8 +369,9 @@ input[type="checkbox"].FormElement{
 	width: 15px;
 	color: #15428B;		
 }
-input[type="textarea"].FormElement{
+textarea.FormElement{
 	color: #15428B;		
+	font-size: 11px;
 }
 select.FormElement {
 	font-size: 10px;

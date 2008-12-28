@@ -70,7 +70,8 @@ $.fn.extend({
 					else {
 						switch ($t.p.colModel[i].edittype) {
 							case "checkbox":
-								tmp[nm]=  $("input",this).attr("checked") ? 1 : 0; 
+								var cbv = $t.p.colModel[i].editoptions.value.split(":") || ["Yes","No"];
+								tmp[nm]=  $("input",this).attr("checked") ? cbv[0] : cbv[1]; 
 								break;
 							case 'text':
 							case 'password':
@@ -107,29 +108,33 @@ $.fn.extend({
 								$('#'+rowid+" td",$t.grid.bDiv).each(function(i) {
 									nm = $t.p.colModel[i].name;
 									if ( nm !== 'cb' && nm !== 'subgrid' && $t.p.colModel[i].editable===true) {
-										switch ($t.p.colModel[i].edittype) {
-											case "select":
-												if(!$t.p.colModel[i].editoptions.multiple) {
-													tmp2 = $("select>option:selected", this).text();
-												} else if( $t.p.colModel[i].editoptions.multiple ===true) {
-													var selectedText = [];
-													$("select > option:selected",this).each(
-														function(i,selected){
-															selectedText[i] = $(selected).text();
-														}
-													);
-													tmp2= selectedText.join(",");
-												}
-												break;
-											case "checkbox":
-												var cbv = $t.p.colModel[i].editoptions.value.split(":") || ["Yes","No"];
-												tmp2 = $("input",this).attr("checked") ? cbv[0] : cbv[1];
-												break;
-											case "password":
-											case "text":
-											case "textarea":
-												tmp2 = $("input, textarea", this).val();
-												break;
+										if($t.p.colModel[i].hidden ===true ) {
+											tmp2 = $(this).html();
+										} else {
+											switch ($t.p.colModel[i].edittype) {
+												case "select":
+													if(!$t.p.colModel[i].editoptions.multiple) {
+														tmp2 = $("select>option:selected", this).text();
+													} else if( $t.p.colModel[i].editoptions.multiple ===true) {
+														var selectedText = [];
+														$("select > option:selected",this).each(
+															function(i,selected){
+																selectedText[i] = $(selected).text();
+															}
+														);
+														tmp2= selectedText.join(",");
+													}
+													break;
+												case "checkbox":
+													var cbv = $t.p.colModel[i].editoptions.value.split(":") || ["Yes","No"];
+													tmp2 = $("input",this).attr("checked") ? cbv[0] : cbv[1];
+													break;
+												case "password":
+												case "text":
+												case "textarea":
+													tmp2 = $("input, textarea", this).val();
+													break;
+											}
 										}
 										$(this).empty();
 										$(this).html(tmp2 || "&nbsp;");

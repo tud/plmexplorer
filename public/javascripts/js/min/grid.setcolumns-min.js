@@ -1,11 +1,11 @@
-/*
- * jqGrid  3.3.1 - jQuery Grid
- * Copyright (c) 2008, Tony Tomov, tony@trirand.com
- * Dual licensed under the MIT and GPL licenses
+/**
+ * jqGrid extension for manipulating columns properties
+ * Piotr Roznicki roznicki@o2.pl
+ * http://www.roznicki.prv.pl
+ * Dual licensed under the MIT and GPL licenses:
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
- * Date: 2008-11-01 rev 67
- */
+**/
 
 ;(function($){$.fn.extend({setColumns:function(p){p=$.extend({top:0,left:0,width:200,height:195,modal:false,drag:true,closeicon:'ico-close.gif',beforeShowForm:null,afterShowForm:null,afterSubmitForm:null},$.jgrid.col,p||{});return this.each(function(){var $t=this;if(!$t.grid){return;}
 var onBeforeShow=typeof p.beforeShowForm==='function'?true:false;var onAfterShow=typeof p.afterShowForm==='function'?true:false;var onAfterSubmit=typeof p.afterSubmitForm==='function'?true:false;if(!p.imgpath){p.imgpath=$t.p.imgpath;}

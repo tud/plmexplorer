@@ -48,9 +48,17 @@ $.fn.extend({
 				var nm, hc, sf;
 				for(var i=0; i< cM.length;i++) {
 					nm = cM[i].name;
-					hc = (cM[i].hidden===true) ? true : false;
 					sf = (cM[i].search===false) ? false: true;
-					if( nm !== 'cb' && nm !== 'subgrid' && sf && !hc ) { // add here condition for searchable
+					if(cM[i].editrules && cM[i].editrules.searchhidden === true) {
+						hc = true;
+					} else {
+						if(cM[i].hidden === true ) {
+							hc = false;
+						} else {
+							hc = true;
+						}
+					}					
+					if( nm !== 'cb' && nm !== 'subgrid' && sf && hc===true ) { // add here condition for searchable
 						var sname = (cM[i].index) ? cM[i].index : nm;
 						cNames += "<option value='"+sname+"'>"+$t.p.colNames[i]+"</option>";
 					}
@@ -145,8 +153,12 @@ $.fn.extend({
 			beforeSubmit: null,
 			afterSubmit: null,
 			onclickSubmit: null,
+			afterComplete: null,
+			onclickPgButtons : null,
+			afterclickPgButtons: null,
 			editData : {},
-			recreateForm : false
+			recreateForm : false,
+			addedrow : "first"
 		}, $.jgrid.edit, p || {});
 		rp_ge = p;
 		return this.each(function(){
@@ -250,11 +262,11 @@ $.fn.extend({
 						if(!suc) { return false; }
 					});
 					if(j==0) { ret[0] = false; ret[1] = $.jgrid.errors.norecords; }
-					if( $.isFunction( rp_ge.onclickSubmit)) { p.editData = rp_ge.onclickSubmit(p) || {}; }
+					if( $.isFunction( rp_ge.onclickSubmit)) { rp_ge.editData = rp_ge.onclickSubmit(p) || {}; }
 					if(ret[0]) {
 						if( $.isFunction(rp_ge.beforeSubmit))  { ret = rp_ge.beforeSubmit(postdata,$("#"+frmgr)); }
 					}
-					var gurl = p.url ? p.url : $t.p.editurl;
+					var gurl = rp_ge.url ? rp_ge.url : $t.p.editurl;
 					if(ret[0]) {
 						if(!gurl) { ret[0]=false; ret[1] += " "+$.jgrid.errors.nourl; }
 					}
@@ -268,10 +280,10 @@ $.fn.extend({
 							$(this).attr("disabled",true);
 							// we add to pos data array the action - the name is oper
 							postdata.oper = postdata.id == "_empty" ? "add" : "edit";
-							postdata = $.extend(postdata,p.editData);
+							postdata = $.extend(postdata,rp_ge.editData);
 							$.ajax({
 								url:gurl,
-								type: p.mtype,
+								type: rp_ge.mtype,
 								data:postdata,
 								complete:function(data,Status){
 									if(Status != "success") {
@@ -295,13 +307,16 @@ $.fn.extend({
 											// user not set the id ret[2]
 											if(!ret[2]) { ret[2] = parseInt($($t).getGridParam('records'))+1; }
 											postdata.id = ret[2];
-											if(p.closeAfterAdd) {
+											if(rp_ge.closeAfterAdd) {
 												if(rp_ge.reloadAfterSubmit) { $($t).trigger("reloadGrid"); }
-												else { $($t).addRowData(ret[2],postdata,"first"); }
-												$("#"+IDs.themodal).jqmHide();
+												else {
+													$($t).addRowData(ret[2],postdata,p.addedrow);
+													$($t).setSelection(ret[2]);
+												}
+												hideModal("#"+IDs.themodal);
 											} else if (rp_ge.clearAfterAdd) {
 												if(rp_ge.reloadAfterSubmit) { $($t).trigger("reloadGrid"); }
-												else { $($t).addRowData(ret[2],postdata,"first"); }
+												else { $($t).addRowData(ret[2],postdata,p.addedrow); }
 												$(".FormElement", "#"+frmtb).each(function(i){
 													switch ($(this).get(0).type) {
 													case "checkbox":
@@ -321,7 +336,7 @@ $.fn.extend({
 												});
 											} else {
 												if(rp_ge.reloadAfterSubmit) { $($t).trigger("reloadGrid"); }
-												else { $($t).addRowData(ret[2],postdata,"first"); }
+												else { $($t).addRowData(ret[2],postdata,p.addedrow); }
 											}
 										} else {
 											// the action is update
@@ -335,7 +350,10 @@ $.fn.extend({
 													$($t).setRowData(postdata.id,postdata);
 												}
 											}
-											if(rp_ge.closeAfterEdit) { $("#"+IDs.themodal).jqmHide(); }
+											if(rp_ge.closeAfterEdit) { hideModal("#"+IDs.themodal); }
+										}
+										if($.isFunction(rp_ge.afterComplete)) {
+											setTimeout(function(){rp_ge.afterComplete(data,postdata,$("#"+frmgr));},500);
 										}
 									}
 									p.processing=false;
@@ -348,7 +366,7 @@ $.fn.extend({
 					e.stopPropagation();
 				});
 				$("#cData", "#"+frmtb).click(function(e){
-					$("#"+IDs.themodal).jqmHide();
+					hideModal("#"+IDs.themodal);
 					e.stopPropagation();
 				});
 				$("#nData", "#"+frmtb).click(function(e){
@@ -356,8 +374,14 @@ $.fn.extend({
 					var npos = getCurrPos();
 					npos[0] = parseInt(npos[0]);
 					if(npos[0] != -1 && npos[1][npos[0]+1]) {
+						if($.isFunction(p.onclickPgButtons)) {
+							p.onclickPgButtons('next',$("#"+frmgr),npos[1][npos[0]]);
+						}
 						fillData(npos[1][npos[0]+1],$t);
 						$($t).setSelection(npos[1][npos[0]+1]);
+						if($.isFunction(p.afterclickPgButtons)) {
+							p.afterclickPgButtons('next',$("#"+frmgr),npos[1][npos[0]+1]);
+						}
 						updateNav(npos[0]+1,npos[1].length-1);
 					};
 					return false;
@@ -366,8 +390,14 @@ $.fn.extend({
 					$("#FormError","#"+frmtb).hide();
 					var ppos = getCurrPos();
 					if(ppos[0] != -1 && ppos[1][ppos[0]-1]) {
+						if($.isFunction(p.onclickPgButtons)) {
+							p.onclickPgButtons('prev',$("#"+frmgr),ppos[1][ppos[0]]);
+						}
 						fillData(ppos[1][ppos[0]-1],$t);
 						$($t).setSelection(ppos[1][ppos[0]-1]);
+						if($.isFunction(p.afterclickPgButtons)) {
+							p.afterclickPgButtons('prev',$("#"+frmgr),ppos[1][ppos[0]-1]);
+						}
 						updateNav(ppos[0]-1,ppos[1].length-1);
 					};
 					return false;
@@ -401,13 +431,13 @@ $.fn.extend({
 						if(nm == obj.p.ExpandColumn && obj.p.treeGrid === true) {
 							tmp = $(this).text();
 						} else {
-							tmp = $(this).html().replace(/\&nbsp\;/ig,'');
+							tmp = $(this).html();
 						}
 						var opt = $.extend(obj.p.colModel[i].editoptions || {} ,{id:nm,name:nm});
 						if(!obj.p.colModel[i].edittype) obj.p.colModel[i].edittype = "text";
 						elc = createEl(obj.p.colModel[i].edittype,opt,tmp);
 						$(elc).addClass("FormElement");
-						trdata = $("<tr "+dc+"></tr>").addClass("FormData");
+						trdata = $("<tr "+dc+"></tr>").addClass("FormData").attr("id","tr_"+nm);
 						tdl = $("<td></td>").addClass("CaptionTD");
 						tde = $("<td></td>").addClass("DataTD");
 						$(tdl).html(obj.p.colNames[i]+": ");
@@ -441,12 +471,16 @@ $.fn.extend({
 						if(nm == obj.p.ExpandColumn && obj.p.treeGrid === true) {
 							tmp = $(this).text();
 						} else {
-							tmp = $(this).html().replace(/\&nbsp\;/ig,'');
+							tmp = $(this).html();
 						}
 						switch (obj.p.colModel[i].edittype) {
 							case "password":
 							case "text":
+								tmp = tmp.replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"').replace(/\&nbsp\;/ig,'');
+								$("#"+nm,"#"+frmtb).val(tmp);
+								break;
 							case "textarea":
+								if(tmp == "&nbsp;" || tmp == "&#160;") {tmp='';}
 								$("#"+nm,"#"+frmtb).val(tmp);
 								break;
 							case "select":
@@ -587,11 +621,14 @@ $.fn.extend({
 											$t.p.selrow = null;
 											$t.p.selarrrow = [];
 										}
+										if($.isFunction(p.afterComplete)) {
+											setTimeout(function(){p.afterComplete(data,postdata);},500);
+										}
 									}
 									p.processing=false;
 									$("#dData", "#"+dtbl).attr("disabled",false);
 									$("div.loading","#"+IDs.themodal).fadeOut("fast");
-									if(ret[0]) { $("#"+IDs.themodal).jqmHide(); }
+									if(ret[0]) { hideModal("#"+IDs.themodal); }
 								}
 							});
 						}
@@ -599,7 +636,7 @@ $.fn.extend({
 					return false;
 				});
 				$("#eData", "#"+dtbl).click(function(e){
-					$("#"+IDs.themodal).jqmHide();
+					hideModal("#"+IDs.themodal);
 					return false;
 				});
 				if(onBeforeShow) { p.beforeShowForm($("#"+dtbl)); }
@@ -654,31 +691,6 @@ $.fn.extend({
 			$(trd).addClass("nav-row");
 			var imp = $t.p.imgpath;
 			var tbd;
-			if (o.edit) {
-				tbd = document.createElement("td");
-				$(tbd).append("&nbsp;").css({border:"none",padding:"0px"});
-				trd.appendChild(tbd);
-				tbd = document.createElement("td");
-				tbd.title = o.edittitle || "";
-				$(tbd).append("<table cellspacing='0' cellpadding='0' border='0' class='tbutton'><tr><td><img src='"+imp+o.editicon+"'/></td><td valign='center'>"+o.edittext+"&nbsp;</td></tr></table>")
-				.css("cursor","pointer")
-				.addClass("nav-button")
-				.click(function(){
-					var sr = $($t).getGridParam('selrow');
-					if (sr) { $($t).editGridRow(sr,pEdit || {}); }
-					else { viewModal("#"+alertIDs.themodal); }
-					return false;
-				})
-				.hover( function () {
-					$(this).addClass("nav-hover");
-					},
-					function () {
-						$(this).removeClass("nav-hover");
-					}
-				);
-				trd.appendChild(tbd);
-				tbd = null;
-			}
 			if (o.add) {
 				tbd = document.createElement("td");
 				$(tbd).append("&nbsp;").css({border:"none",padding:"0px"});
@@ -699,6 +711,38 @@ $.fn.extend({
 				.hover(
 					function () {
 						$(this).addClass("nav-hover");
+					},
+					function () {
+						$(this).removeClass("nav-hover");
+					}
+				);
+				trd.appendChild(tbd);
+				tbd = null;
+			}
+			if (o.edit) {
+				tbd = document.createElement("td");
+				$(tbd).append("&nbsp;").css({border:"none",padding:"0px"});
+				trd.appendChild(tbd);
+				tbd = document.createElement("td");
+				tbd.title = o.edittitle || "";
+				$(tbd).append("<table cellspacing='0' cellpadding='0' border='0' class='tbutton'><tr><td><img src='"+imp+o.editicon+"'/></td><td valign='center'>"+o.edittext+"&nbsp;</td></tr></table>")
+				.css("cursor","pointer")
+				.addClass("nav-button")
+				.click(function(){
+					var sr = $($t).getGridParam('selrow');
+					if (sr) {
+						if(typeof o.editfunc == 'function') {
+							o.editfunc(sr);
+						} else {
+							$($t).editGridRow(sr,pEdit || {});
+						}
+					} else {
+						viewModal("#"+alertIDs.themodal);
+					}
+					return false;
+				})
+				.hover( function () {
+					$(this).addClass("nav-hover");
 					},
 					function () {
 						$(this).removeClass("nav-hover");

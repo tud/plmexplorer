@@ -18,7 +18,7 @@ function createModal(aIDs, content, p, insertSelector, posSelector, appendsel) {
 	var clicon = p.imgpath ? p.imgpath+p.closeicon : p.closeicon;
 	var mw  = document.createElement('div');
 	jQuery(mw).addClass("modalwin").attr("id",aIDs.themodal);
-	var mh = jQuery('<div id="'+aIDs.modalhead+'"><table width="100%"><tbody><tr><td class="modaltext">'+p.caption+'</td> <td align="right"><a href="javascript:void(0);" class="jqmClose">'+(clicon!=''?'<img src="' + clicon + '" border="0"/>':'X') + '</a></td></tr></tbody></table> </div>').addClass("modalhead");
+	var mh = jQuery('<div id="'+aIDs.modalhead+'"><table width="100%"><tbody><tr><td class="modaltext">'+p.caption+'</td> <td style="text-align:right" ><a href="javascript:void(0);" class="jqmClose">'+(clicon!=''?'<img src="' + clicon + '" border="0"/>':'X') + '</a></td></tr></tbody></table> </div>').addClass("modalhead");
 	var mc = document.createElement('div');
 	jQuery(mc).addClass("modalcontent").attr("id",aIDs.modalcontent);
 	jQuery(mc).append(content);
@@ -32,7 +32,7 @@ function createModal(aIDs, content, p, insertSelector, posSelector, appendsel) {
 		jQuery(mw).append("<img  class='jqResize' src='"+p.imgpath+"resize.gif'/>");
 	}
 	if(appendsel===true) { jQuery('body').append(mw); } //append as first child in body -for alert dialog
-	else { jQuery(mw).insertBefore(insertSelector); }
+	else { jQuery(mw).insertBefore(insertSelector);	}
 	if(p.left ==0 && p.top==0) {
 		var pos = [];
 		pos = findPos(posSelector) ;
@@ -51,13 +51,16 @@ function viewModal(selector,o){
 		toTop: true,
 		overlay: 10,
 		modal: false,
-		drag: true,
 		onShow: showModal,
 		onHide: closeModal
 	}, o || {});
 	jQuery(selector).jqm(o).jqmShow();
 	return false;
 };
+function hideModal(selector) {
+	jQuery(selector).jqmHide();
+}
+
 function DnRModal(modwin,handler){
 	jQuery(handler).css('cursor','move');
 	jQuery(modwin).jqDrag(handler).jqResize(".jqResize");
@@ -122,6 +125,7 @@ function createEl(eltype,options,vl,elm) {
 				elem = document.createElement("textarea");
 				if(!options.cols && elm) {jQuery(elem).css("width","99%");}
 				jQuery(elem).attr(options);
+				if(vl == "&nbsp;" || vl == "&#160;") {vl='';} // comes from grid if empty
 				jQuery(elem).val(vl);
 				break;
 		case "checkbox" : //what code for simple checkbox
@@ -164,6 +168,7 @@ function createEl(eltype,options,vl,elm) {
 		case "text" :
 			elem = document.createElement("input");
 			elem.type = "text";
+			vl = vl.replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"').replace(/\&nbsp\;/ig,'');
 			elem.value = vl;
 			if(!options.size && elm) {
 				jQuery(elem).css("width","99%");
@@ -173,6 +178,7 @@ function createEl(eltype,options,vl,elm) {
 		case "password" :
 			elem = document.createElement("input");
 			elem.type = "password";
+			vl = vl.replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"').replace(/\&nbsp\;/ig,'');
 			elem.value = vl;
 			if(!options.size && elm) { jQuery(elem).css("width","99%"); }
 			jQuery(elem).attr(options);
@@ -211,6 +217,87 @@ function checkValues(val, valref,g) {
 			if(isNaN(val)) return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.integer,""];
 			if ((val < 0) || (val % 1 != 0) || (val.indexOf('.') != -1)) return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.integer,""];
 		}
+		if(edtrul.date == true) {
+			var dft = g.p.colModel[valref].datefmt || "Y-m-d";
+			if(!checkDate (dft, val)) return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.date+" - "+dft,""];
+		}
 	}
 	return [true,"",""];
 };
+// Date Validation Javascript
+function checkDate (format, date) {
+	var tsp = {};
+	var result =  false;
+	var sep;
+	format = format.toLowerCase();
+	//we search for /,-,. for the date separator
+	if(format.indexOf("/") != -1) {
+		sep = "/";
+	} else if(format.indexOf("-") != -1) {
+		sep = "-";
+	} else if(format.indexOf(".") != -1) {
+		sep = ".";
+	} else {
+		sep = "/";
+	}
+	format = format.split(sep);
+	date = date.split(sep);
+	if (date.length != 3) return false;
+	var j=-1,yln, dln=-1, mln=-1;
+	for(var i=0;i<format.length;i++){
+		var dv =  isNaN(date[i]) ? 0 : parseInt(date[i],10); 
+		tsp[format[i]] = dv;
+		yln = format[i];
+		if(yln.indexOf("y") != -1) { j=i; }
+		if(yln.indexOf("m") != -1) {mln=i}
+		if(yln.indexOf("d") != -1) {dln=i}
+	}
+	if (format[j] == "y" || format[j] == "yyyy") {
+		yln=4;
+	} else if(format[j] =="yy"){
+		yln = 2;
+	} else {
+		yln = -1;
+	}
+	var daysInMonth = DaysArray(12);
+	var strDate;
+	if (j === -1) {
+		return false;
+	} else {
+		strDate = tsp[format[j]].toString();
+		if(yln == 2 && strDate.length == 1) {yln = 1;}
+		if (strDate.length != yln || tsp[format[j]]==0 ){
+			return false;
+		}
+	}
+	if(mln === -1) {
+		return false;
+	} else {
+		strDate = tsp[format[mln]].toString();
+		if (strDate.length<1 || tsp[format[mln]]<1 || tsp[format[mln]]>12){
+			return false;
+		}
+	}
+	if(dln === -1) {
+		return false;
+	} else {
+		strDate = tsp[format[dln]].toString();
+		if (strDate.length<1 || tsp[format[dln]]<1 || tsp[format[dln]]>31 || (tsp[format[mln]]==2 && tsp[format[dln]]>daysInFebruary(tsp[format[j]])) || tsp[format[dln]] > daysInMonth[tsp[format[mln]]]){
+			return false;
+		}
+	}
+	return true;
+}
+function daysInFebruary (year){
+	// February has 29 days in any year evenly divisible by four,
+    // EXCEPT for centurial years which are not also divisible by 400.
+    return (((year % 4 == 0) && ( (!(year % 100 == 0)) || (year % 400 == 0))) ? 29 : 28 );
+}
+function DaysArray(n) {
+	for (var i = 1; i <= n; i++) {
+		this[i] = 31;
+		if (i==4 || i==6 || i==9 || i==11) {this[i] = 30;}
+		if (i==2) {this[i] = 29;}
+   } 
+   return this;
+}

@@ -33,7 +33,8 @@ $.jgrid.edit = {
         minValue:"wartość musi być większa lub równa",
         maxValue:"wartość musi być mniejsza od",
         email: "nie jest adresem e-mail",
-        integer: "Proszę wpisać poprawną liczbę"
+        integer: "Proszę wpisać poprawną liczbę",
+		date: "Please, enter valid date value"
     }
 };
 $.jgrid.del = {

@@ -1,10 +1,11 @@
 /*
- * jqGrid  3.3.1 - jQuery Grid
+ * jqGrid  3.3.2 - jQuery Grid
  * Copyright (c) 2008, Tony Tomov, tony@trirand.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
- * Date: 2008-11-01 rev 67
+ * Date: 2008-12-14 rev 74
+ * 
  */
 
 ;(function($){$.fn.extend({getPostData:function(){var $t=this[0];if(!$t.grid){return;}

@@ -3,7 +3,7 @@ var pexAccordion;
 
 $(document).ready(function () {
 	// fix png for ie6
-	jQuery('img[@src$=png]').ifixpng();
+	$(document).pngFix();
 	
 	// fix for jQuery
 	jQuery.ajaxSetup({ 
@@ -16,7 +16,7 @@ $(document).ready(function () {
 	,	north__spacing_open: 0
 	,	west__spacing_closed: 10
 	,	west__onresize: function(){
-			jQuery('#wNavigation').accordion('size');
+			jQuery('#wNavigation').accordion('resize');
 		}
 	,	center__onresize: function(){
 			var centerWidth = pexLayout.cssWidth('center');
@@ -31,7 +31,7 @@ $(document).ready(function () {
 	pexAccordion = $('#wNavigation').accordion({
 		fillSpace: true
 	,	navigation: true
-	,	header: "div.header"
+	,	header: "h3"
 	});
 
 	$("#cMenu > ul").tabs();

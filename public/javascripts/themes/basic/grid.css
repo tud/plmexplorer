@@ -360,8 +360,9 @@ input[type="checkbox"].FormElement{
 	width: 15px;
 	color: #15428B;		
 }
-input[type="textarea"].FormElement{
-	color: #15428B;		
+textarea.FormElement{
+	color: #15428B;
+	font-size: 11px;
 }
 select.FormElement {
 	font-size: 10px;

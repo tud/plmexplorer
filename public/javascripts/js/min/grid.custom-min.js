@@ -1,10 +1,11 @@
 /*
- * jqGrid  3.3.1 - jQuery Grid
+ * jqGrid  3.3.2 - jQuery Grid
  * Copyright (c) 2008, Tony Tomov, tony@trirand.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
- * Date: 2008-11-01 rev 67
+ * Date: 2008-12-14 rev 74
+ * 
  */
 
 ;(function($){$.fn.extend({getColProp:function(colname){var ret={},$t=this[0];if(!$t.grid){return;}
@@ -20,7 +21,8 @@ var defgrid={id:$(this).attr('id'),cl:$(this).attr('class')};if(this.p.pager){$(
 var newtable=document.createElement('table');$(newtable).attr({id:defgrid['id']});newtable.className=defgrid['cl'];$("#lui_"+this.id).remove();if(this.p.toolbar[0]){$(this.grid.uDiv).remove();}
 $(this.grid.cDiv).remove();$(this.grid.bDiv).remove();$(this.grid.hDiv).before(newtable).remove();this.p=null;this.grid=null;});},filterGrid:function(gridid,p){p=$.extend({gridModel:false,gridNames:false,gridToolbar:false,filterModel:[],formtype:"horizontal",autosearch:true,formclass:"filterform",tableclass:"filtertable",buttonclass:"filterbutton",searchButton:"Search",clearButton:"Clear",enableSearch:false,enableClear:false,beforeSearch:null,afterSearch:null,beforeClear:null,afterClear:null,url:'',marksearched:true},p||{});return this.each(function(){var self=this;this.p=p;if(this.p.filterModel.length==0&&this.p.gridModel===false){alert("No filter is set");return;}
 if(!gridid){alert("No target grid is set!");return;}
-this.p.gridid=gridid.indexOf("#")!=-1?gridid:"#"+gridid;var gcolMod=$(this.p.gridid).getGridParam('colModel');if(gcolMod){if(this.p.gridModel===true){var thegrid=$(this.p.gridid)[0];$.each(gcolMod,function(i,n){var tmpFil=[];this.search=this.search===false?false:true;if(this.search===true&&!this.hidden){if(self.p.gridNames===true){tmpFil.label=thegrid.p.colNames[i];}else{tmpFil.label='';}
+this.p.gridid=gridid.indexOf("#")!=-1?gridid:"#"+gridid;var gcolMod=$(this.p.gridid).getGridParam('colModel');if(gcolMod){if(this.p.gridModel===true){var thegrid=$(this.p.gridid)[0];var sh;$.each(gcolMod,function(i,n){var tmpFil=[];this.search=this.search===false?false:true;if(this.editrules&&this.editrules.searchhidden===true){sh=true;}else{if(this.hidden===true){sh=false;}else{sh=true;}}
+if(this.search===true&&sh===true){if(self.p.gridNames===true){tmpFil.label=thegrid.p.colNames[i];}else{tmpFil.label='';}
 tmpFil.name=this.name;tmpFil.index=this.index||this.name;tmpFil.stype=this.edittype||'text';if(tmpFil.stype!='select'||tmpFil.stype!='select'){tmpFil.stype='text';}
 tmpFil.defval=this.defval||'';tmpFil.surl=this.surl||'';tmpFil.sopt=this.editoptions||{};tmpFil.width=this.width;self.p.filterModel.push(tmpFil);}});}else{$.each(self.p.filterModel,function(i,n){for(var j=0;j<gcolMod.length;j++){if(this.name==gcolMod[j].name){this.index=gcolMod[j].index||this.name;break;}}
 if(!this.index){this.index=this.name;}});}}else{alert("Could not get grid colModel");return;}

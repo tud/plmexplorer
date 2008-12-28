@@ -14,7 +14,20 @@
 /*              GLOBALS               */
 /**************************************/
 
-
+.hint {
+	font-style:italic;
+	font-size:.8em;
+	margin-bottom:1.875em;
+	line-height:1.875em;
+	margin-left:2em;
+	color:#E08002;
+}
+.title {
+	font-weight: bold;
+}
+select {
+	height:2em;
+}
 
 /**************************************/
 /*              NORTH                 */
@@ -28,14 +41,38 @@
 /*              WEST                  */
 /**************************************/
 
+.ui-layout-west {
+	text-align: left;
+}
+
 #wNavigation {
 	font-size: 1.2em;
+}
+#wNavigation a {
+	color:#1C94C4;
+	outline-color:-moz-use-text-color;
+	outline-style:none;
+	outline-width:medium;
+	text-decoration:none;
+}
+
+#wNavigation a:hover, #wNavigation a:focus {
+	background: #fdf5ce url(images/fdf5ce_40x100_textures_02_glass_100.png) 50% 50% repeat-x
+	font-weight: bold;
+	color: #c77405;
+	outline: none;
+}
+.ui-accordion-content a {
+	line-height:2em;
 }
 
 /**************************************/
 /*              CENTER                */
 /**************************************/
 
+.ui-layout-center {
+	text-align: left;
+}
 .ui-tabs-hide {
 	display: none;
 }
@@ -50,6 +87,26 @@
 	display: none;
 }
 
+.uniForm .inlineLabels label, .uniForm .inlineLabels .label {
+	width:20%;
+}
+.uniForm fieldset {
+	border:1px solid #0F6FD2;
+	padding: 1em;
+	color:#0F6FD2;
+}
+.uniForm .buttonHolder {
+	text-align:left;
+	margin-left: 6px;
+}
+.uniForm .inlineLabels .selectInput, .uniForm .inlineLabels select {
+	width:auto;
+}
+.uniForm fieldset legend {
+	color:#0F6FD2;
+}
+
+/*
 form div {
 	clear: left;
 	display: block;
@@ -66,7 +123,7 @@ form div label {
 	margin: 0 0 5px 0;
 	text-align: right;
 }
-
+*/
 #brecord_find_rec_bname1 optgroup {
 	font-size:.8em;
 	margin-bottom:1.875em;
@@ -74,8 +131,8 @@ form div label {
 }
 #find_submit_btn, #find_reset_btn, #find_cancel_btn {
 	cursor:pointer;
-	border:1px solid #f3a251;
-	background:#222222;
+	border:1px solid #E08002;
+	background:#0F6FD2;
 	color:#FFFFFF;
 	font-weight:bold;
 	padding: 2px 15px;
@@ -85,11 +142,12 @@ form div label {
 	padding-bottom: 5px;
 }
 #find_submit_btn:hover, #find_reset_btn:hover {
-	background: #FFBC0B;
+	background: #E08002;
 }
 #find_submit_btn:focus, #find_reset_btn:focus, #find_submit_btn:active, #find_reset_btn:active {
-	background: #222222;
+	background: #0F6FD2;
 }
+/*
 #findRecord input[type="text"], #findRecord textarea, #findRecord select {
 	border: 1px solid #f3a251;
 }
@@ -97,6 +155,7 @@ form div label {
 	border: 1px solid #f3a251;
 	background: #ffeddc;
 }
+*/
 
 /**************************************/
 /*              SOUTH                 */

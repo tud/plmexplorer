@@ -1,8 +1,8 @@
-<% form_for :brecord, :html => {:id => 'find_records'} do |f| %>
-	<fieldset>
+<% form_for :brecord, :html => {:id => 'find_records', :class => 'uniForm'} do |f| %>
+	<fieldset class='inlineLabels'>
 		<legend id="legend_find_record"></legend>
 		<%= f.hidden_field :find_rec_brectype, :value => @rectype %>
-		<div>
+		<div class='ctrlHolder'>
 		<% if @rectype == 'WORKAUTH' %>
 			<label for="brecord_find_rec_brecname">Name :</label>
 			<%= f.text_field :find_rec_brecname, :maxlength => "32", :tabindex => "1", :class => "uppercase" %>
@@ -11,64 +11,65 @@
 			<%= f.text_field :find_rec_name, :maxlength => "26", :tabindex => "1", :class => "uppercase" %>
 			<% end %>
 		</div>
-		<div>
+		<div class='ctrlHolder'>
 			<label for="brecord_find_rec_bname1">Bus. ID :</label>
 			<select id="brecord_find_rec_bname1" name="brecord[find_rec_bname1]" tabindex="2">
 				<option value="" />
 				<%= option_groups_from_collection_for_select(CAGE_CODES, :options, :label, :value, :key) %>
 			</select>
 		</div>
-		<div>
+		<div class='ctrlHolder'>
 			<label for="brecord_find_rec_brecalt">Rev. :</label>
 			<%= f.text_field :find_rec_brecalt, :value => "#", :maxlength => "4", :tabindex => "3", :class => "uppercase" %>
+			<span class='hint'> # = latest revision</span>
 		</div>
-		<div>
+		<div class='ctrlHolder'>
 			<label for="brecord_find_rec_breclevel">Status :</label>
 			<%= f.select :find_rec_breclevel, @statusList, {}, {:tabindex => "4"} %>
 		</div>
-		<div>
+		<div class='ctrlHolder'>
 			<label for="brecord_find_rec_bproject">Project :</label>
 			<%= f.select :find_rec_bproject, PROJECT_LIST, {}, {:tabindex => "5"} %>
 		</div>
-		<div>
+		<div class='ctrlHolder'>
 			<label for="brecord_find_rec_bowner">Owner :</label>
 			<%= f.select :find_rec_bowner, USER_LIST, {}, {:tabindex => "6", :class => "uppercase editableCombobox"} %>
 		</div>
-		<div>
+		<div class='ctrlHolder'>
 			<label for="brecord_find_rec_bcreateuser">Created By :</label>
 			<%= f.select :find_rec_bcreateuser, USER_LIST, {}, {:tabindex => "7", :class => "uppercase editableCombobox"} %>
 		</div>
-		<div>
+		<div class='ctrlHolder'>
 			<label for="brecord_find_rec_bfamily">Type :</label>
 			<select id="brecord_find_rec_bfamily" name="brecord[find_rec_bfamily]" tabindex="8">
 				<option value="" />
 				<%= option_groups_from_collection_for_select(@typeList, :options, :label, :value, :key) %>
 			</select>
 		</div>
-		<div>
+		<div class='ctrlHolder'>
 			<label for="brecord_find_rec_name4">Short Description :</label>
 			<%= f.text_field :find_rec_name4, :maxlength => "32", :tabindex => "9" %>
 		</div>
-		<div>
+		<div class='ctrlHolder'>
 			<label for="brecord_find_rec_bdesc">Description :</label>
 			<%= f.text_field :find_rec_bdesc, :maxlength => "80", :tabindex => "10" %>
 		</div>
 		<% if @rectype == 'PART' %>
-			<div>
+			<div class='ctrlHolder'>
 				<label for="brecord_find_uda_logistic_item">Logistic Item Type :</label>
 				<%= f.select :find_uda_logistic_item, DynList::LOGISTIC_ITEMS, {}, {:tabindex => "21"} %>
 			</div>
-			<div>
+			<div class='ctrlHolder'>
 				<label for="brecord_find_uda_comm_number">Commercial Code :</label>
 				<%= f.text_field :find_uda_comm_number, :maxlength => "80", :tabindex => "22" %>
 			</div>
-			<div>
+			<div class='ctrlHolder'>
 				<label for="brecord_find_uda_maker">Manufacturer :</label>
 				<%= f.text_field :find_uda_maker, :maxlength => "80", :tabindex => "23" %>
 			</div>
 		<% end %>
 		<% if @rectype == 'DOCUMENT' %>
-			<div>
+			<div class='ctrlHolder'>
 				<label for="brecord_find_rec_btype4">Document Size :</label>
 				<select id="brecord_find_rec_btype4" name="brecord[find_rec_btype4]" tabindex="21">
 					<option value="" />
@@ -77,26 +78,26 @@
 			</div>
 		<% end %>
 		<% if @rectype == 'WORKAUTH' %>
-			<div>
+			<div class='ctrlHolder'>
 				<label for="brecord_find_rec_btype3">Change Class :</label>
 				<select id="brecord_find_rec_btype3" name="brecord[find_rec_btype3]" tabindex="21">
 					<option value="" />
 					<%= option_groups_from_collection_for_select(CHANGE_CLASSES, :options, :label, :value, :key) %>
 				</select>
 			</div>
-			<div>
+			<div class='ctrlHolder'>
 				<label for="brecord_find_uda_change_subclass">Sub-Class :</label>
 				<select id="brecord_find_uda_change_subclass" name="brecord[find_uda_change_subclass]" tabindex="22">
 					<option value="" />
 					<%= option_groups_from_collection_for_select(CHANGE_SUBCLASSES, :options, :label, :value, :key) %>
 				</select>
 			</div>
-			<div>
+			<div class='ctrlHolder'>
 				<label for="brecord_find_uda_ecp_number">Eng Chg Prop Nr :</label>
 				<%= f.text_field :find_uda_ecp_number, :maxlength => "32", :tabindex => "23" %>
 			</div>
 		<% end %>
-		<div>
+		<div class="buttonHolder">
 			<label>&nbsp;</label>
 			<button type="submit" id="find_submit_btn"><span class="ss_sprite ss_confirm">&nbsp;</span>Find</button>
 			<button type="reset" id="find_reset_btn"><span class="ss_sprite ss_cross">&nbsp;</span>Reset</button>
@@ -120,4 +121,6 @@
 	jQuery('#find_records').ajaxForm(formOptions);
 	
 	jQuery('.editableCombobox').editableCombobox();
+	
+	jQuery('form.uniForm').uniform();
 </script>

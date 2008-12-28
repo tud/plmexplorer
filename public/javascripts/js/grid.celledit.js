@@ -32,7 +32,7 @@ $.fn.extend({
 			if (!$t.grid || $t.p.cellEdit !== true) {return;}
 			var currentFocus = null;
 			// I HATE IE
-			if ($.browser.msie && $.browser.version <=6 && ed===true && fg===true) {
+			if ($.browser.msie && $.browser.version <=7 && ed===true && fg===true) {
 				iCol = getAbsoluteIndex($t.rows[iRow],iCol);
 			}
 			// select the row that can be used for other methods
@@ -68,7 +68,7 @@ $.fn.extend({
 				}
 				$(cc).addClass("edit-cell");
 				$($t.rows[iRow]).addClass("selected-row");
-				tmp = $(cc).html().replace(/\&nbsp\;/ig,'');
+				tmp = $(cc).html();
 				var opt = $.extend($t.p.colModel[iCol].editoptions || {} ,{id:iRow+"_"+nm,name:nm});
 				if (!$t.p.colModel[iCol].edittype) {$t.p.colModel[iCol].edittype = "text";}
 				$t.p.savedRow.push({id:iRow,ic:iCol,name:nm,v:tmp});
@@ -85,7 +85,10 @@ $.fn.extend({
 				$("input, select, textarea",cc).bind("keydown",function(e) { 
 					if (e.keyCode === 27) {$($t).restoreCell(iRow,iCol);} //ESC
 					if (e.keyCode === 13) {$($t).saveCell(iRow,iCol);}//Enter
-					if (e.keyCode == 9)  {$($t).nextCell(iRow,iCol);} //Tab
+					if (e.keyCode == 9)  {
+						if (e.shiftKey) {$($t).prevCell(iRow,iCol);} //Shift TAb
+						else {$($t).nextCell(iRow,iCol);} //Tab
+					}
 					e.stopPropagation();
 				});
 				if ($.isFunction($t.p.afterEditCell)) {
@@ -173,7 +176,7 @@ $.fn.extend({
 										if (stat == 'success') {
 											if ($.isFunction($t.p.afterSubmitCell)) {
 												var ret = $t.p.afterSubmitCell(result,postdata.id,nm,v,iRow,iCol);
-												if(ret && ret[0] === true) {
+												if(ret[0] === true) {
 													$(cc).empty().html(v2 || "&nbsp;");
 													$(cc).addClass("dirty-cell");
 													$($t.rows[iRow]).addClass("edited");
@@ -244,6 +247,26 @@ $.fn.extend({
 			if (!$t.grid || $t.p.cellEdit !== true) {return;}
 			// try to find next editable cell
 			for (var i=iCol+1; i<$t.p.colModel.length; i++) {
+				if ( $t.p.colModel[i].editable ===true) {
+					nCol = i; break;
+				}
+			}
+			if(nCol !== false) {
+				$($t).saveCell(iRow,iCol);
+				$($t).editCell(iRow,nCol,true);
+			} else {
+				if ($t.p.savedRow.length >0) {
+					$($t).saveCell(iRow,iCol);
+				}
+			}
+		});
+	},
+	prevCell : function (iRow,iCol) {
+		return this.each(function (){
+			var $t = this, nCol=false, tmp;
+			if (!$t.grid || $t.p.cellEdit !== true) {return;}
+			// try to find next editable cell
+			for (var i=iCol-1; i>=0; i--) {
 				if ( $t.p.colModel[i].editable ===true) {
 					nCol = i; break;
 				}

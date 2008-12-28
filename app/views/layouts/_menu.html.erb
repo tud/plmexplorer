@@ -1,25 +1,25 @@
-<ul id="wNavigation" class="ui-accordion-container">
-	<li>
-		<div class="header"><%=fam_img_tag 'find' %> Find</div>
+<div id="wNavigation">
+	<div>
+		<h3 class="header"><a href="#"><%=fam_img_tag 'find' %> Find</a></h3>
 		<div>
 			<% find_menu_items.each do |item| %>
 				<%= item %><br/>
 			<% end %>
 		</div>
-	</li>
-	<li>
-		<div class="header"><%=fam_img_tag 'printer' %> Reports</div>
+	</div>
+	<div>
+		<h3 class="header"><a href="#"><%=fam_img_tag 'printer' %> Reports</a></h3>
 		<div>
 			<a href="#"><%=fam_img_tag 'report' %> Report 1</a><br/>
 			<a href="#"><%=fam_img_tag 'report' %> Report 2</a><br/>
 			<a href="#"><%=fam_img_tag 'report' %> Report 3</a><br/>
 			<a href="#"><%=fam_img_tag 'report' %> Report 4</a><br/>
 		</div>
-	</li>
-	<li>
-		<div class="header"><%=fam_img_tag 'help' %> Help</div>
+	</div>
+	<div>
+		<h3 class="header"><a href="#"><%=fam_img_tag 'help' %> Help</a></h3>
 		<div>
-			<a href="#"><%=fam_img_tag 'information' %> About</li>
+			<a href="#"><%=fam_img_tag 'information' %> About</a>
 		</div>
-	</li>
-</ul>
+	</div>
+</div>
