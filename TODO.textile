@@ -1,15 +1,22 @@
 h1. TODO
 
-h4. (aggiornata al 18-11-2008)
+h4. (aggiornata al 29-12-2008)
 
 -# documento specifiche _(*Taurus*)_-
-# far funzionare e fare test per IE6 _(*Tud*)_
-# controllare che funzioni con Rails 2.1.2 _(*Taurus* + *Tud*)_
-# gestione tabs per relazioni specifiche configurabili _(*Tud*)_
+-# aggiornamento versioni librerie usate _(*Tud*)_-
+-# controllare che funzioni con Rails 2.2.2 _(*Taurus* + *Tud*)_-
+# far funzionare e fare test per IE6/7 _(*Tud*)_
 # where-used _(backend *Taurus* + ui *Tud*)_
 # gestione file _(backend *Taurus* + ui *Tud*)_
-# aggiornamento versioni librerie usate _(*Tud*)_
 # gestione login _(backend *Taurus* + ui *Tud*)_
-# gestione reports _(*Taurus*)_
-# ? tree grid grafica per espansione relazioni _(*Tud*)_
-# inserire limite records ricercati _(*Taurus*)_
+# rec.children("USES") _(*Taurus*)_-
+# rec.parents("USES") _(*Taurus*)_-
+# rec.files _(*Taurus*)_-
+# UI per filtro References _(*Tud*)_
+# UI per filtro Attributi _(*Tud*)_
+# UI per filtro History _(*Tud*)_
+# ? tab workflow _(backend *Taurus* + ui *Tud*)_
+# ? gestione reports _(*Taurus*)_
+# ? tree grafica per espansione relazioni _(*Tud*)_
+# ? multirecord _(*Tud*)_
+# ? gestione firme _(backend *Taurus* + ui *Tud*)_
