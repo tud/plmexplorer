@@ -30,7 +30,8 @@
 			hidegrid: false,
 			hiddengrid: <%= @hiddengrid %>,
 			ondblClickRow: function(id) {
-				if (id!=null && id!==lastSel) {
+				if (id!=null) {
+                                    if (id!==lastSel) {
 					//jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
 					lastSel=id;
 					jQuery.history(id);
@@ -39,7 +40,8 @@
 						url: ("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>?id="+id),
 						dataType: "script"
 					});
-					jQuery("#cMenu > ul").tabs("select",2);
+                                    }
+                                    jQuery("#cMenu > ul").tabs("select",2);
 				}
 			},
 			postData: {
