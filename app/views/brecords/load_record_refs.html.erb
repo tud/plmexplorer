@@ -42,7 +42,10 @@ jQuery(document).ready(function(){
 				});
 			}
 		},
+                /*
 		postData: {conditions: 'bobjid='+id+' '}
+                */
+		postData: {id: id, reftypes: ''}
 	})
 	.navGrid('#refsPager', {refresh: true, edit: false, add: false, del: false, search: true})
 });

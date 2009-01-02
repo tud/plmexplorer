@@ -1,9 +1,24 @@
 class Brecord < ActiveRecord::Base
   has_many :budas,         :foreign_key => 'bobjid', :order => 'bname'
   has_many :bfiles,        :foreign_key => 'bobjid', :order => 'balias'
-  has_many :brefs,         :foreign_key => 'bobjid', :order => 'breftype,brectype,brecname,brecalt'
   has_many :bpromotions,   :foreign_key => 'bobjid', :order => 'bpromdate'
   has_many :bchkhistories, :foreign_key => 'bobjid', :order => 'bdate'
+  has_many :brefs,         :foreign_key => 'bobjid', :order => 'breftype,brectype,brecname,brecalt' do
+    def resolved(reftypes = '', order = nil, limit = nil, offset = 0)
+      # reftypes puo' essere un elenco di tipi di legame separati da virgole e/o spazi
+      if !reftypes || reftypes.empty?
+        conditions = nil
+      else
+        # in questo modo si genera una clausola di tipo BREFTYPE IN (...)
+        conditions = { :breftype => reftypes.upcase.split(/[, ]+/) }
+      end
+      refs = find(:all,
+                  :order => order,
+                  :limit => limit,
+                  :offset => offset,
+                  :conditions => conditions).each { |ref| ref.resolve }
+    end
+  end
 
   def name
     self[:brecname].split('&')[0]
@@ -30,7 +45,11 @@ class Brecord < ActiveRecord::Base
     latest_rev = self.find(:first, :conditions => conditions, :order => 'brecalt DESC')
   end
 
-  def where_used(order, limit, offset, conditions = '')
+  def children(reftypes = '', order = nil, limit = nil, offset = 0)
+    brefs.resolved(reftypes, order, limit, offset)
+  end
+
+  def parents(order, limit, offset, conditions = '')
     conditions ||= ''
     if !conditions.empty?
       conditions += ' AND '

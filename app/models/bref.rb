@@ -44,14 +44,4 @@ class Bref < ActiveRecord::Base
     self
   end
 
-  def self.resolve_set(order, limit, offset, conditions)
-    refs = Bref.find(:all,
-      :order => order,
-      :limit => limit,
-      :offset => offset,
-      :conditions => conditions)
-    refs.each { |ref| ref.resolve }
-    refs
-  end
-
 end

@@ -29,7 +29,10 @@ jQuery(document).ready(function(){
 		height: '100%',
 		width: centerWidth,
 		pager: 'promotionsPager',
+                /*
 		postData: {conditions: 'bobjid='+id+' '}
+                */
+		postData: {id: id}
 	})
 	.navGrid('#promotionsPager', {refresh: true, edit: false, add: false, del: false, search: true})
 });
@@ -76,7 +79,7 @@ jQuery(document).ready(function(){
 				});
 			}
 		},
-		postData: {conditions: 'brectype=\'<%=@record.brectype%>\' AND brecname=\'<%=@record.brecname%>\' '}
+		postData: {id: id}
 	})
 	.navGrid('#revisionsPager', {refresh: true, edit: false, add: false, del: false, search: true})
 });
@@ -114,7 +117,10 @@ jQuery(document).ready(function(){
 		height: '100%',
 		width: centerWidth,
 		pager: 'signoffsPager',
+                /*
 		postData: {conditions: 'bobjid='+id+' '}
+                */
+		postData: {id: id}
 	})
 	.navGrid('#signoffsPager', {refresh: true, edit: false, add: false, del: false, search: true})
 });

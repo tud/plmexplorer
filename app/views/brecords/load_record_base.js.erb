@@ -10,11 +10,11 @@ jQuery('#cRecord').html('<%=@tabs%>');
 					attrname = fid.gsub(/record_/, '')
 					if (@record.attribute_present? attrname)
 %>
-						jQuery('#view_<%=fid%>').val('<%= escape_javascript h @record.read_attribute attrname %>')
+						jQuery('#view_<%=fid%>').val('<%= escape_javascript h(@record.read_attribute(attrname)) %>')
 <%
 					elsif (@record.respond_to? attrname)
 %>
-						jQuery('#view_<%=fid%>').val('<%= escape_javascript h @record.send(attrname) %>')
+						jQuery('#view_<%=fid%>').val('<%= escape_javascript h(@record.send(attrname)) %>')
 <%
 					end
 				elsif (fid.starts_with? "uda_")
@@ -24,7 +24,7 @@ jQuery('#cRecord').html('<%=@tabs%>');
 						uda = get_uda_value udas, attrname
 						if (uda)
 %>
-							jQuery('#view_<%=fid%>').val('<%= escape_javascript h uda %>')
+							jQuery('#view_<%=fid%>').val('<%= escape_javascript h(uda) %>')
 <%
 						end
 					elsif (ftype.starts_with? "multi_")
@@ -42,7 +42,7 @@ jQuery('#cRecord').html('<%=@tabs%>');
 							ii = ii + 1
 						end
 %>
-						jQuery('#view_<%=fid%>').val('<%= escape_javascript h value  %>')
+						jQuery('#view_<%=fid%>').val('<%= escape_javascript h(value) %>')
 <%
 					end
 				end
@@ -58,9 +58,9 @@ jQuery('#cRecord').html('<%=@tabs%>');
 		end
 %>
 
-		jQuery('#view_record_id').val('<%= escape_javascript h @record.id  %>');
+		jQuery('#view_record_id').val('<%= escape_javascript h(@record.id) %>');
 
-		jQuery('#record_title').html("<%= icon_span @record.brectype %><%= escape_javascript h @record.title %>");
+		jQuery('#record_title').html("<%= icon_span @record.brectype %><%= escape_javascript h(@record.title) %>");
 		jQuery('#record_title').show();
 		
 		jQuery('#recordTabName').html("<span><%= icon_span @record.brectype %> <%=@record.name%>-<%=@record.brecalt%></span>")

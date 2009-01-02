@@ -99,20 +99,15 @@ class BrecordsController < ApplicationController
 
   def grid_records
     prep_query
+
     @brecords = Brecord.find :all,
       :order => @order,
       :limit => @limit,
       :offset => @offset,
-      :select => "id, brecname, brecalt, breclevel, bdesc, bname1",
+      :select => 'id, brecname, brecalt, breclevel, bdesc, bname1',
       :conditions => @conditions,
       :joins => @joins
-        
-    # Ricalcolo count solo quando necessario
-    if (@conditions == @prev_conditions)
-      count = @prev_count
-    else
-      count = Brecord.count :all, :conditions => @conditions, :joins => @joins
-    end
+    count = Brecord.count :all, :conditions => @conditions, :joins => @joins
 
     prep_return_data(count)
     @return_data[:rows] = @brecords.collect{|u| {
@@ -131,16 +126,14 @@ class BrecordsController < ApplicationController
 
   def grid_refs
     prep_query
-    @brefs = Bref.resolve_set(@order, @limit, @offset, @conditions)
-      
-    if (@conditions == @prev_conditions)
-      count = @prev_count
-    else
-      count = Bref.count :all, :conditions => @conditions
-    end
 
+    record = session[:curr_record] || Brecord.find(params[:id])
+    reftypes = params[:reftypes]
+    count = record.brefs.size
+    children = record.children(reftypes, @order, @limit, @offset)
+      
     prep_return_data(count)
-    @return_data[:rows] = @brefs.collect{|u| {
+    @return_data[:rows] = children.collect{|u| {
       :id => u.child_id,
       :cell => [
         u.child_id,
@@ -151,7 +144,7 @@ class BrecordsController < ApplicationController
         u.brecalt,
         u.breclevel,
         u.bdesc,
-        u.bquantity]}}
+        u.bquantity] }}
 
     # Convert the hash to a json object
     render :text => @return_data.to_json, :layout=>false
@@ -159,18 +152,14 @@ class BrecordsController < ApplicationController
 
   def grid_promotions
     prep_query
-    @promotions = Bpromotion.find :all,
-      :order => @order,
-      :limit => @limit,
-      :offset => @offset,
-      :select => "bpromdate, blevel, brelproc, buser, bdesc",
-      :conditions => @conditions
-      
-    count = Bpromotion.count :all, :conditions => @conditions
+
+    record = session[:curr_record] || Brecord.find(params[:id])
+    count = record.bpromotions.size
+    promotions = record.bpromotions :order => @order, :limit => @limit, :offset => @offset
 
     prep_return_data(count)
     id = 1
-    @return_data[:rows] = @promotions.collect{|u| {
+    @return_data[:rows] = promotions.collect{|u| {
       :id => id+1,
       :cell => [
         id,
@@ -186,18 +175,14 @@ class BrecordsController < ApplicationController
 
   def grid_signoffs
     prep_query
-    @signoffs = Bchkhistory.find :all,
-      :order => @order,
-      :limit => @limit,
-      :offset => @offset,
-      :select => "bdate, bcommand, bstatus, bname, buser, bdesc",
-      :conditions => @conditions
-      
-    count = Bchkhistory.count :all, :conditions => @conditions
+
+    record = session[:curr_record] || Brecord.find(params[:id])
+    count = record.bchkhistories.size
+    signoffs = record.bchkhistories :order => @order, :limit => @limit, :offset => @offset
 
     prep_return_data(count)
     id = 1
-    @return_data[:rows] = @signoffs.collect{|u| {
+    @return_data[:rows] = signoffs.collect{|u| {
       :id => id+1,
       :cell => [
         id,
@@ -214,17 +199,19 @@ class BrecordsController < ApplicationController
 
   def grid_revisions
     prep_query
-    @revisions = Brecord.find :all,
+
+    record = session[:curr_record] || Brecord.find(params[:id])
+    conditions = [ 'brectype = ? AND brecname = ? AND id = blatest', record.brectype, record.brecname ]
+    count = Brecord.count :all, :conditions => conditions
+    revisions = Brecord.find :all,
       :order => @order,
       :limit => @limit,
       :offset => @offset,
-      :select =>"id, brectype, brecname, brecalt, breclevel, bproject, bowner, bpromdate",
-      :conditions => @conditions
-      
-    count = Brecord.count :all, :conditions => @conditions
+      :select =>'id, brectype, brecname, brecalt, breclevel, bproject, bowner, bpromdate',
+      :conditions => conditions
 
     prep_return_data(count)
-    @return_data[:rows] = @revisions.collect{|u| {
+    @return_data[:rows] = revisions.collect{|u| {
       :id => u.id,
       :cell => [
         u.id,
@@ -240,6 +227,7 @@ class BrecordsController < ApplicationController
 
   def load_record_base
     @record = Brecord.find(params[:id])
+    session[:curr_record] = @record
     if (TABS["#{@record.brectype}"])
       @tabs = (render_to_string :partial => 'tabs', :locals => {:record => @record}).gsub!(/(\n|\r)/,'')
     else
@@ -255,7 +243,6 @@ class BrecordsController < ApplicationController
   end
 
   def load_record_history
-    @record = Brecord.find(params[:id])
     render :layout => false
   end
 
@@ -278,8 +265,6 @@ private
     @conditions = params[:conditions]
     @joins = params[:joins]
 
-    @prev_conditions = session[:prev_conditions] || ''
-    @prev_count = session[:prev_count].to_i
     prev_limit = session[:prev_limit].to_i
 
     if (prev_limit != @limit)
@@ -290,38 +275,42 @@ private
       @offset = 0
     end
 
-    isSearch     = params[:_search]
-    searchField  = params[:searchField]
-    searchOper   = params[:searchOper]
-    searchString = params[:searchString]
-
-    if searchField != 'bdesc'
-      searchString.upcase! if searchString
-    end
-    if (isSearch == 'true')
-      if (searchOper == 'eq')
-        oper = "= '" + searchString +"'"
-      elsif (searchOper == 'bw')
-        oper = "LIKE '" + searchString + "%'"
-      elsif (searchOper == 'ne')
-        oper = "<> '" + searchString +"'"
-      elsif (searchOper == 'lt')
-        oper = "< '" + searchString +"'"
-      elsif (searchOper == 'le')
-        oper = "<= '" + searchString +"'"
-      elsif (searchOper == 'gt')
-        oper = "> '" + searchString +"'"
-      elsif (searchOper == 'ge')
-        oper = ">= '" + searchString +"'"
-      elsif (searchOper == 'ew')
-        oper = "LIKE '%" + searchString +"'"
-      elsif (searchOper == 'cn')
-        oper = "LIKE '%" + searchString +"%'"
-      end
-
-      @conditions += ' AND ' + searchField + ' ' + oper
-      #puts '----> conditions: ' + @conditions
-    end
+################################################################################
+# Non si gestisce piu' il filtro sulle grid, pertanto il seguente codice
+# viene commentato
+################################################################################
+#    isSearch     = params[:_search]
+#    searchField  = params[:searchField]
+#    searchOper   = params[:searchOper]
+#    searchString = params[:searchString]
+#
+#    if searchField != 'bdesc'
+#      searchString.upcase! if searchString
+#    end
+#    if (isSearch == 'true')
+#      if (searchOper == 'eq')
+#        oper = "= '" + searchString +"'"
+#      elsif (searchOper == 'bw')
+#        oper = "LIKE '" + searchString + "%'"
+#      elsif (searchOper == 'ne')
+#        oper = "<> '" + searchString +"'"
+#      elsif (searchOper == 'lt')
+#        oper = "< '" + searchString +"'"
+#      elsif (searchOper == 'le')
+#        oper = "<= '" + searchString +"'"
+#      elsif (searchOper == 'gt')
+#        oper = "> '" + searchString +"'"
+#      elsif (searchOper == 'ge')
+#        oper = ">= '" + searchString +"'"
+#      elsif (searchOper == 'ew')
+#        oper = "LIKE '%" + searchString +"'"
+#      elsif (searchOper == 'cn')
+#        oper = "LIKE '%" + searchString +"%'"
+#      end
+#
+#      @conditions += ' AND ' + searchField + ' ' + oper
+#      #puts '----> conditions: ' + @conditions
+#    end
 
     # Init a hash for the ActiveRecord result
     @return_data = Hash.new()
@@ -331,8 +320,6 @@ private
   end
 
   def prep_return_data(count)
-    session[:prev_conditions] = @conditions
-    session[:prev_count] = count.to_s
     session[:prev_limit] = @limit.to_s
 
     total_pages = (count.to_f/@limit).ceil
