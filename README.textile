@@ -16,7 +16,7 @@ h4(. "Ruby on Rails _2.2.2_":http://rubyonrails.org/
 h4(. "jQuery _1.2.6_":http://jquery.com/
 
 * plugins:
-** "jQuery UI _svn_":http://ui.jquery.com/
+** "jQuery UI _1.6rc4_":http://ui.jquery.com/
 ** "jQuery Grid _3.3.2_":http://www.trirand.com/blog/  
 ** "jQuery Ui.Layout _1.2.0_":http://layout.jquery-dev.net/
 ** "jQuery Form Plugin":http://malsup.com/jquery/form/
