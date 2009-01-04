@@ -35,7 +35,9 @@ class BrecordsController < ApplicationController
     uda_ref = 'u0'
     if request.post?
       brecord = params[:brecord]
+      print brecord.to_yaml
       @rectype = brecord[:find_rec_brectype].upcase
+      print @rectype.to_yaml
       condition = Condition.new('id = blatest')  # considero solo l'ultima versione
       latest_rev = false
       name = nil
@@ -123,7 +125,7 @@ class BrecordsController < ApplicationController
     render :text => @return_data.to_json, :layout=>false
   end
 
-  def grid_refs
+  def grid_children
     prep_query
 
     record = session[:curr_record] || Brecord.find(params[:id])
@@ -133,9 +135,9 @@ class BrecordsController < ApplicationController
       
     prep_return_data(count)
     @return_data[:rows] = children.collect{|u| {
-      :id => u.child_id,
+      :id => u.id,
       :cell => [
-        u.child_id,
+        u.id,
         u.breftype,
         u.brectype,
         u.name,
@@ -144,6 +146,31 @@ class BrecordsController < ApplicationController
         u.breclevel,
         u.bdesc,
         u.bquantity] }}
+
+    # Convert the hash to a json object
+    render :text => @return_data.to_json, :layout=>false
+  end
+  
+  def grid_parents
+    prep_query
+
+    record = session[:curr_record] || Brecord.find(params[:id])
+    reftypes = params[:reftypes]
+    count = record.parents(reftypes).size
+    parents = record.parents(reftypes, @order, @limit, @offset)
+      
+    prep_return_data(count)
+    @return_data[:rows] = parents.collect{|u| {
+      :id => u.id,
+      :cell => [
+        u.id,
+        u.breftype,
+        u.brectype,
+        u.name,
+        u.cage_code,
+        u.brecalt,
+        u.breclevel,
+        u.bdesc] }}
 
     # Convert the hash to a json object
     render :text => @return_data.to_json, :layout=>false
@@ -227,21 +254,22 @@ class BrecordsController < ApplicationController
   def load_record_base
     @record = Brecord.find(params[:id])
     session[:curr_record] = @record
-    if (TABS["#{@record.brectype}"])
-      @tabs = (render_to_string :partial => 'tabs', :locals => {:record => @record}).gsub!(/(\n|\r)/,'')
-    else
-      @tabs = ""
-    end
-    respond_to do |format|
-      format.js
-    end
+    render :layout => false
   end
 
-  def load_record_refs
+  def load_record_children
     render :layout => false
   end
 
   def load_record_history
+    render :layout => false
+  end
+  
+  def load_record_parents
+    render :layout => false
+  end
+  
+  def load_record_files
     render :layout => false
   end
 

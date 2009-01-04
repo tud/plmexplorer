@@ -1,0 +1,24 @@
+<div id="wNavigation">
+	<div>
+		<h3 class="header"><a href="#"><%=fam_img_tag 'find' %> Find</a></h3>
+		<div>
+			<% navigation_find_items.each do |item| %>
+				<%= item %><br/>
+			<% end %>
+		</div>
+	</div>
+	<div>
+		<h3 class="header"><a href="#"><%=fam_img_tag 'printer' %> Reports</a></h3>
+		<div>
+			<% navigation_report_items.each do |item| %>
+				<%= item %><br/>
+			<% end %>
+		</div>
+	</div>
+	<div>
+		<h3 class="header"><a href="#"><%=fam_img_tag 'help' %> Help</a></h3>
+		<div>
+			<a href="#"><%=fam_img_tag 'information' %> About</a>
+		</div>
+	</div>
+</div>

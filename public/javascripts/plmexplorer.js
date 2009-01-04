@@ -1,15 +1,18 @@
 var pexLayout;
 var pexAccordion;
 
+var grid_imgpath='/javascripts/themes/plmexplorer/images';
+
 $(document).ready(function () {
 	// fix png for ie6
 	$(document).pngFix();
 	
 	// fix for jQuery
-	jQuery.ajaxSetup({ 
+	$.ajaxSetup({ 
 		'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
 	});
 
+	// UI.layout
 	pexLayout = $('body').layout({
 		applyDefaultStyles: true
 	,	north__size: "auto"
@@ -20,7 +23,7 @@ $(document).ready(function () {
 		}
 	,	center__onresize: function(){
 			var centerWidth = pexLayout.cssWidth('center');
-			jQuery('#searchGrid').setGridWidth(centerWidth -25);
+			jQuery('#findGrid').setGridWidth(centerWidth -25);
 			jQuery('#promotionsGrid').setGridWidth(centerWidth-45);
 			jQuery('#revisionsGrid').setGridWidth(centerWidth-45);
 			jQuery('#signoffsGrid').setGridWidth(centerWidth-45);
@@ -28,19 +31,19 @@ $(document).ready(function () {
 		}
 	});
 
+	// navigation accordion
 	pexAccordion = $('#wNavigation').accordion({
 		fillSpace: true
 	,	navigation: true
 	,	header: "h3"
 	});
 
-	$("#cMenu > ul").tabs();
+	// prima riga tabs
+	$('#cMenuTabs > ul').tabs();
 
-	$("#cRecord > ul").tabs();
-	
-	$('.find_rec').click(function() {
+	$('.wNavigation_find').click(function() {
 		var rectype = $(this).attr('title');
 		$('#cFind').load('/rectype/'+rectype+'/find');
-		$("#cMenu > ul").tabs("select",0);
+		$("#cMenuTabs > ul").tabs('select',0);
 	});
 });

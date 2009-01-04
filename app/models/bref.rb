@@ -14,8 +14,6 @@ class Bref < ActiveRecord::Base
     { :conditions => [ "brefs.brectype = ? AND brefs.brecname = ? AND (((brefs.btype1 = 'LATEST' OR SUBSTR(brefs.brecalt,-1,1) = '#') AND SUBSTR(brefs.breftype,-4,4) != '_FRZ' AND SUBSTR(brefs.brecalt,1,4) <= ?) OR (((brefs.btype1 != 'LATEST' AND SUBSTR(brefs.brecalt,-1,1) != '#') OR SUBSTR(brefs.breftype,-4,4) = '_FRZ') AND SUBSTR(brefs.brecalt,1,4) = ?))", record.brectype, record.brecname, record.brecalt, record.brecalt ] }
   }
 
-  attr_reader :child_id
-
   def name
     self[:brecname].split('&')[0]
   end
@@ -46,12 +44,12 @@ class Bref < ActiveRecord::Base
       :conditions => "brectype = '#{self.brectype}' AND brecname = '#{self.brecname}' AND brecalt #{relop} '#{self.brecalt}' AND id = blatest",
       :order => 'brecalt DESC'
     if child
-      @child_id = child.id
+      self[:id] = child.id
       self.brecalt = child.brecalt
       self.breclevel = child.breclevel
       self.bdesc = child.bdesc
     else
-      @child_id = 0
+      self[:id] = 0
       self.bdesc = '*** UNRESOLVED ***'
     end
     self
