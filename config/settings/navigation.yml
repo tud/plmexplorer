@@ -1,0 +1,27 @@
+FIND:
+  - type: PART
+    label: Part
+    iconclass: page_white_gear
+  - type: DOCUMENT
+    label: Document
+    iconclass: page_white_word
+  - type: WORKAUTH
+    label: Workauth
+    iconclass: application_form_edit
+  - type: SOFTWARE
+    label: Software
+    iconclass: page_white_code
+    
+REPORT:
+  - type: REPORT
+    label: Report 1
+    iconclass: report
+  - type: REPORT
+    label: Report 2
+    iconclass: report
+  - type: REPORT
+    label: Report 3
+    iconclass: report
+  - type: REPORT
+    label: Report 4
+    iconclass: report

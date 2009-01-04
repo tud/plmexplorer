@@ -4,9 +4,9 @@
 <div id="promotionsPager" class="scroll"></div>
 
 <script type="text/javascript">
-var id;
-id = jQuery('#view_record_id').attr('value');
+var id = jQuery('#view_record_id').attr('value');
 var centerWidth = pexLayout.cssWidth('center') - 90;
+
 jQuery(document).ready(function(){
 	jQuery('#promotionsGrid').jqGrid({
 		url: '/brecords/grid_promotions',
@@ -25,16 +25,13 @@ jQuery(document).ready(function(){
 		sortname: 'bpromdate',
 		sortorder: 'asc',
 		viewrecords: true,
-		imgpath: '/javascripts/themes/plmexplorer/images',
+		imgpath: grid_imgpath,
 		height: '100%',
 		width: centerWidth,
 		pager: 'promotionsPager',
-                /*
-		postData: {conditions: 'bobjid='+id+' '}
-                */
 		postData: {id: id}
 	})
-	.navGrid('#promotionsPager', {refresh: true, edit: false, add: false, del: false, search: true})
+	.navGrid('#promotionsPager', {refresh: false, edit: false, add: false, del: false, search: false})
 });
 </script>
 
@@ -45,8 +42,6 @@ jQuery(document).ready(function(){
 <div id="revisionsPager" class="scroll"></div>
 
 <script type="text/javascript">
-id = jQuery('#view_record_id').attr('value');
-var centerWidth = pexLayout.cssWidth('center') - 90;
 jQuery(document).ready(function(){
 	jQuery('#revisionsGrid').jqGrid({
 		url: '/brecords/grid_revisions',
@@ -65,23 +60,20 @@ jQuery(document).ready(function(){
 		sortname: 'brecalt',
 		sortorder: 'desc',
 		viewrecords: true,
-		imgpath: '/javascripts/themes/plmexplorer/images',
+		imgpath: grid_imgpath,
 		height: '100%',
 		width: centerWidth,
 		pager: 'revisionsPager',
 		ondblClickRow: function(id) {	
 			if (id!=null) {
 				jQuery.history(id);
-				jQuery.ajax({
-					type: "POST",
-					url: ("<%= url_for(:action => 'load_record_base', :controller => 'brecords') %>?id="+id),
-					dataType: "script"
-				});
+				$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
+				$('#record_content > ul').tabs('select', 0);
 			}
 		},
 		postData: {id: id}
 	})
-	.navGrid('#revisionsPager', {refresh: true, edit: false, add: false, del: false, search: true})
+	.navGrid('#revisionsPager', {refresh: false, edit: false, add: false, del: false, search: false})
 });
 </script>
 
@@ -92,8 +84,6 @@ jQuery(document).ready(function(){
 <div id="signoffsPager" class="scroll"></div>
 
 <script type="text/javascript">
-id = jQuery('#view_record_id').attr('value');
-var centerWidth = pexLayout.cssWidth('center') - 90;
 jQuery(document).ready(function(){
 	jQuery('#signoffsGrid').jqGrid({
 		url: '/brecords/grid_signoffs',
@@ -113,15 +103,12 @@ jQuery(document).ready(function(){
 		sortname: 'bdate',
 		sortorder: 'asc',
 		viewrecords: true,
-		imgpath: '/javascripts/themes/plmexplorer/images',
+		imgpath: grid_imgpath,
 		height: '100%',
 		width: centerWidth,
 		pager: 'signoffsPager',
-                /*
-		postData: {conditions: 'bobjid='+id+' '}
-                */
 		postData: {id: id}
 	})
-	.navGrid('#signoffsPager', {refresh: true, edit: false, add: false, del: false, search: true})
+	.navGrid('#signoffsPager', {refresh: false, edit: false, add: false, del: false, search: false})
 });
 </script>

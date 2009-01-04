@@ -1,0 +1,43 @@
+<table id="childrenGrid" class="scroll"></table>
+<div id="childrenPager" class="scroll"></div>
+
+<script type="text/javascript">
+var id = $('#view_record_id').attr('value');
+$(document).ready(function(){
+	var centerWidth = pexLayout.cssWidth('center') - 90;
+	$('#childrenGrid').jqGrid({
+		url: '/brecords/grid_children',
+		datatype: 'json',
+		mtype: 'GET',
+		colNames: ['id', 'Relationship', 'Item Type', 'Identifier', 'Bus Id', 'Rev', 'Status', 'Description', 'Qty'],
+		colModel :[
+			{name:'id',        index:'id',        hidden:true},
+			{name:'breftype',  index:'breftype',  width:70},
+			{name:'brectype',  index:'brectype',  width:50},
+			{name:'name',      index:'brecname',  width:80},
+			{name:'busid',     index:'cage_code', width:35, sortable:false},
+			{name:'brecalt',   index:'brecalt',   width:30, sortable:false},
+			{name:'breclevel', index:'breclevel', width:60}, 
+			{name:'bdesc',     index:'bdesc',     width:250, sortable:false}, 
+			{name:'bquantity', index:'bquantity', width:30, align:'center', sortable:false} ],
+		rowNum: 20,
+		rowList: [10,20,30,50,100],
+		sortname: 'breftype,brectype,brecname',
+		sortorder: 'asc',
+		viewrecords: true,
+		imgpath: grid_imgpath,
+		height: '100%',
+		width: centerWidth,
+		pager: 'childrenPager',
+		ondblClickRow: function(id) {
+			if (id!=null) {
+				$.history(id);
+				$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
+			}
+			$('#record_content > ul').tabs('select', 0);
+		},
+		postData: {id: id, reftypes: ''}
+	})
+	.navGrid('#childrenPager', {refresh: false, edit: false, add: false, del: false, search: false})
+});
+</script>

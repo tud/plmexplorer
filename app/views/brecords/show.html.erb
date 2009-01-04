@@ -1,11 +1,11 @@
-	<table id="searchGrid" class="scroll"></table>
-	<div id="searchPager" class="scroll"></div>
+<table id="findGrid" class="scroll"></table>
+<div id="findPager" class="scroll"></div>
 
-	<script type="text/javascript">
+<script type="text/javascript">
 	var lastSel;
-	jQuery(document).ready(function(){
+	$(document).ready(function(){
 		var centerWidth = pexLayout.cssWidth('center') - 50;
-		jQuery('#searchGrid').jqGrid({
+		$('#findGrid').jqGrid({
 			url: '/brecords/grid_records',
 			datatype: 'json',
 			mtype: 'GET',
@@ -22,26 +22,19 @@
 			sortname: 'brecname,brecalt',
 			sortorder: 'asc',
 			viewrecords: true,
-			imgpath: '/javascripts/themes/plmexplorer/images',
+			imgpath: grid_imgpath,
 			caption: "<%=find_result_table_title @rectype%>",
 			height: '100%',
 			width: centerWidth,
-			pager: 'searchPager',
-			hidegrid: false,
-			hiddengrid: <%= @hiddengrid %>,
+			pager: 'findPager',
 			ondblClickRow: function(id) {
 				if (id!=null) {
-                                    if (id!==lastSel) {
-					//jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
-					lastSel=id;
-					jQuery.history(id);
-					jQuery.ajax({
-						type: "POST",
-						url: ("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>?id="+id),
-						dataType: "script"
-					});
-                                    }
-                                    jQuery("#cMenu > ul").tabs("select",2);
+					if (id!==lastSel) {
+						lastSel=id;
+						$.history(id);
+						$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
+					}
+					$('#cMenuTabs > ul').tabs('select',2);
 				}
 			},
 			postData: {
@@ -49,28 +42,6 @@
 				joins: '<%=escape_javascript @joins%>'
 			}
 		})
-		.navGrid('#searchPager', {refresh: true, edit: false, add: false, del: false, search: true})
-		.navButtonAdd('#searchPager',
-			{ caption:"", buttonimg: '/javascripts/themes/plmexplorer/images/row_edit.gif', 
-				onClickButton:function() {
-					var id = jQuery('#searchGrid').getGridParam('selrow');
-					if (id) {
-						//jQuery('.HeaderButton',$('#searchGrid')[0].grid.cDiv).trigger('click');
-						jQuery.history(id);
-						jQuery.ajax({
-							type: "POST",
-							url: ("<%= url_for(:action => 'load_record_base', :controller => 'brecords') %>?id="+id),
-							dataType: "script"
-						});
-						jQuery("#cMenu > ul").tabs("select",2);
-					} else {
-						alert("Please select Row");
-					}
-				}
-			}
-		)
-		// workaround per visualizzare tooltip sul nuovo button
-		jQuery("td.nav-button:eq(2)").attr("title", "Open");
+		.navGrid('#findPager', {refresh: false, edit: false, add: false, del: false, search: false})
 	});
-	
-	</script>
+</script>

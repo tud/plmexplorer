@@ -99,8 +99,8 @@
 		<% end %>
 		<div class="buttonHolder">
 			<label>&nbsp;</label>
-			<button type="submit" id="find_submit_btn"><span class="ss_sprite ss_confirm">&nbsp;</span>Find</button>
-			<button type="reset" id="find_reset_btn"><span class="ss_sprite ss_cross">&nbsp;</span>Reset</button>
+			<button type="submit" id="find_submit_btn"><%=fam_img_tag('find')-%>Find</button>
+			<button type="reset" id="find_reset_btn"><%=fam_img_tag('delete')-%>Reset</button>
 		</div>
 	</fieldset>
 <% end %>
@@ -108,14 +108,14 @@
 <script type="text/javascript">
 	var rectype = "<%= @rectype %>".toLowerCase();
 	var title = 'Find '+rectype.toUpperCase();
-	jQuery('#legend_find_record').html(title);
-	jQuery('#brecord_find_rec_brectype').val(rectype);
+	$('#legend_find_record').html(title);
+	$('#brecord_find_rec_brectype').val(rectype);
 	
 	var formOptions = { 
-	    target: 	'#cResult'
+	    target: 	'#cFindResultTable'
 	,	url: 		'/rectype/'+rectype
 	,	success: 	function() {
-			$("#cMenu > ul").tabs("select",1);
+			$('#cMenuTabs > ul').tabs('select',1);
 		}
 	};
 	jQuery('#find_records').ajaxForm(formOptions);

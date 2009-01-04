@@ -1,0 +1,154 @@
+<div id="record_title"></div>
+<div>&nbsp;</div>
+
+<div id="record_tabs">
+	<ul>
+		<li><a href="#attributes" id="attributes_tab">Attributes</a></li>
+		<!--
+		<li><a href="#lifecycle">Lifecycle</a></li>
+		-->
+	</ul>
+</div>
+
+<div id='attributes'>
+<% 
+	form_for :filter, :html => {:id => 'record_attributes_filters', :class => 'uniForm'} do |f|
+		
+		ii = 0
+		(filter_names @record.brectype).each do |filter|
+			if (ii==0)
+%>
+				<input type="hidden" id="view_record_id" value="<%=@record.id%>"/>
+				<input type="radio" name="attributes_filter" value="view_fieldset_<%=ii%>" checked="checked"/><%=filter%>
+<%
+			elsif
+%>
+				<input type="radio" name="attributes_filter" value="view_fieldset_<%=ii%>"/><%=filter%>
+<%
+			end
+			ii+=1
+		end
+	end
+%>
+
+<%
+	if (FORMS["#{@record.brectype}"])
+		udas = @record.budas
+		form_for :formid, :html => {:id => 'view_record_form', :class => 'uniForm'} do |f|
+			yy = 0
+			FORMS["#{@record.brectype}"].each do |form|
+				fieldsetid = 'view_fieldset_'+ yy.to_s
+%>
+				<fieldset id='<%=fieldsetid%>' class='inlineLabels hide filters'>
+					<legend><%=form['label']%></legend>
+				
+<%
+				form['fields'].each do |field|
+					fid = field['id']
+					if (fid.starts_with? "record_")
+						attrname = fid.gsub(/record_/, '')
+						if (@record.attribute_present? attrname)
+%>
+							<div class='ctrlHolder'>
+								<label><%=field['label']%> :</label>
+								<input type="text" readonly="readonly" size="<%=field['size']%>" value="<%= escape_javascript h(@record.read_attribute(attrname)) %>"/>
+							</div>
+<%
+						elsif (@record.respond_to? attrname)
+%>
+							<div class='ctrlHolder'>
+								<label><%=field['label']%> :</label>
+								<input type="text" readonly="readonly" size="<%=field['size']%>" value="<%= escape_javascript h(@record.send(attrname)) %>"/>
+							</div>
+<%
+						end
+					elsif (fid.starts_with? "uda_")
+						ftype = field['type']
+						if (ftype == nil)
+							attrname = fid.gsub(/uda_/, '').upcase
+							uda = get_uda_value udas, attrname
+							if (uda)
+%>
+								<div class='ctrlHolder'>
+									<label><%=field['label']%> :</label>
+									<input type="text" readonly="readonly" size="<%=field['size']%>" value="<%= escape_javascript h(uda) %>"/>
+								</div>
+<%
+							end
+						elsif (ftype.starts_with? "multi_")
+							attrname = fid.gsub(/uda_/, '').upcase
+							counter = ftype.gsub(/multi_/,'').to_i
+							ii = 1
+							value = ""
+							while (ii <= counter)
+								suffix = "%02d" % ii  
+								multi_attrname = "#{attrname}_#{suffix}"
+								uda = get_uda_value udas, multi_attrname
+								if (uda)
+									value = "#{value}#{uda}\n"
+								end
+								ii = ii + 1
+							end
+%>
+							<div class='ctrlHolder'>
+								<label><%=field['label']%> :</label>
+								<textarea readonly="readonly" cols="80" rows="<%=field['size']%>" value="<%= escape_javascript h(value) %>"></textarea>
+<%
+						end
+					end
+				end
+%>
+				</fieldset>
+<%
+				yy+=1
+			end
+		end
+	end
+%>
+</div>
+
+<script type="text/javascript">
+	$(document).ready(function () {
+		// creazione tabs
+		$('#record_tabs > ul').tabs();
+
+		// visualizzazione title del record
+		$('#record_title').html("<%= fam_img_tag_rectype @record.brectype  %><%= escape_javascript h(@record.title) %>");
+		$('#record_title').show();
+
+		// creazione tabs ajax
+		<% if (@record.brectype != 'PART') %>
+		$('#record_tabs > ul').tabs('add', '/<%= controller.controller_name %>/load_record_files?id=<%= @record.id %>', 'Files');
+		<% end %>
+		<% if (@record.brectype != 'DOCUMENT') %>
+		$('#record_tabs > ul').tabs('add', '/<%= controller.controller_name %>/load_record_children?id=<%= @record.id %>', 'Children');
+		<% end %>
+		$('#record_tabs > ul').tabs('add', '/<%= controller.controller_name %>/load_record_parents?id=<%= @record.id %>', 'Parents');
+		$('#record_tabs > ul').tabs('add', '/<%= controller.controller_name %>/load_record_history?id=<%= @record.id %>', 'History');
+
+		// visualizzazione div
+		$('#view_fieldset_0').show();
+		
+		$('#attributes_tab').click(function() {
+			var div_id = $("input[@name='attributes_filter']:checked").val();
+			$('.filters').hide();
+			$('#'+div_id).show();
+		});
+
+		// gestione selezione radio buttons
+		$("input[@name='attributes_filter']").change(
+			function(){
+				var div_id = $("input[@name='attributes_filter']:checked").val();
+				$('.filters').hide();
+				$('#'+div_id).show();
+			}
+		);
+
+		// uniform
+		$('#view_record_form').uniform();
+		$('#record_attributes_filters').uniform();
+		
+		// nome tab
+		$('#recordTabName').html("<span><%= fam_img_tag_rectype @record.brectype %> <%=@record.name%>-<%=@record.brecalt%></span>")
+	});
+</script>

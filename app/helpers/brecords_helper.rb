@@ -1,31 +1,14 @@
 module BrecordsHelper
-
-  def tab_names rectype
-    tabs = TABS["#{rectype.upcase}"]
-    tabnames = Array.new
-    if (tabs)
-      tabs.each do |htab|
-        tab = Hash.new
-        tab['label'] = "<span>"+htab['label']+"</span>"
-        tab['action'] = htab['label'].gsub(/ /,'_').to_s
-        tab['fields'] = htab['fields']
-        tabnames << tab
+  
+  def filter_names rectype
+    filters = FORMS["#{rectype.upcase}"]
+    filternames = Array.new
+    if (filters)
+      filters.each do |filter|
+        filternames << filter['label']
       end
     end
-    tabnames
-  end
-
-  def tab_commons
-    tabs = TABS['COMMONS']
-    tabnames = Array.new
-    tabs.each do |htab|
-      tab = Hash.new
-      tab['label'] = "<span>"+htab['label']+"</span>"
-      tab['action'] = htab['action']
-      tab['fields'] = htab['fields']
-      tabnames << tab
-    end
-    tabnames
+    filternames
   end
 
   def get_uda_value udas, uda_name
@@ -39,37 +22,36 @@ module BrecordsHelper
     uda_value
   end
 
-  def icon_span rectype
-    classname = ""
-    if (rectype != "*")
-      MENU['FIND'].each do |entry|
-        if (entry['type'] == rectype.upcase)
-          classname = "<img src='/images/fam/"+entry['iconclass']+".png'/>&nbsp;"
-          break
-        end
-      end
-    end
-    classname
-  end
-
   def find_result_table_title rectype
     if (rectype != "*")
-      "Find result table -- " + (icon_span(rectype)) + " " + rectype.capitalize.pluralize
+      "Find result table -- " + (fam_img_tag_rectype(rectype)) + " " + rectype.capitalize.pluralize
     else
       ""
     end
   end
   
-  def find_menu_items
+  def navigation_find_items
     items = Array.new
-    MENU['FIND'].each do |entry|
-      items << "<a href='#' class='find_rec' title='"+entry['type'].downcase+"'>"+icon_span(entry['type'])+entry['label']+"</a>"
+    NAVIGATION['FIND'].each do |entry|
+      items << "<a class='wNavigation_find' href='#' title='"+entry['type'].downcase+"'>"+fam_img_tag(entry['iconclass'])+entry['label']+"</a>"
+    end
+    items
+  end
+  
+  def navigation_report_items
+    items = Array.new
+    NAVIGATION['REPORT'].each do |entry|
+      items << "<a class='wNavigation_report' href='#' title='"+entry['type'].downcase+"'>"+fam_img_tag(entry['iconclass'])+entry['label']+"</a>"
     end
     items
   end
   
   def fam_img_tag famimg
-    "<img src='/images/fam/"+famimg+".png'/>"
+    "<img src='/images/fam/"+famimg+".png'/>&nbsp;"
+  end
+  
+  def fam_img_tag_rectype rectype
+    fam_img_tag NAVIGATION['FIND'].find {|hash| hash['type'] == rectype}['iconclass']
   end
 
 end
