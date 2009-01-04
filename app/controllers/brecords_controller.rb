@@ -1,7 +1,7 @@
 class BrecordsController < ApplicationController
 
   def index
-    redirect_to :action => :show, :rectype => '*', :hiddengrid => 'true'
+    redirect_to :action => :show, :rectype => '*'
   end
   
   def find
@@ -31,7 +31,6 @@ class BrecordsController < ApplicationController
   end
 
   def show
-    @hiddengrid = params[:hiddengrid] || "false"
     @joins = ''
     uda_ref = 'u0'
     if request.post?
@@ -129,7 +128,7 @@ class BrecordsController < ApplicationController
 
     record = session[:curr_record] || Brecord.find(params[:id])
     reftypes = params[:reftypes]
-    count = record.brefs.size
+    count = record.brefs.of_type(reftypes).count
     children = record.children(reftypes, @order, @limit, @offset)
       
     prep_return_data(count)

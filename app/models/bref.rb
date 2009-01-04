@@ -1,5 +1,18 @@
 class Bref < ActiveRecord::Base
   belongs_to :brecord, :foreign_key => 'bobjid'
+  named_scope :of_type, lambda { |reftypes|
+    # reftypes e' un elenco di tipi di legame separati da virgole e/o spazi
+    if reftypes && !reftypes.empty?
+      # clausola di tipo BREFTYPE IN (...)
+      { :conditions => { :breftype => reftypes.upcase.split(/[, ]+/) } }
+    else
+      # anche senza filtri, escludo comunque i legami "di sistema"
+      { :conditions => "brefs.breftype != 'EFFECTIVE_ON' AND brefs.breftype != 'IMAGE_FOR' AND brefs.breftype != 'MARKUP_FOR'" }
+    end
+  }
+  named_scope :parent_of, lambda { |record|
+    { :conditions => [ "brefs.brectype = ? AND brefs.brecname = ? AND (((brefs.btype1 = 'LATEST' OR SUBSTR(brefs.brecalt,-1,1) = '#') AND SUBSTR(brefs.breftype,-4,4) != '_FRZ' AND SUBSTR(brefs.brecalt,1,4) <= ?) OR (((brefs.btype1 != 'LATEST' AND SUBSTR(brefs.brecalt,-1,1) != '#') OR SUBSTR(brefs.breftype,-4,4) = '_FRZ') AND SUBSTR(brefs.brecalt,1,4) = ?))", record.brectype, record.brecname, record.brecalt, record.brecalt ] }
+  }
 
   attr_reader :child_id
 
