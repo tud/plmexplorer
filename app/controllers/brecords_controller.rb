@@ -1,7 +1,7 @@
 class BrecordsController < ApplicationController
 
   def index
-    redirect_to :action => :show, :rectype => '*'
+    redirect_to :action => :show
   end
   
   def find
@@ -35,9 +35,7 @@ class BrecordsController < ApplicationController
     uda_ref = 'u0'
     if request.post?
       brecord = params[:brecord]
-      print brecord.to_yaml
       @rectype = brecord[:find_rec_brectype].upcase
-      print @rectype.to_yaml
       condition = Condition.new('id = blatest')  # considero solo l'ultima versione
       latest_rev = false
       name = nil
@@ -93,7 +91,8 @@ class BrecordsController < ApplicationController
       end
       render :layout => false
     else
-      @rectype = params[:rectype].upcase
+      #@rectype = params[:rectype].upcase
+      @rectype = "*"
       @conditions = "brectype = '!'"
     end
   end

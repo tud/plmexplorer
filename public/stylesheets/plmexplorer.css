@@ -3,9 +3,9 @@
 |--------------------------------------|
 - black		#000000
 - white		#FFFFFF
-- blue		#0F6FD2
+- blue		#0F6FD2 1c94c4
 - gray		#222222
-- orange	#E08002
+- orange	#E08002 e78f08
 - ligth		#F7E8D4
 \**************************************/
 
@@ -20,7 +20,7 @@
 	margin-bottom:1.875em;
 	line-height:1.875em;
 	margin-left:2em;
-	color:#E08002;
+	color:#e78f08;
 }
 .title {
 	font-weight: bold;
@@ -29,13 +29,15 @@ select {
 	height:2em;
 }
 
+#login_dialog .uniForm .inlineLabels label, #login_dialog .uniForm .inlineLabels .label {
+	width:8em;
+}
 /**************************************/
 /*              NORTH                 */
 /**************************************/
 
 .ui-layout-north {
 	text-align: center;
-	height:110px;
 }
 
 /**************************************/
@@ -95,9 +97,9 @@ select {
 	width:15em;
 }
 .uniForm fieldset {
-	border:1px solid #0F6FD2;
+	border:1px solid #1c94c4;
 	padding: 1em;
-	color:#0F6FD2;
+	color:#1c94c4;
 }
 .uniForm .buttonHolder {
 	text-align:left;
@@ -107,7 +109,7 @@ select {
 	width:auto;
 }
 .uniForm fieldset legend {
-	color:#0F6FD2;
+	color:#1c94c4;
 }
 .uniForm .ctrlHolder {
 	border-bottom:0px;
@@ -121,8 +123,8 @@ select {
 }
 #find_submit_btn, #find_reset_btn {
 	cursor:pointer;
-	border:1px solid #E08002;
-	background:#0F6FD2;
+	border:1px solid #e78f08;
+	background:#1c94c4;
 	color:#FFFFFF;
 	font-weight:bold;
 	padding: 2px 15px;
@@ -135,10 +137,10 @@ select {
 	padding-bottom: 5px;
 }
 #find_submit_btn:hover, #find_reset_btn:hover {
-	background: #E08002;
+	background: #e78f08;
 }
 #find_submit_btn:focus, #find_reset_btn:focus, #find_submit_btn:active, #find_reset_btn:active {
-	background: #0F6FD2;
+	background: #1c94c4;
 }
 /*
 #findRecord input[type="text"], #findRecord textarea, #findRecord select {
