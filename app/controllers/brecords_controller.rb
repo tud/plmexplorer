@@ -1,36 +1,10 @@
 class BrecordsController < ApplicationController
 
+  #def index
+    #redirect_to :action => :show, :rectype => '*'
+  #end
+
   def index
-    redirect_to :action => :show, :rectype => '*'
-  end
-  
-  def find
-    @rectype = params[:rectype].upcase
-
-    if @rectype == '*'
-      @statusList = Blevel.find(:all).map { |level| level.bname }.sort.uniq
-    else
-      @statusList = Blevel.find(:all,
-                                :conditions => "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname = '" + @rectype + "'",
-                                :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
-    end
-    @statusList.unshift('')
-
-    if @rectype == 'PART'
-      @typeList = DynList.build_from('IPD_PARTSUBTYPE')
-    elsif @rectype == 'DOCUMENT'
-      @typeList = DynList.build_from('IPD_DOCSUBTYPE')
-    elsif @rectype == 'WORKAUTH'
-      @typeList = DynList.build_from('IPD_WORKASUBTYP')
-    elsif @rectype == 'SOFTWARE'
-      @typeList = DynList.sw_types
-    else
-      @typeList = []
-    end
-    render :layout => false
-  end
-
-  def show
     @joins = ''
     uda_ref = 'u0'
     if request.post?
@@ -93,9 +67,35 @@ class BrecordsController < ApplicationController
       end
       render :layout => false
     else
-      @rectype = params[:rectype].upcase
+      @rectype = (params[:rectype] || 'PART').upcase
       @conditions = "brectype = '!'"
     end
+  end
+  
+  def find
+    @rectype = params[:rectype].upcase
+
+    if @rectype == '*'
+      @statusList = Blevel.find(:all).map { |level| level.bname }.sort.uniq
+    else
+      @statusList = Blevel.find(:all,
+                                :conditions => "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname = '" + @rectype + "'",
+                                :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
+    end
+    @statusList.unshift('')
+
+    if @rectype == 'PART'
+      @typeList = DynList.build_from('IPD_PARTSUBTYPE')
+    elsif @rectype == 'DOCUMENT'
+      @typeList = DynList.build_from('IPD_DOCSUBTYPE')
+    elsif @rectype == 'WORKAUTH'
+      @typeList = DynList.build_from('IPD_WORKASUBTYP')
+    elsif @rectype == 'SOFTWARE'
+      @typeList = DynList.sw_types
+    else
+      @typeList = []
+    end
+    render :layout => false
   end
 
   def grid_records

@@ -1,0 +1,44 @@
+<table id="findGrid" class="scroll"></table>
+<div id="findPager" class="scroll"></div>
+
+<script type="text/javascript">
+	var lastSel;
+	$(document).ready(function(){
+		var centerWidth = pexLayout.cssWidth('center') - 50;
+		$('#findGrid').jqGrid({
+			url: '/brecords/grid_records',
+			datatype: 'json',
+			mtype: 'GET',
+			colNames: ['Id', 'Name', 'Bus. ID', 'Rev', 'Status', 'Description'],
+			colModel :[
+				{name:'id',        index:'id',        hidden:true},
+				{name:'name',      index:'brecname',  width:80},
+				{name:'bname1',    index:'bname1',    width:50},
+				{name:'brecalt',   index:'brecalt',   width:30},
+				{name:'breclevel', index:'breclevel', width:50}, 
+				{name:'bdesc',     index:'bdesc',     width:300} ],
+			rowNum: 10,
+			rowList: [10,20,30,50,100],
+			sortname: 'brecname,brecalt',
+			sortorder: 'asc',
+			viewrecords: true,
+			imgpath: grid_imgpath,
+			caption: "<%=find_result_table_title @rectype%>",
+			height: '100%',
+			width: centerWidth,
+			pager: 'findPager',
+			ondblClickRow: function(id) {
+				if (id!=null) {
+                                        $.history(id);
+                                        $('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
+					$('#cMenuTabs > ul').tabs('select',2);
+				}
+			},
+			postData: {
+				conditions: '<%=escape_javascript @conditions%>',
+				joins: '<%=escape_javascript @joins%>'
+			}
+		})
+		.navGrid('#findPager', {refresh: false, edit: false, add: false, del: false, search: false})
+	});
+</script>

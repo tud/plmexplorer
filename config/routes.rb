@@ -34,9 +34,12 @@ ActionController::Routing::Routes.draw do |map|
   # map.root :controller => "welcome"
 
   # See how all your routes lay out with "rake routes"
-  map.root :controller => 'brecords', :action => 'index'
-  map.connect 'rectype/:rectype', :controller => 'brecords', :action => 'show'
+  map.root :controller => 'brecords'
+  map.connect 'rectype/:rectype', :controller => 'brecords'
   map.connect 'rectype/:rectype/:action', :controller => 'brecords'
+
+  map.login 'login', :controller => 'sessions', :action => 'new'
+  map.login 'logout', :controller => 'sessions', :action => 'destroy'
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
