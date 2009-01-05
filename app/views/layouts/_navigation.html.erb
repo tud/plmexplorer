@@ -18,7 +18,32 @@
 	<div>
 		<h3 class="header"><a href="#"><%=fam_img_tag 'help' %> Help</a></h3>
 		<div>
-			<a href="#"><%=fam_img_tag 'information' %> About</a>
+			<a href="#" id="about"><%=fam_img_tag 'information' %> About</a>
 		</div>
 	</div>
 </div>
+
+<div id="dialog_about" title="About PlmExplorer">
+	Fantastico programma partorito dalle due menti deviate
+	di Sergio Gallelli e Stefano Manieri<br/><br/>
+	&copy; 2009 - tutti i diritti riservati<br/>
+	ed anche i rovesci<br/><br/>
+	<a href="http://www.plmexplorer.com"><img src="/images/logo_button.gif" alt="PlmExplorer"></a>
+</div>
+
+<script type="text/javascript">
+	$(function() {
+		$('#dialog_about').dialog({
+			modal: true,
+			autoOpen: false,
+			overlay: {
+				opacity: 0.5,
+				background: "#1c94c4"
+			}
+		});
+	});
+
+	$('#about').click(function() {
+		$('#dialog_about').dialog("open");
+	});
+</script>
