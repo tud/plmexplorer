@@ -35,7 +35,7 @@ class Brecord < ActiveRecord::Base
   end
 
   def parents_count(reftypes = '')
-    parent_entries(reftypes, nil, nil, 0).count
+    parent_entries(reftypes, nil, nil, 0).size
   end
 
   def parents(reftypes = '', order = nil, limit = nil, offset = 0)
