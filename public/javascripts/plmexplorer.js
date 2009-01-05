@@ -15,8 +15,8 @@ $(document).ready(function () {
 	// UI.layout
 	pexLayout = $('body').layout({
 		applyDefaultStyles: true
-	,	north__size: "auto"
-	,	north__spacing_open: 0
+	,	north__size: 110
+	,	south__spacing_open: 0
 	,	west__spacing_closed: 10
 	,	west__onresize: function(){
 			jQuery('#wNavigation').accordion('resize');

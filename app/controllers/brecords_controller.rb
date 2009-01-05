@@ -1,17 +1,11 @@
 class BrecordsController < ApplicationController
 
-  #def index
-    #redirect_to :action => :show, :rectype => '*'
-  #end
-
   def index
     @joins = ''
     uda_ref = 'u0'
     if request.post?
       brecord = params[:brecord]
-      print brecord.to_yaml
       @rectype = brecord[:find_rec_brectype].upcase
-      print @rectype.to_yaml
       condition = Condition.new('id = blatest')  # considero solo l'ultima versione
       latest_rev = false
       name = nil
@@ -67,11 +61,11 @@ class BrecordsController < ApplicationController
       end
       render :layout => false
     else
-      @rectype = (params[:rectype] || 'PART').upcase
+      @rectype = "*"
       @conditions = "brectype = '!'"
     end
   end
-  
+
   def find
     @rectype = params[:rectype].upcase
 
