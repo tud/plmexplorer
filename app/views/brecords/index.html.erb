@@ -2,8 +2,7 @@
 <div id="findPager" class="scroll"></div>
 
 <script type="text/javascript">
-	var lastSel;
-	$(document).ready(function(){
+	$(function(){
 		var centerWidth = pexLayout.cssWidth('center') - 50;
 		$('#findGrid').jqGrid({
 			url: '/brecords/grid_records',
@@ -29,8 +28,8 @@
 			pager: 'findPager',
 			ondblClickRow: function(id) {
 				if (id!=null) {
-                                        $.history(id);
-                                        $('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
+					$.history(id);
+					$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
 					$('#cMenuTabs > ul').tabs('select',2);
 				}
 			},
