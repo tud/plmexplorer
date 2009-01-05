@@ -34,24 +34,33 @@ class Brecord < ActiveRecord::Base
     brefs.of_type(reftypes).all(:order => order, :limit => limit, :offset => offset).each { |ref| ref.resolve }
   end
 
+  def parents_count(reftypes = '')
+    parent_entries(reftypes, nil, nil, 0).count
+  end
+
   def parents(reftypes = '', order = nil, limit = nil, offset = 0)
-    select = 'DISTINCT brefs.breftype, brecords.brectype, brecords.brecname, MAX(brecords.brecalt) AS brecalt'
-    joins = ', brecords'
-    conditions = 'brefs.bobjid = brecords.id'
-    group = 'brefs.breftype, brecords.brectype, brecords.brecname'
-    latest = Bref.of_type(reftypes).parent_of(self).all(:select => select,
-                                                        :joins => joins,
-                                                        :conditions => conditions,
-                                                        :group => group,
-                                                        :order => order,
-                                                        :limit => limit,
-                                                        :offset => offset)
-    latest.map { |rec|
+    parent_entries(reftypes, order, limit, offset).map { |rec|
       parent = Brecord.find_by_brectype_and_brecname_and_brecalt(rec.brectype, rec.brecname, rec.brecalt,
                                                                  :conditions => "id = blatest")
       parent[:breftype] = rec.breftype
       parent
     }
+  end  
+
+  private
+
+  def parent_entries(reftypes, order, limit, offset)
+    select = 'DISTINCT brefs.breftype, brecords.brectype, brecords.brecname, MAX(brecords.brecalt) AS brecalt'
+    joins = ', brecords'
+    conditions = 'brefs.bobjid = brecords.id'
+    group = 'brefs.breftype, brecords.brectype, brecords.brecname'
+    Bref.of_type(reftypes).parent_of(self).all (:select => select,
+                                                :joins => joins,
+                                                :conditions => conditions,
+                                                :group => group,
+                                                :order => order,
+                                                :limit => limit,
+                                                :offset => offset)
   end  
 
 end

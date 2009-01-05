@@ -150,9 +150,9 @@ class BrecordsController < ApplicationController
 
     record = session[:curr_record] || Brecord.find(params[:id])
     reftypes = params[:reftypes]
-    count = record.parents(reftypes).size
+    count = record.parents_count(reftypes)
     parents = record.parents(reftypes, @order, @limit, @offset)
-      
+
     prep_return_data(count)
     @return_data[:rows] = parents.collect{|u| {
       :id => u.id,
