@@ -24,11 +24,12 @@ $(document).ready(function () {
 		}
 	,	center__onresize: function(){
 			var centerWidth = pexLayout.cssWidth('center');
-			$('#findGrid').setGridWidth(centerWidth -25);
-			$('#promotionsGrid').setGridWidth(centerWidth-45);
-			$('#revisionsGrid').setGridWidth(centerWidth-45);
-			$('#signoffsGrid').setGridWidth(centerWidth-45);
-			$('#refsGrid').setGridWidth(centerWidth-45);
+			$('#findGrid').setGridWidth(centerWidth-40);
+			$('#promotionsGrid').setGridWidth(centerWidth-80);
+			$('#revisionsGrid').setGridWidth(centerWidth-80);
+			$('#signoffsGrid').setGridWidth(centerWidth-80);
+			$('#childrenGrid').setGridWidth(centerWidth-60);
+			$('#parentsGrid').setGridWidth(centerWidth-70);
 		}
 	});
 

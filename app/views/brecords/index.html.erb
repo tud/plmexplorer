@@ -3,7 +3,13 @@
 
 <script type="text/javascript">
 	$(function(){
-		var centerWidth = pexLayout.cssWidth('center') - 50;
+		var centerWidth;
+		if($.browser.msie){
+			centerWidth = pexLayout.cssWidth('center') -80;
+		} else {
+			centerWidth = pexLayout.cssWidth('center') -50;
+		}
+
 		$('#findGrid').jqGrid({
 			url: '/brecords/grid_records',
 			datatype: 'json',
@@ -23,7 +29,7 @@
 			viewrecords: true,
 			imgpath: grid_imgpath,
 			caption: "<%=find_result_table_title @rectype%>",
-			height: '100%',
+			height: 'auto',
 			width: centerWidth,
 			pager: 'findPager',
 			ondblClickRow: function(id) {

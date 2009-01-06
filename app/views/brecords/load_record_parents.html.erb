@@ -51,7 +51,7 @@ $(function(){
 
 <script type="text/javascript">
 $(function(){
-	var centerWidth = pexLayout.cssWidth('center') - 90;
+	var centerWidth = pexLayout.cssWidth('center') - 100;
 	$('#parentsGrid').jqGrid({
 		url: '/brecords/grid_parents',
 		datatype: 'json',
@@ -72,7 +72,7 @@ $(function(){
 		sortorder: 'asc',
 		viewrecords: true,
 		imgpath: grid_imgpath,
-		height: '100%',
+		height: 'auto',
 		width: centerWidth,
 		pager: 'parentsPager',
 		ondblClickRow: function(id) {
