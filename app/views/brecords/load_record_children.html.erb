@@ -19,7 +19,7 @@ $(function(){
 		$('#record_tabs > ul').tabs("load", selected );
 		return false;
 	});
-	$("#children_filters").checkbox({checked: "/images/fam/accept.png", unchecked: "/images/fam/delete.png"});
+	$("#children_filters").checkbox({checked: "/images/fam/add.png", unchecked: "/images/fam/delete.png"});
 });
 </script>
 
@@ -52,7 +52,7 @@ $(function(){
 
 <script type="text/javascript">
 $(function(){
-	var centerWidth = pexLayout.cssWidth('center') - 90;
+	var centerWidth = pexLayout.cssWidth('center') -100;
 	$('#childrenGrid').jqGrid({
 		url: '/brecords/grid_children',
 		datatype: 'json',
@@ -74,7 +74,7 @@ $(function(){
 		sortorder: 'asc',
 		viewrecords: true,
 		imgpath: grid_imgpath,
-		height: '100%',
+		height: 'auto',
 		width: centerWidth,
 		pager: 'childrenPager',
 		ondblClickRow: function(id) {

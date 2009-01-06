@@ -153,13 +153,25 @@ button:focus, a.button:focus, button:active, a.button:active {
 	line-height:1.875em;
 }
 
-#children_filters label, #parents_filters label {
+#children_filters label, #parents_filters label, #record_attributes_filters label{
 	padding-right:1em;
 }
 
-#record_attributes_filters img, #recordTabName img, #record_tile img {
+#record_attributes_filters img, #recordTabName img, #record_tile img,
+#children_filters img, #parents_filters img,
+#record_attributes_filters img {
 	margin:0 3px -3px 0 !important;
 }
+
+#record_attributes_filters label {
+	display:inline
+}
+
+#find_records legend, #view_record_form legend {
+	padding-right:1em;
+	padding-left:1em;
+}
+
 /**************************************/
 /*              SOUTH                 */
 /**************************************/

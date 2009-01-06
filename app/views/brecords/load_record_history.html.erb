@@ -5,7 +5,7 @@
 
 <script type="text/javascript">
 var id = "<%= @id %>";
-var centerWidth = pexLayout.cssWidth('center') - 90;
+var centerWidth = pexLayout.cssWidth('center') -110;
 $(function(){
 	$('#promotionsGrid').jqGrid({
 		url: '/brecords/grid_promotions',
@@ -25,7 +25,7 @@ $(function(){
 		sortorder: 'asc',
 		viewrecords: true,
 		imgpath: grid_imgpath,
-		height: '100%',
+		height: 'auto',
 		width: centerWidth,
 		pager: 'promotionsPager',
 		postData: {id: id}
@@ -60,7 +60,7 @@ $(function(){
 		sortorder: 'desc',
 		viewrecords: true,
 		imgpath: grid_imgpath,
-		height: '100%',
+		height: 'auto',
 		width: centerWidth,
 		pager: 'revisionsPager',
 		ondblClickRow: function(id) {	
@@ -103,7 +103,7 @@ $(function(){
 		sortorder: 'asc',
 		viewrecords: true,
 		imgpath: grid_imgpath,
-		height: '100%',
+		height: 'auto',
 		width: centerWidth,
 		pager: 'signoffsPager',
 		postData: {id: id}
