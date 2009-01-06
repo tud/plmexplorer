@@ -48,7 +48,7 @@
 				fieldsetid = 'view_fieldset_'+ yy.to_s
 %>
 				<fieldset id='<%=fieldsetid%>' class='inlineLabels hide filters'>
-					<legend><%=form['label']%></legend>
+					<legend>&nbsp;<%=form['label']%>&nbsp;</legend>
 				
 <%
 				form['fields'].each do |field|
@@ -147,6 +147,8 @@
 		$('#record_attributes_filters').uniform();
 		
 		// nome tab
-		$('#recordTabName').html("<span><%= fam_img_tag_rectype @record.brectype %> <%=@record.name%>-<%=@record.brecalt%></span>")
+		$('#recordTabName').html("<span><%= fam_img_tag_rectype @record.brectype %> <%=@record.name%>-<%=@record.brecalt%></span>");
+		
+		$("#record_attributes_filters").radio({checked: "/images/fam/asterisk_orange.png", unchecked: "/images/asterisk_gray.jpg"});
 	});
 </script>

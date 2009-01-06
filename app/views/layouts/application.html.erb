@@ -23,7 +23,7 @@
 		<%= stylesheet_link_tag 'plmexplorer.css' %>
 		
 		<%= javascript_include_tag :defaults %>
-		<%= javascript_include_tag 'uni-form.jquery.js' %>
+		<%= javascript_include_tag 'uni-form.jquery.js','jquery.checkbox.js' %>
 		<%= javascript_include_tag 'jquery.layout.min.js','jquery.pngFix.pack.js', 'jquery.form.js' %>
 		<%= javascript_include_tag 'jquery.history.js','jquery.history.custom.js','jquery.jec.min-0.5.2.js' %>
 		<%= javascript_include_tag 'jquery.jqGrid.js','js/jqModal.js','js/jqDnR.js' %>
@@ -46,7 +46,7 @@
 			<%= render :partial => 'layouts/footer' %>
 		</div>
 		<%
-		if session[:user].nil?
+		if session[:user2].nil?
 		%>
 			<%= render :partial => 'layouts/login' %>
 		<%

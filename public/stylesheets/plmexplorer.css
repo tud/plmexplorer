@@ -62,7 +62,7 @@ button:hover, a.button:hover {
 }
 button:focus, a.button:focus, button:active, a.button:active {
 	background: #1c94c4;
-	color: #1c94c4;
+	color: #e78f08;
 }
 /**************************************/
 /*              NORTH                 */
@@ -80,11 +80,12 @@ button:focus, a.button:focus, button:active, a.button:active {
 	text-align: left;
 }
 .ui-layout-west img {
-	vertical-align:-10%;
+	margin:0 3px -3px 0 !important;
 }
 
 #wNavigation {
 	font-size: 1.2em;
+	margin:0 0 -10px 0 !important;
 }
 #wNavigation a {
 	color:#1C94C4;
@@ -111,9 +112,7 @@ button:focus, a.button:focus, button:active, a.button:active {
 .ui-layout-center {
 	text-align: left;
 }
-.ui-layout-center img {
-	vertical-align:-10%;
-}
+
 .ui-tabs-hide {
 	display: none;
 }
@@ -154,6 +153,13 @@ button:focus, a.button:focus, button:active, a.button:active {
 	line-height:1.875em;
 }
 
+#children_filters label, #parents_filters label {
+	padding-right:1em;
+}
+
+#record_attributes_filters img, #recordTabName img, #record_tile img {
+	margin:0 3px -3px 0 !important;
+}
 /**************************************/
 /*              SOUTH                 */
 /**************************************/
@@ -162,5 +168,5 @@ button:focus, a.button:focus, button:active, a.button:active {
 	text-align: center;
 }
 .ui-layout-south img {
-	vertical-align: -25%;
+	margin:0 3px -3px 0 !important;
 }
