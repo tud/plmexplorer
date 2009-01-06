@@ -4,6 +4,14 @@
 <div id="record_tabs">
 	<ul>
 		<li><a href="#attributes" id="attributes_tab">Attributes</a></li>
+		<% if (@record.brectype != 'PART') %>
+		<li><a href="/<%= controller.controller_name %>/load_record_files?id=<%= @record.id %>" id="files_tab">Files</a></li>
+		<% end %>
+		<% if (@record.brectype != 'DOCUMENT') %>
+		<li><a href="/<%= controller.controller_name %>/load_record_children?id=<%= @record.id %>&amp;reftypes=<%=CHILDREN[@record.brectype][0]["reftype"]%>" id="children_tab">Children</a></li>
+		<% end %>
+		<li><a href="/<%= controller.controller_name %>/load_record_parents?id=<%= @record.id %>&amp;reftypes=<%=PARENTS[@record.brectype][0]["reftype"]%>" id="parents_tab">Parents</a></li>
+		<li><a href="/<%= controller.controller_name %>/load_record_history?id=<%= @record.id %>" id="history_tab">History</a></li>
 		<!--
 		<li><a href="#lifecycle">Lifecycle</a></li>
 		-->
@@ -115,16 +123,6 @@
 		// visualizzazione title del record
 		$('#record_title').html("<%= fam_img_tag_rectype @record.brectype  %><%= escape_javascript h(@record.title) %>");
 		$('#record_title').show();
-
-		// creazione tabs ajax
-		<% if (@record.brectype != 'PART') %>
-		$('#record_tabs > ul').tabs('add', '/<%= controller.controller_name %>/load_record_files?id=<%= @record.id %>', 'Files');
-		<% end %>
-		<% if (@record.brectype != 'DOCUMENT') %>
-		$('#record_tabs > ul').tabs('add', '/<%= controller.controller_name %>/load_record_children?id=<%= @record.id %>', 'Children');
-		<% end %>
-		$('#record_tabs > ul').tabs('add', '/<%= controller.controller_name %>/load_record_parents?id=<%= @record.id %>', 'Parents');
-		$('#record_tabs > ul').tabs('add', '/<%= controller.controller_name %>/load_record_history?id=<%= @record.id %>', 'History');
 
 		// visualizzazione div
 		$('#view_fieldset_0').show();

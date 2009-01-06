@@ -252,18 +252,26 @@ class BrecordsController < ApplicationController
   end
 
   def load_record_children
+    @record = Brecord.find(params[:id])
+    @reftypes = params[:reftypes]
+    @id = params[:id]
     render :layout => false
   end
 
   def load_record_history
+    @id = params[:id]
     render :layout => false
   end
   
   def load_record_parents
+    @record = Brecord.find(params[:id])
+    @reftypes = params[:reftypes]
+    @id = params[:id]
     render :layout => false
   end
   
   def load_record_files
+    @id = params[:id]
     render :layout => false
   end
 
