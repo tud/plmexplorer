@@ -1,0 +1,17 @@
+PART:
+  - reftype: USES
+  - reftype: USES_FRZ
+  - reftype: DESC_BY
+  - reftype: DESC_BY_FRZ
+SOFTWARE:
+  - reftype: DESC_BY
+  - reftype: DESC_BY_FRZ
+WORKAUTH:
+  - reftype: RAISED_AGAINST
+  - reftype: RELEASES
+  - reftype: CLOSES
+  - reftype: COMPOSED_OF
+  - reftype: USES
+  - reftype: USES_FRZ
+  - reftype: DESC_BY
+  - reftype: DESC_BY_FRZ

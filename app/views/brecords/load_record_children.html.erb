@@ -1,8 +1,54 @@
+<script type="text/javascript">
+var id = "<%= @id %>";
+var reftypes = "<%= @reftypes %>";
+$(function(){
+	$('#apply_button_children').click(function() {
+		reftypes = "";
+		$("#children_filters input[type='checkbox']").each( function() {
+			if ($(this).is(':checked')) {
+				if (reftypes == "") {
+					reftypes = $(this).attr('value');
+				} else {
+					reftypes = reftypes + "," + $(this).attr('value');
+				}
+			}
+		});
+		var selected = $('#record_tabs > ul').tabs().data('selected.tabs');
+		var url = '/<%= controller.controller_name %>/load_record_children?id=<%= @id %>&reftypes='+reftypes;
+		$('#record_tabs > ul').tabs("url", selected, url);
+		$('#record_tabs > ul').tabs("load", selected );
+		return false;
+	});
+});
+</script>
+
+<div>
+<%
+	arr_rectypes = @reftypes.split ","
+	form_for :filter, :html => {:id => 'children_filters'} do |f|
+		(filter_children @record.brectype).each do |filter|
+			if arr_rectypes.include? filter
+%>
+				<input type="checkbox" name="children_filter" value="<%=filter%>" checked="checked"/><%=filter%>
+<%
+			elsif
+%>
+				<input type="checkbox" name="children_filter" value="<%=filter%>"/><%=filter%>
+<%
+			end
+		end
+%>
+		&nbsp;&nbsp;<a href="#" id="apply_button_children" class="button ui-state-default ui-corner-all">Filter</a>
+<%
+	end
+%>
+</div>
+<p></p>
+
 <table id="childrenGrid" class="scroll"></table>
 <div id="childrenPager" class="scroll"></div>
 
 <script type="text/javascript">
-var id = $('#view_record_id').attr('value');
 $(function(){
 	var centerWidth = pexLayout.cssWidth('center') - 90;
 	$('#childrenGrid').jqGrid({
@@ -36,7 +82,7 @@ $(function(){
 			}
 			$('#record_content > ul').tabs('select', 0);
 		},
-		postData: {id: id, reftypes: ''}
+		postData: {id: id, reftypes: reftypes}
 	})
 	.navGrid('#childrenPager', {refresh: false, edit: false, add: false, del: false, search: false})
 });

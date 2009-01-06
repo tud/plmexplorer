@@ -4,7 +4,7 @@
 <div id="promotionsPager" class="scroll"></div>
 
 <script type="text/javascript">
-var id = jQuery('#view_record_id').attr('value');
+var id = "<%= @id %>";
 var centerWidth = pexLayout.cssWidth('center') - 90;
 $(function(){
 	$('#promotionsGrid').jqGrid({
