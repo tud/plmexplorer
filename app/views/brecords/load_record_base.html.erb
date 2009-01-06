@@ -21,17 +21,15 @@
 <div id='attributes'>
 <% 
 	form_for :filter, :html => {:id => 'record_attributes_filters', :class => 'uniForm'} do |f|
-		
 		ii = 0
 		(filter_names @record.brectype).each do |filter|
 			if (ii==0)
 %>
-				<input type="hidden" id="view_record_id" value="<%=@record.id%>"/>
-				<input type="radio" name="attributes_filter" value="view_fieldset_<%=ii%>" checked="checked"/><%=filter%>
+				<input type="radio" name="attributes_filter" value="view_fieldset_<%=ii%>" checked="checked"/><label><%=filter%></label>
 <%
 			elsif
 %>
-				<input type="radio" name="attributes_filter" value="view_fieldset_<%=ii%>"/><%=filter%>
+				<input type="radio" name="attributes_filter" value="view_fieldset_<%=ii%>"/><label><%=filter%></label>
 <%
 			end
 			ii+=1
@@ -48,7 +46,7 @@
 				fieldsetid = 'view_fieldset_'+ yy.to_s
 %>
 				<fieldset id='<%=fieldsetid%>' class='inlineLabels hide filters'>
-					<legend>&nbsp;<%=form['label']%>&nbsp;</legend>
+					<legend><%=form['label']%></legend>
 				
 <%
 				form['fields'].each do |field|
@@ -149,6 +147,6 @@
 		// nome tab
 		$('#recordTabName').html("<span><%= fam_img_tag_rectype @record.brectype %> <%=@record.name%>-<%=@record.brecalt%></span>");
 		
-		$("#record_attributes_filters").radio({checked: "/images/fam/asterisk_orange.png", unchecked: "/images/asterisk_gray.jpg"});
+		$("#record_attributes_filters").radio({checked: "/images/fam/accept.png", unchecked: "/images/fam/cross.png"});
 	});
 </script>
