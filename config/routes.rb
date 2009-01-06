@@ -38,8 +38,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'rectype/:rectype', :controller => 'brecords'
   map.connect 'rectype/:rectype/:action', :controller => 'brecords'
 
-  map.login 'login', :controller => 'sessions', :action => 'new'
-  map.login 'logout', :controller => 'sessions', :action => 'destroy'
+  #map.login 'login', :controller => 'sessions', :action => 'new'
+  #map.login 'logout', :controller => 'sessions', :action => 'destroy'
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should

@@ -1,5 +1,7 @@
 class BrecordsController < ApplicationController
 
+  #before_filter :authenticate
+
   def index
     @joins = ''
     uda_ref = 'u0'
@@ -267,6 +269,18 @@ class BrecordsController < ApplicationController
     render :layout => false
   end
 
+  def login
+    unless (session[:user])
+      if (params[:name] && !params[:name].empty?)
+        session[:user] = params[:name]
+      else
+      end
+    end
+    @rectype = '*'
+    #redirect_to :action => 'index'
+    render :layout => false
+  end
+
 private
 
   def normalize(string)
@@ -349,5 +363,17 @@ private
     @return_data[:total] = total_pages
     @return_data[:records] = count
   end
+
+
+  #protected
+
+  #def authenticate
+  #  authenticate_or_request_with_http_basic do |user, password|
+  #    if !user.empty?
+  #      session[:user] = user
+  #    end
+  #    session[:user]
+  # end
+  #end
 
 end

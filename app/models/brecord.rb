@@ -54,13 +54,13 @@ class Brecord < ActiveRecord::Base
     joins = ', brecords'
     conditions = 'brefs.bobjid = brecords.id'
     group = 'brefs.breftype, brecords.brectype, brecords.brecname'
-    Bref.of_type(reftypes).parent_of(self).all (:select => select,
-                                                :joins => joins,
-                                                :conditions => conditions,
-                                                :group => group,
-                                                :order => order,
-                                                :limit => limit,
-                                                :offset => offset)
+    Bref.of_type(reftypes).parent_of(self).all(:select => select,
+                                               :joins => joins,
+                                               :conditions => conditions,
+                                               :group => group,
+                                               :order => order,
+                                               :limit => limit,
+                                               :offset => offset)
   end  
 
 end

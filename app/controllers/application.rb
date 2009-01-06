@@ -16,19 +16,4 @@ class ApplicationController < ActionController::Base
   # disable CSRF protection
   self.allow_forgery_protection = false
 
-
-  protected
-
-  def authorize
-    unless admin?
-      flash[:notice] = "Unauthorized access"
-      redirect_to :controller => 'brecords'
-      false
-    end
-  end
-
-  def admin?
-    session[:password] == 'sherpa'
-  end
-
 end

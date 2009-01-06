@@ -30,6 +30,7 @@
 		<%= javascript_include_tag 'plmexplorer.js' %>
 	</head>
 	<body>
+		<% puts('******************' + session[:user].to_s) %>
 		<div class="ui-layout-north">
 			<img src="/images/logo_trans.png" alt="logo"/>
 		</div>
@@ -45,12 +46,12 @@
 		<div class="ui-layout-south">
 			<%= render :partial => 'layouts/footer' %>
 		</div>
-		<%
-		if session[:user].nil?
-		%>
+                <script type="text/javascript">
+                alert("PINO")
+		</script>
+                
+		<% if session[:user].nil? %>
 			<%= render :partial => 'layouts/login' %>
-		<%
-		end
-		%>
+		<% end %>
 	</body>
 </html>

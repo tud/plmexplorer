@@ -1,5 +1,5 @@
 <div id="login_dialog" title="Login">
-	<form id="login_form" class="uniForm">
+	<form id="login_form" class="uniForm" action="/brecords/login">
 	<fieldset class='inlineLabels'>
 		<legend><img src="/images/logo_button.gif" alt="PlmExplorer"/></legend>
 		<div class='ctrlHolder'>
@@ -15,6 +15,7 @@
 </div>
 
 <script type="text/javascript">
+        alert("PIPPO");
 	$(function() {
 		$("#login_dialog").dialog({
 			height: 250,
@@ -26,7 +27,11 @@
 			},
 			buttons: {
 				OK: function() {
+                                        console.log($('#login_form').attr("action"));
+                                        var url = $('#login_form').attr("action") + "?name=" + $('#name').attr("value") + "&password=" + $('#password').attr("value");
+                                        $.post(url);
 					$(this).dialog('close');
+                                        window.location.reload(false);
 				}
 			}
 		});
