@@ -27,7 +27,6 @@
 			},
 			buttons: {
 				OK: function() {
-					console.log($('#login_form').attr("action"));
 					var url = $('#login_form').attr("action") + "?name=" + $('#name').attr("value") + "&password=" + $('#password').attr("value");
 					$.post(url);
 					$(this).dialog('close');

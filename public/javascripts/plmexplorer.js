@@ -16,18 +16,19 @@ $(document).ready(function () {
 	pexLayout = $('body').layout({
 		applyDefaultStyles: true
 	,	north__size: 110
+	,	north__spacing_open: 3
 	,	south__spacing_open: 0
-	,	west__spacing_closed: 10
+	,	west__spacing_open: 3
 	,	west__onresize: function(){
-			jQuery('#wNavigation').accordion('resize');
+			$('#wNavigation').accordion('resize');
 		}
 	,	center__onresize: function(){
 			var centerWidth = pexLayout.cssWidth('center');
-			jQuery('#findGrid').setGridWidth(centerWidth -25);
-			jQuery('#promotionsGrid').setGridWidth(centerWidth-45);
-			jQuery('#revisionsGrid').setGridWidth(centerWidth-45);
-			jQuery('#signoffsGrid').setGridWidth(centerWidth-45);
-			jQuery('#refsGrid').setGridWidth(centerWidth-45);
+			$('#findGrid').setGridWidth(centerWidth -25);
+			$('#promotionsGrid').setGridWidth(centerWidth-45);
+			$('#revisionsGrid').setGridWidth(centerWidth-45);
+			$('#signoffsGrid').setGridWidth(centerWidth-45);
+			$('#refsGrid').setGridWidth(centerWidth-45);
 		}
 	});
 

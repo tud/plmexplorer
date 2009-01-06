@@ -19,6 +19,7 @@ $(function(){
 		$('#record_tabs > ul').tabs("load", selected );
 		return false;
 	});
+	$("#parents_filters").checkbox({checked: "/images/fam/accept.png", unchecked: "/images/fam/delete.png"});
 });
 </script>
 
@@ -29,11 +30,11 @@ $(function(){
 		(filter_parents @record.brectype).each do |filter|
 			if arr_rectypes.include? filter
 %>
-				<input type="checkbox" name="parent_filter" value="<%=filter%>" checked="checked"/><%=filter%>
+				<input type="checkbox" name="parent_filter" value="<%=filter%>" checked="checked"/><label><%=filter%></label>
 <%
 			elsif
 %>
-				<input type="checkbox" name="parent_filter" value="<%=filter%>"/><%=filter%>
+				<input type="checkbox" name="parent_filter" value="<%=filter%>"/><label><%=filter%></label>
 <%
 			end
 		end
