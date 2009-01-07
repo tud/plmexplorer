@@ -144,6 +144,55 @@ class BrecordsController < ApplicationController
     # Convert the hash to a json object
     render :text => @return_data.to_json, :layout=>false
   end
+
+  def fam_icon_rectype rectype
+    "/images/fam/"+NAVIGATION['FIND'].find {|hash| hash['type'] == rectype}['iconclass']+".png"
+  end
+  
+  def tree_children
+    if params[:id] == "0"
+      record = session[:curr_record]
+      root = true
+    else
+      record = Brecord.find(params[:id])
+      root = false
+    end
+
+    reftypes = params[:reftypes]
+    children = record.children(reftypes)
+
+    if root
+      @return_data = Hash.new { |h,v| h[v]= Hash.new }
+      @return_data[:state] = "open"
+      @return_data[:data][:title]= record.tree_label
+      @return_data[:data][:icon] = fam_icon_rectype record.brectype
+      @return_data[:attributes][:id] = record.id.to_s
+      @return_data[:children] = children.collect{|u| {
+        :state => "closed",
+        :data => {
+          :title => u.tree_label,
+          :icon => fam_icon_rectype(u.brectype)
+        },
+        :attributes => {
+          :id => u.id.to_s
+        }
+      }}
+    else
+      @return_data = children.collect{|u| {
+        :state => "closed",
+        :data => {
+          :title => u.tree_label,
+          :icon => fam_icon_rectype(u.brectype)
+        },
+        :attributes => {
+          :id => u.id.to_s
+        }
+      }}
+    end
+
+    # Convert the hash to a json object
+    render :text => @return_data.to_json, :layout=>false
+  end
   
   def grid_parents
     prep_query
@@ -165,6 +214,51 @@ class BrecordsController < ApplicationController
         u.brecalt,
         u.breclevel,
         u.bdesc] }}
+
+    # Convert the hash to a json object
+    render :text => @return_data.to_json, :layout=>false
+  end
+  
+  def tree_parents
+    if params[:id] == "0"
+      record = session[:curr_record]
+      root = true
+    else
+      record = Brecord.find(params[:id])
+      root = false
+    end
+
+    reftypes = params[:reftypes]
+    parents = record.parents(reftypes)
+
+    if root
+      @return_data = Hash.new { |h,v| h[v]= Hash.new }
+      @return_data[:state] = "open"
+      @return_data[:data][:title]= record.tree_label
+      @return_data[:data][:icon] = fam_icon_rectype record.brectype
+      @return_data[:attributes][:id] = record.id.to_s
+      @return_data[:children] = parents.collect{|u| {
+        :state => "closed",
+        :data => {
+          :title => u.tree_label,
+          :icon => fam_icon_rectype(u.brectype)
+        },
+        :attributes => {
+          :id => u.id.to_s
+        }
+      }}
+    else
+      @return_data = parents.collect{|u| {
+        :state => "closed",
+        :data => {
+          :title => u.tree_label,
+          :icon => fam_icon_rectype(u.brectype)
+        },
+        :attributes => {
+          :id => u.id.to_s
+        }
+      }}
+    end
 
     # Convert the hash to a json object
     render :text => @return_data.to_json, :layout=>false
@@ -257,6 +351,13 @@ class BrecordsController < ApplicationController
     @id = params[:id]
     render :layout => false
   end
+  
+  def load_record_children_tree
+    @record = Brecord.find(params[:id])
+    @reftypes = params[:reftypes]
+    @id = params[:id]
+    render :layout => false
+  end
 
   def load_record_history
     @id = params[:id]
@@ -264,6 +365,13 @@ class BrecordsController < ApplicationController
   end
   
   def load_record_parents
+    @record = Brecord.find(params[:id])
+    @reftypes = params[:reftypes]
+    @id = params[:id]
+    render :layout => false
+  end
+  
+  def load_record_parents_tree
     @record = Brecord.find(params[:id])
     @reftypes = params[:reftypes]
     @id = params[:id]

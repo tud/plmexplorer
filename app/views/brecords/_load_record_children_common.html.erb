@@ -1,0 +1,64 @@
+<script type="text/javascript">
+var id = "<%= @id %>";
+var reftypes = "<%= @reftypes %>";
+$(function(){
+	$('#apply_button_children').click(function() {
+		reftypes = "";
+		$('#children_filters input[type="checkbox"]').each( function() {
+			if ($(this).is(':checked')) {
+				if (reftypes == "") {
+					reftypes = $(this).attr('value');
+				} else {
+					reftypes = reftypes + "," + $(this).attr('value');
+				}
+			}
+		});
+		var action = $("input[@name='filter_type_children']:checked").val();
+		var selected = $('#record_tabs > ul').tabs().data('selected.tabs');
+		var url = '/<%= controller.controller_name %>/'+action+'?id=<%= @id %>&reftypes='+reftypes;
+		$('#record_tabs > ul').tabs("url", selected, url);
+		$('#record_tabs > ul').tabs("load", selected );
+		return false;
+	});
+	$("#children_filters").checkbox({checked: "/images/fam/add.png", unchecked: "/images/fam/delete.png"});
+	$("#children_filters").radio({checked: "/images/tick.png", unchecked: "/images/fam/cross.png"});
+});
+</script>
+
+<div>
+<%
+	arr_rectypes = @reftypes.split ","
+	form_for :filter, :html => {:id => 'children_filters'} do |f|
+		(CHILDREN["#{@record.brectype.upcase}"]).each do |filter|
+			if arr_rectypes.include? filter['reftype']
+%>
+				<input type="checkbox" name="children_filter" value="<%=filter['reftype']%>" checked="checked"/><label><%=filter['label']%></label>
+<%
+			elsif
+%>
+				<input type="checkbox" name="children_filter" value="<%=filter['reftype']%>"/><label><%=filter['label']%></label>
+<%
+			end
+		end
+%>
+		|&nbsp;&nbsp;
+<%
+		if controller.action_name.include? "tree"
+%>
+			<input type="radio" name="filter_type_children" value="load_record_children"/><label>Grid</label>
+			<input type="radio" name="filter_type_children" value="load_record_children_tree" checked="checked"/><label>Tree</label>
+<%
+		else
+%>
+			<input type="radio" name="filter_type_children" value="load_record_children" checked="checked"/><label>Grid</label>
+			<input type="radio" name="filter_type_children" value="load_record_children_tree"/><label>Tree</label>
+<%
+	end
+%>
+		&nbsp;&nbsp;
+		<a href="#" id="apply_button_children" class="button ui-state-default ui-corner-all">Filter</a>
+<%
+	end
+%>
+</div>
+<p></p>

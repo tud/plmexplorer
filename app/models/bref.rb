@@ -21,6 +21,10 @@ class Bref < ActiveRecord::Base
   def cage_code
     self[:brecname].split('&')[1] || ''
   end
+  
+  def tree_label
+    breftype+" "+brecname.gsub(/&/,'~')+" Rev. "+brecalt+" at Status "+breclevel+" - "+bdesc
+  end
 
   def resolve
     # Forzo REF.RECALT a 4 caratteri max (standard Oto)

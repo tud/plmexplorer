@@ -10,28 +10,6 @@ module BrecordsHelper
     end
     filternames
   end
-  
-  def filter_parents rectype
-    filters = PARENTS["#{rectype.upcase}"]
-    filternames = Array.new
-    if (filters)
-      filters.each do |filter|
-        filternames << filter['reftype']
-      end
-    end
-    filternames
-  end
-  
-  def filter_children rectype
-    filters = CHILDREN["#{rectype.upcase}"]
-    filternames = Array.new
-    if (filters)
-      filters.each do |filter|
-        filternames << filter['reftype']
-      end
-    end
-    filternames
-  end
 
   def get_uda_value udas, uda_name
     uda_value = nil
