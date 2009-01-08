@@ -6,11 +6,16 @@
 $(function(){
 	var treeparents = new tree_component();
 	treeparents.init($('#parentsTree'),{
-		path: "/javascripts",
+		ui: { dots : true },
 		data: {
 			type:	"json",
 			async:	true,
 			url: 	"/<%= controller.controller_name %>/tree_parents?reftypes=<%=@reftypes%>"
+		},
+		callback: {
+			ondblclk: function(NODE, TREE_OBJ) { 
+				$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:NODE.id});
+			}
 		}
 	});
 });

@@ -8,9 +8,29 @@
 		<li><a href="/<%= controller.controller_name %>/load_record_files?id=<%= @record.id %>" id="files_tab">Files</a></li>
 		<% end %>
 		<% if (@record.brectype != 'DOCUMENT') %>
-		<li><a href="/<%= controller.controller_name %>/load_record_children?id=<%= @record.id %>&amp;reftypes=<%=CHILDREN[@record.brectype][0]["reftype"]%>" id="children_tab">Children</a></li>
+		<%
+			cookiename = "children_" + @record.brectype
+			if session[cookiename]
+				children_reftypes = session[cookiename][:reftypes]
+				view = session[cookiename][:view]
+			else
+				children_reftypes = CHILDREN[@record.brectype][0]["reftype"]
+				view = ""
+			end
+		%>
+			<li><a href="/<%= controller.controller_name %>/load_record_children<%= view %>?id=<%= @record.id %>&amp;reftypes=<%= children_reftypes %>" id="children_tab">Children</a></li>
 		<% end %>
-		<li><a href="/<%= controller.controller_name %>/load_record_parents?id=<%= @record.id %>&amp;reftypes=<%=PARENTS[@record.brectype][0]["reftype"]%>" id="parents_tab">Parents</a></li>
+		<%
+			cookiename = "parents_" + @record.brectype
+			if session[cookiename]
+				parents_reftypes = session[cookiename][:reftypes]
+				view = session[cookiename][:view]
+			else
+				parents_reftypes = PARENTS[@record.brectype][0]["reftype"]
+				view = ""
+			end
+		%>
+		<li><a href="/<%= controller.controller_name %>/load_record_parents<%= view %>?id=<%= @record.id %>&amp;reftypes=<%= parents_reftypes %>" id="parents_tab">Parents</a></li>
 		<li><a href="/<%= controller.controller_name %>/load_record_history?id=<%= @record.id %>" id="history_tab">History</a></li>
 		<!--
 		<li><a href="#lifecycle">Lifecycle</a></li>
