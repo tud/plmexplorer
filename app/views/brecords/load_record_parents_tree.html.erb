@@ -1,0 +1,17 @@
+<%= render :partial => 'brecords/load_record_parents_common' %>
+
+<div id="parentsTree"></div>
+
+<script type="text/javascript">
+$(function(){
+	var treeparents = new tree_component();
+	treeparents.init($('#parentsTree'),{
+		path: "/javascripts",
+		data: {
+			type:	"json",
+			async:	true,
+			url: 	"/<%= controller.controller_name %>/tree_parents?reftypes=<%=@reftypes%>"
+		}
+	});
+});
+</script>

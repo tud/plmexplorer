@@ -1,17 +1,31 @@
 PART:
   - reftype: USES
+    label: Parts
   - reftype: USES_FRZ
+    label: UsesFrz
   - reftype: DESC_BY
+    label: Documents
   - reftype: DESC_BY_FRZ
+    label: DocumentsFrz
 SOFTWARE:
   - reftype: DESC_BY
+    label: Documents
   - reftype: DESC_BY_FRZ
+    label: DocumentsFrz
 WORKAUTH:
   - reftype: RAISED_AGAINST
+    label: RaisedAgainst
   - reftype: RELEASES
+    label: Releases
   - reftype: CLOSES
+    label: Closes
   - reftype: COMPOSED_OF
+    label: ComposedOf
   - reftype: USES
+    label: Uses
   - reftype: USES_FRZ
+    label: UsesFrz
   - reftype: DESC_BY
+    label: Documents
   - reftype: DESC_BY_FRZ
+    label: DocumentsFrz
