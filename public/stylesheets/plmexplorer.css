@@ -28,33 +28,40 @@
 select {
 	height:2em;
 }
+.centered {
+	text-align:center;
+}
+.nomargin {
+	padding:0;
+	padding:0;
+}
 
 #login_dialog .uniForm .inlineLabels label, #login_dialog .uniForm .inlineLabels .label {
 	width:8em;
 }
 
 a.button, button {
-  margin: 0.7em 0.5em 0.7em 0;
-  padding:5px 10px 5px 7px;   /* Links */
-  border:1px solid #1c94c4;
-  border-top:1px solid #1c94c4;
-  border-left:1px solid #1c94c4;
-  background-color:#f5f5f5;
-  font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
-  font-size:100%;
-  line-height:130%;
-  text-decoration:none;
-  font-weight:bold;
-  color:#1c94c4;
-  cursor:pointer;
+	margin: 0.7em 0.5em 0.7em 0;
+	padding:5px 10px 5px 7px;   /* Links */
+	border:1px solid #1c94c4;
+	border-top:1px solid #1c94c4;
+	border-left:1px solid #1c94c4;
+	background-color:#f5f5f5;
+	font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+	font-size:100%;
+	line-height:130%;
+	text-decoration:none;
+	font-weight:bold;
+	color:#1c94c4;
+	cursor:pointer;
 }
 button img, a.button img {
-  margin:0 3px -3px 0 !important;
-  padding:0;
-  border:none;
-  width:16px;
-  height:16px;
-  float:none;
+	margin:0 3px -3px 0 !important;
+	padding:0;
+	border:none;
+	width:16px;
+	height:16px;
+	float:none;
 }
 button:hover, a.button:hover {
 	background: #1c94c4;

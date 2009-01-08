@@ -11,7 +11,7 @@
 				<%= password_field_tag :password, params[:password], :html => {:id => 'password', :class => "textInput"} %>
 			</div>
 			<% if flash[:notice] -%>
-                                <div align="center" id="notice"><%= flash[:notice] %></div>
+				<div id="notice" class="centered notice nomargin"><%= flash[:notice] %></div>
 			<% end -%>
 		</fieldset>
 	<% end %>
@@ -19,9 +19,9 @@
 
 <script type="text/javascript">
 	$(function() {
-		$("#login_dialog").dialog({
-			height: 250,
-			width: 330,
+		$('#login_dialog').dialog({
+			height: 280,
+			width: 350,
 			modal: true,
 			closeOnEscape: false,
 			overlay: {
@@ -37,5 +37,12 @@
 		});
 		$('#login_form').uniform();
 		$('.ui-dialog-titlebar-close:first').hide();
+
+		$('#login_dialog').bind('keydown', function(event) {
+			if (event.keyCode == $.ui.keyCode.ENTER) {
+				$('#login_form').submit();
+				$(this).dialog('close');
+			}
+		});
 	});
 </script>
