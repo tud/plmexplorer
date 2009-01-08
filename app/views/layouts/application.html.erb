@@ -32,6 +32,14 @@
 		<%= javascript_include_tag 'plmexplorer.js' %>
 	</head>
 	<body>
+		<%
+		if (controller.controller_name == 'session')
+		%>
+			<%= render 'session/login' %>
+		<%
+		end
+		%>
+
 		<div class="ui-layout-north">
 			<img src="/images/logo_trans.png" alt="logo"/>
 		</div>
@@ -46,7 +54,6 @@
 
 		<div class="ui-layout-south">
 			<%= render :partial => 'layouts/footer' %>
-		</div>
-                <%= yield :layout %>
+		</div> 
 	</body>
 </html>

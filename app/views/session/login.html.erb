@@ -1,21 +1,20 @@
 <div id="login_dialog" title="Login">
-        <% form_tag :id => 'login_form', :class => 'uniForm' do %>
-                <fieldset class='inlineLabels'>
-                        <legend><img src="/images/logo_button.gif" alt="PlmExplorer"/></legend>
-                        <div class='ctrlHolder'>
-                                <label for="username" >Username</label>
-                                <%= text_field_tag :username, params[:username], :html => {:id => 'username', :class => "textInput"} %>
-                        </div>
-                        <div class='ctrlHolder'>
-                                <label for="password" >Password</label>
-                                <%= password_field_tag :password, params[:password], :html => {:id => 'password', :class => "textInput"} %>
-                        </div>
-                        <%= submit_tag "Login", :class => "submit" %>
-                </fieldset>
-                <% if flash[:notice] -%>
-                        <div id="notice"><%= flash[:notice] %></div>
-                <% end -%>
-        <% end %>
+	<% form_tag ({:action => 'login'}, {:id => 'login_form', :class => 'uniForm', :method => 'POST'}) do %>
+		<fieldset class='inlineLabels'>
+			<legend><img src="/images/logo_button.gif" alt="PlmExplorer"/></legend>
+			<div class='ctrlHolder'>
+				<label for="username" >Username</label>
+				<%= text_field_tag :username, params[:username], :html => {:id => 'username', :class => "textInput"} %>
+			</div>
+			<div class='ctrlHolder'>
+				<label for="password" >Password</label>
+				<%= password_field_tag :password, params[:password], :html => {:id => 'password', :class => "textInput"} %>
+			</div>
+			<% if flash[:notice] -%>
+				<div id="notice"><%= flash[:notice] %></div>
+			<% end -%>
+		</fieldset>
+	<% end %>
 </div>
 
 <script type="text/javascript">
@@ -24,18 +23,19 @@
 			height: 250,
 			width: 330,
 			modal: true,
+			closeOnEscape: false,
 			overlay: {
 				backgroundColor: '#1c94c4',
 				opacity: 0.5
 			},
 			buttons: {
 				OK: function() {
-					var url = $('#login_form').attr("action") + "?username=" + $('#username').attr("value") + "&password=" + $('#password').attr("value");
-					$.post(url);
+					$('#login_form').submit();
 					$(this).dialog('close');
 				}
 			}
 		});
 		$('#login_form').uniform();
+		$('.ui-dialog-titlebar-close:first').hide();
 	});
 </script>
