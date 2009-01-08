@@ -11,7 +11,7 @@
 				<%= password_field_tag :password, params[:password], :html => {:id => 'password', :class => "textInput"} %>
 			</div>
 			<% if flash[:notice] -%>
-				<div id="notice"><%= flash[:notice] %></div>
+                                <div align="center" id="notice"><%= flash[:notice] %></div>
 			<% end -%>
 		</fieldset>
 	<% end %>

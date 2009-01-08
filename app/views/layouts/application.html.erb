@@ -32,13 +32,9 @@
 		<%= javascript_include_tag 'plmexplorer.js' %>
 	</head>
 	<body>
-		<%
-		if (controller.controller_name == 'session')
-		%>
+		<% if (session[:user] == nil) %>
 			<%= render 'session/login' %>
-		<%
-		end
-		%>
+		<% end %>
 
 		<div class="ui-layout-north">
 			<img src="/images/logo_trans.png" alt="logo"/>
