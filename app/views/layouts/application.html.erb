@@ -17,7 +17,7 @@
 		<%= stylesheet_link_tag 'blueprint/print.css', :media => "print" %>
 		<!--[if IE]><%= stylesheet_link_tag 'blueprint/ie.css', :media => "screen, projection" %><![endif]-->
 
-		<%= stylesheet_link_tag 'themes/default/ui.all.css', 'uni-form.css' %>
+		<%= stylesheet_link_tag 'themes/default/ui.all.css','themes/default/ui.theme.css', 'uni-form.css' %>
 		<!--[if IE]><%= stylesheet_link_tag 'uni-form.ie.css', :media => "screen, projection" %><![endif]-->
 		<%= stylesheet_link_tag '../javascripts/themes/basic/grid.css','../javascripts/themes/jqModal.css','grid_custom.css' %>
 		<%= stylesheet_link_tag 'plmexplorer.css' %>
@@ -30,7 +30,6 @@
 		<%= javascript_include_tag 'plmexplorer.js' %>
 	</head>
 	<body>
-		<% puts('******************' + session[:user].to_s) %>
 		<div class="ui-layout-north">
 			<img src="/images/logo_trans.png" alt="logo"/>
 		</div>
@@ -46,14 +45,6 @@
 		<div class="ui-layout-south">
 			<%= render :partial => 'layouts/footer' %>
 		</div>
-                <!--
-                <script type="text/javascript">
-                alert("PINO")
-		</script>
-                
-		<% if session[:user].nil? %>
-			<%= render :partial => 'layouts/login' %>
-		<% end %>
-                -->
+                <%= yield :layout %>
 	</body>
 </html>

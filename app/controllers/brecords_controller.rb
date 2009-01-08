@@ -1,6 +1,6 @@
 class BrecordsController < ApplicationController
 
-  #before_filter :authenticate
+  before_filter :authorize
 
   def index
     @joins = ''
@@ -118,7 +118,7 @@ class BrecordsController < ApplicationController
         u.bdesc]}}
 
     # Convert the hash to a json object
-    render :text => @return_data.to_json, :layout=>false
+    render :text => @return_data.to_json, :layout => false
   end
 
   def grid_children
@@ -144,7 +144,7 @@ class BrecordsController < ApplicationController
         u.bquantity] }}
 
     # Convert the hash to a json object
-    render :text => @return_data.to_json, :layout=>false
+    render :text => @return_data.to_json, :layout => false
   end
   
   def grid_parents
@@ -169,7 +169,7 @@ class BrecordsController < ApplicationController
         u.bdesc] }}
 
     # Convert the hash to a json object
-    render :text => @return_data.to_json, :layout=>false
+    render :text => @return_data.to_json, :layout => false
   end
 
   def grid_promotions
@@ -192,7 +192,7 @@ class BrecordsController < ApplicationController
         u.bdesc]}}
 
     # Convert the hash to a json object
-    render :text => @return_data.to_json, :layout=>false
+    render :text => @return_data.to_json, :layout => false
   end
 
   def grid_signoffs
@@ -216,7 +216,7 @@ class BrecordsController < ApplicationController
         u.bdesc]}}
 
     # Convert the hash to a json object
-    render :text => @return_data.to_json, :layout=>false
+    render :text => @return_data.to_json, :layout => false
   end
 
   def grid_revisions
@@ -244,7 +244,7 @@ class BrecordsController < ApplicationController
         u.promdate]}}
 
     # Convert the hash to a json object
-    render :text => @return_data.to_json, :layout=>false
+    render :text => @return_data.to_json, :layout => false
   end
 
   def load_record_base
@@ -277,17 +277,6 @@ class BrecordsController < ApplicationController
     render :layout => false
   end
 
-  def login
-    unless (session[:user])
-      if (params[:name] && !params[:name].empty?)
-        session[:user] = params[:name]
-      else
-      end
-    end
-    @rectype = '*'
-    #redirect_to :action => 'index'
-    render :layout => false
-  end
 
 private
 
@@ -371,17 +360,5 @@ private
     @return_data[:total] = total_pages
     @return_data[:records] = count
   end
-
-
-  #protected
-
-  #def authenticate
-  #  authenticate_or_request_with_http_basic do |user, password|
-  #    if !user.empty?
-  #      session[:user] = user
-  #    end
-  #    session[:user]
-  # end
-  #end
 
 end
