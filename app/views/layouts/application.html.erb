@@ -32,8 +32,8 @@
 		<%= javascript_include_tag 'plmexplorer.js' %>
 	</head>
 	<body>
-		<% if (session[:user] == nil) %>
-			<%= render 'session/login' %>
+		<% if session[:user].nil? %>
+                  <%= render :file => 'session/login' %>
 		<% end %>
 
 		<div class="ui-layout-north">

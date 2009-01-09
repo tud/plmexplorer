@@ -10,11 +10,13 @@ class SessionController < ApplicationController
     session[:user] = nil
     if request.post?
       user = Bdbuser.authenticate(params[:username], params[:password])
-      if user
+      if user[:logged_in]
         session[:user] = user
-        redirect_to('/')
+        uri = session[:original_uri]
+	session[:original_uri] = nil
+	redirect_to(uri || '/')
       else
-        flash[:notice] = 'Invalid user/password combination'
+        flash[:notice] = user[:log_message]
       end
     end
   end

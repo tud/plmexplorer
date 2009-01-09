@@ -34,6 +34,11 @@ class Brecord < ActiveRecord::Base
     latest_rev = self.find(:first, :conditions => conditions, :order => 'brecalt DESC')
   end
 
+  def uda(name)
+    @udas ||= budas
+    @udas.map { |uda| uda.bvalue if uda.bname == name }.compact.to_s
+  end
+
   def children(reftypes = '', order = nil, limit = nil, offset = 0)
     brefs.of_type(reftypes).all(:order => order, :limit => limit, :offset => offset).each { |ref| ref.resolve }
   end
