@@ -10,3 +10,15 @@ input.selbox {height: 13px; padding: 0;}
 
 div.loading {background: #FFBC0B;}
 table.scroll th div {font-weight: bold;}
+
+.selected-row, .selected-row TD {
+	background-color: #fdf5cf;
+	color:#1c94c4;
+}
+table.scroll tr.selected td {
+	background: #fdf5cf;
+	color:#1c94c4;
+}
+table.scroll tr.over td{
+	background-color: #fdf5cf;
+}

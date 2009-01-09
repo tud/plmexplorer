@@ -351,6 +351,8 @@ class BrecordsController < ApplicationController
     @record = Brecord.find(params[:id])
     @reftypes = params[:reftypes]
     @id = params[:id]
+    cookiename = "children_" + @record.brectype
+    session[cookiename] = {:reftypes => @reftypes, :view => ""}
     render :layout => false
   end
   
@@ -358,6 +360,8 @@ class BrecordsController < ApplicationController
     @record = Brecord.find(params[:id])
     @reftypes = params[:reftypes]
     @id = params[:id]
+    cookiename = "children_" + @record.brectype
+    session[cookiename] = {:reftypes => @reftypes, :view => "_tree"}
     render :layout => false
   end
 
@@ -370,6 +374,8 @@ class BrecordsController < ApplicationController
     @record = Brecord.find(params[:id])
     @reftypes = params[:reftypes]
     @id = params[:id]
+    cookiename = "parents_" + @record.brectype
+    session[cookiename] = {:reftypes => @reftypes, :view => ""}
     render :layout => false
   end
   
@@ -377,6 +383,8 @@ class BrecordsController < ApplicationController
     @record = Brecord.find(params[:id])
     @reftypes = params[:reftypes]
     @id = params[:id]
+    cookiename = "parents_" + @record.brectype
+    session[cookiename] = {:reftypes => @reftypes, :view => "_tree"}
     render :layout => false
   end
   

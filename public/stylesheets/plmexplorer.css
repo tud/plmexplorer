@@ -180,6 +180,14 @@ button:focus, a.button:focus, button:active, a.button:active {
 	padding-left:1em;
 }
 
+.tree li a.clicked,
+.tree li a.clicked:hover,
+.tree li span.clicked,
+.tree li a:hover, 
+.tree li a.hover {
+	background-color: #fdf5cf;
+	border:1px solid #e78f08;
+}
 /**************************************/
 /*              SOUTH                 */
 /**************************************/
