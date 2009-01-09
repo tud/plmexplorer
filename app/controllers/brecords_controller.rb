@@ -166,7 +166,7 @@ class BrecordsController < ApplicationController
     if root
       @return_data = Hash.new { |h,v| h[v]= Hash.new }
       @return_data[:state] = "open"
-      @return_data[:data][:title]= record.tree_label
+      @return_data[:data][:title]= Brecord.tree_label record
       @return_data[:data][:icon] = fam_icon_rectype record.brectype
       @return_data[:attributes][:id] = record.id.to_s
       @return_data[:children] = children.collect{|u| {
@@ -236,13 +236,13 @@ class BrecordsController < ApplicationController
     if root
       @return_data = Hash.new { |h,v| h[v]= Hash.new }
       @return_data[:state] = "open"
-      @return_data[:data][:title]= record.tree_label
+      @return_data[:data][:title]= Brecord.tree_label record
       @return_data[:data][:icon] = fam_icon_rectype record.brectype
       @return_data[:attributes][:id] = record.id.to_s
       @return_data[:children] = parents.collect{|u| {
         :state => "closed",
         :data => {
-          :title => u.tree_label,
+          :title => Brecord.tree_label(u),
           :icon => fam_icon_rectype(u.brectype)
         },
         :attributes => {
@@ -253,7 +253,7 @@ class BrecordsController < ApplicationController
       @return_data = parents.collect{|u| {
         :state => "closed",
         :data => {
-          :title => u.tree_label,
+          :title => Brecord.tree_label(u),
           :icon => fam_icon_rectype(u.brectype)
         },
         :attributes => {
