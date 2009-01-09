@@ -188,6 +188,11 @@ button:focus, a.button:focus, button:active, a.button:active {
 	background-color: #fdf5cf;
 	border:1px solid #e78f08;
 }
+
+.tree li {
+    padding:0 0 0 20px;
+}
+
 /**************************************/
 /*              SOUTH                 */
 /**************************************/

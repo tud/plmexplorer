@@ -16,13 +16,11 @@ class ApplicationController < ActionController::Base
   # disable CSRF protection
   self.allow_forgery_protection = false
 
-
   private
 
   def authorize
     unless session[:user]
       session[:original_uri] = request.request_uri
-      flash[:notice] = 'Please log in'
       redirect_to(:controller => 'session', :action => 'login')
     end
   end

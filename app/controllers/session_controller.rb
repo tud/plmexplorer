@@ -23,7 +23,7 @@ class SessionController < ApplicationController
 
   def logout
     session[:user] = nil
-    flash[:notice] = 'Logged out'
+    flash[:notice] = MSG['LOGGED_OUT']
     redirect_to(:action => 'login')
   end
 

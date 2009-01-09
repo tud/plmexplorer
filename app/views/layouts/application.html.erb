@@ -33,7 +33,7 @@
 	</head>
 	<body>
 		<% if !session[:user] %>
-			<%= render 'session/login' %>
+                  <%= render :file => 'session/login' %>
 		<% end %>
 
 		<div class="ui-layout-north">

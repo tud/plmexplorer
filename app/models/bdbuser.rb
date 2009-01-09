@@ -1,10 +1,6 @@
 require 'net/ftp'
 
 class Bdbuser < ActiveRecord::Base
-  
-  AUTH_KO = 'Invalid username/password combination'
-  AUTH_OK = 'User successfully logged in'
-  CONN_KO = 'Connection to server failed'
 
   belongs_to :bdb, :foreign_key => 'bobjid'
 
@@ -16,27 +12,28 @@ class Bdbuser < ActiveRecord::Base
       # Tuttavia, se fornita, viene comunque verificata.
       if ENV['RAILS_ENV'] != 'development' || !password.empty?
         begin
-          connection = Net::FTP.open(SHERPA_SERVER, username, password)
+          connection = Net::FTP.open(PREF['SHERPA_SERVER'], username, password)
           user[:logged_in] = true
-          user[:log_message] = AUTH_OK
+          user[:log_message] = MSG['AUTH_OK']
         rescue Net::FTPPermError
           user[:logged_in] = false
-          user[:log_message] = AUTH_KO
+          user[:log_message] = MSG['AUTH_KO']
         rescue
+          logger.error(MSG['STARS'] + $!)
           user[:logged_in] = false
-          user[:log_message] = CONN_KO
+          user[:log_message] = MSG['CONN_KO']
         ensure
           connection.close unless connection.nil?
         end
       else
         user[:logged_in] = true
-        user[:log_message] = AUTH_OK
+        user[:log_message] = MSG['AUTH_OK']
       end
     else
       # Viene comunque creato uno user per ritonare lo stato
       user = Bdbuser.new
       user[:logged_in] = false
-      user[:log_message] = AUTH_KO
+      user[:log_message] = MSG['AUTH_KO']
     end
     user
   end
