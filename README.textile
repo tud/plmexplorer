@@ -17,11 +17,11 @@ h4(. "jQuery _1.2.6_":http://jquery.com/
 
 * plugins:
 ** "jQuery UI _1.6rc4_":http://ui.jquery.com/
-** "jQuery Grid _3.3.2_":http://www.trirand.com/blog/  
+** "jQuery Grid _3.3.2_":http://www.trirand.com/blog/
 ** "jQuery Ui.Layout _1.2.0_":http://layout.jquery-dev.net/
+** "jQuery jsTree _0.9.5_":http://www.jstree.com/
 ** "jQuery Form Plugin":http://malsup.com/jquery/form/
 ** "jQuery.pngFix _1.1_":http://jquery.andreaseberhard.de/pngFix/
-** "jQuery History Plugin _0.3_":http://www.overset.com/2008/06/18/jquery-history-plugin/
 ** "jQuery Editable Combobox _0.5.2_":http://code.google.com/p/jquery-jec/
 
 h4(. "Blueprint _0.8_":http://blueprintcss.org/
