@@ -19,7 +19,7 @@ class Bdbuser < ActiveRecord::Base
           user[:logged_in] = false
           user[:log_message] = MSG['AUTH_KO']
         rescue
-          logger.error(MSG['STARS'] + $!)
+          #logger.error(MSG['STARS'] + $!)
           user[:logged_in] = false
           user[:log_message] = MSG['CONN_KO']
         ensure
