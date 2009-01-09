@@ -34,6 +34,8 @@
 	<body>
 		<% if !session[:user] %>
                   <%= render :file => 'session/login' %>
+		<% else %>
+			<%= javascript_include_tag 'onfirstload.js' %>
 		<% end %>
 
 		<div class="ui-layout-north">
