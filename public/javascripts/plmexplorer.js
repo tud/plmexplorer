@@ -43,6 +43,11 @@ $(document).ready(function () {
 	// prima riga tabs
 	$('#cMenuTabs > ul').tabs();
 
+	if ($('#cFind').html() == "") {
+		$('#cFind').load('/rectype/part/find');
+		$("#cMenuTabs > ul").tabs('select',0);
+	}
+
 	$('.wNavigation_find').click(function() {
 		var rectype = $(this).attr('title');
 		$('#cFind').load('/rectype/'+rectype+'/find');
