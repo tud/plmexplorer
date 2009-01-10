@@ -161,7 +161,7 @@ class BrecordsController < ApplicationController
     end
 
     reftypes = params[:reftypes]
-    children = record.children(reftypes)
+    children = record.children(reftypes,"breftype,brectype,brecname")
 
     if root
       @return_data = Hash.new { |h,v| h[v]= Hash.new }
@@ -231,7 +231,7 @@ class BrecordsController < ApplicationController
     end
 
     reftypes = params[:reftypes]
-    parents = record.parents(reftypes)
+    parents = record.parents(reftypes,"breftype,brectype,brecname")
 
     if root
       @return_data = Hash.new { |h,v| h[v]= Hash.new }
