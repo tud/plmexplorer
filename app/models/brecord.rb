@@ -21,8 +21,9 @@ class Brecord < ActiveRecord::Base
     self[:bpromdate].to_s(:db)
   end
   
-  def tree_label
-    brecname.gsub(/&/,'~')+" Rev. "+brecalt+" at Status "+breclevel+" - "+bdesc
+  def self.tree_label u
+    u[:breftype] ||= ""
+    u.breftype+" "+u.brecname.gsub(/&/,'~')+" Rev. "+u.brecalt+" at Status "+u.breclevel+" - "+u.bdesc
   end
 
   def self.latest(brectype, brecname, brecalt = '#')
