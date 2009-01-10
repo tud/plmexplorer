@@ -234,8 +234,7 @@ function tree_component () {
 				animation	: 0,		// INT - duration of open/close animations in miliseconds
 				hover_mode	: true,		// SHOULD get_* functions chage focus or change hovered item
 				scroll_spd	: 4,
-				// theme_path	: false,	// Path to themes
-				theme_path	: "stylesheets/themes/", // Path to themes
+				theme_path	: false,	// Path to themes
 				theme_name	: "default",	// Name of theme
 				context		: [ 
 					{

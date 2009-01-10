@@ -6,11 +6,15 @@
 $(function(){
 	var treeparents = new tree_component();
 	treeparents.init($('#parentsTree'),{
-		ui: { dots : true },
+		ui: {
+			dots: 			true,
+			theme_name: 	"default",
+			theme_path: 	"/stylesheets/tree/"
+		},
 		data: {
-			type:	"json",
-			async:	true,
-			url: 	"/<%= controller.controller_name %>/tree_parents?reftypes=<%=@reftypes%>"
+			type:		"json",
+			async:		true,
+			url: 		"/<%= controller.controller_name %>/tree_parents?reftypes=<%=@reftypes%>"
 		},
 		callback: {
 			ondblclk: function(NODE, TREE_OBJ) { 
