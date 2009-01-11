@@ -175,8 +175,8 @@
 	});
 
         $.history.callback = function ( id, cursor ) {
-          if (id == 'undefined') {
-            history.back();
+          if (typeof(id) == 'undefined') {
+            history.go(1)
           } else {
             $('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
           }
