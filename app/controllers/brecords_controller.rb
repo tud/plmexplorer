@@ -344,6 +344,12 @@ class BrecordsController < ApplicationController
   def load_record_base
     @record = Brecord.find(params[:id])
     session[:curr_record] = @record
+    
+    wrksp = session[:workspace] ||= Workspace.new
+    obj = {:id => @record.id, :rectype => @record.brectype, :label => @record.workspace_label }
+    wrksp.add obj
+    session[:workspace] = wrksp
+    
     render :layout => false
   end
 
@@ -392,6 +398,17 @@ class BrecordsController < ApplicationController
     @id = params[:id]
     render :layout => false
   end
+
+  def show_workspace
+    render :layout => false
+  end
+  
+  def clear_workspace
+    session[:workspace].clear
+    redirect_to(:action => 'show_workspace')
+  end
+  
+  
 
 
 private

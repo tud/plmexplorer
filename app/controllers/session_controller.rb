@@ -13,8 +13,8 @@ class SessionController < ApplicationController
       if user[:logged_in]
         session[:user] = user
         uri = session[:original_uri]
-	session[:original_uri] = nil
-	redirect_to(uri || '/')
+        session[:original_uri] = nil
+        redirect_to(uri || '/')
       else
         flash[:notice] = user[:log_message]
       end

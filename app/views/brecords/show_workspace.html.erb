@@ -1,0 +1,23 @@
+<p>
+	<a href="#" id="clear_history" class="button ui-state-default ui-corner-all">Clear</a>
+</p>
+<%
+session[:workspace].items.each { |record|
+%>
+	<div id="h_<%=record[:id]%>"><span class="wrksp_records"><%=fam_img_tag_rectype record[:rectype]%><%=record[:label]%></span></div>
+<%
+}
+%>
+<script type="text/javascript">
+$(function () {
+	$('.wrksp_records').dblclick(function() {
+		var id = $(this).parent().attr('id').substring(2);
+		$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
+		$('#cMenuTabs > ul').tabs('select',2);
+	});
+	$('#clear_history').click(function() {
+		$('#workspace_container').load("<%= url_for(:controller => 'brecords', :action => 'clear_workspace') %>");
+		$('#eWorkspace').accordion('resize');
+	});
+});
+</script>

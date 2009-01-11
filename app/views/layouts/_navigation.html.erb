@@ -1,4 +1,4 @@
-<div id="wNavigation">
+<div id="wNavigation" class="pex-accordion">
 	<div>
 		<h3 class="header"><a href="#"><%=fam_img_tag 'find' %> Find</a></h3>
 		<div>
@@ -33,6 +33,13 @@
 
 <script type="text/javascript">
 	$(function() {
+		$('#wNavigation').accordion({
+			fillSpace: true
+		,	navigation: true
+		,	header: "h3"
+		});
+		$('#wNavigation').accordion("activate", 0);
+
 		$('#dialog_about').dialog({
 			modal: true,
 			autoOpen: false,

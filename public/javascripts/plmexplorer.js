@@ -1,6 +1,4 @@
 var pexLayout;
-var pexAccordion;
-
 var grid_imgpath='/javascripts/themes/plmexplorer/images';
 
 $(document).ready(function () {
@@ -17,10 +15,14 @@ $(document).ready(function () {
 		applyDefaultStyles: true
 	,	north__size: 110
 	,	north__spacing_open: 3
-	,	south__spacing_open: 0
 	,	west__spacing_open: 3
+	,	east__spacing_open: 3
+	,	south__spacing_open: 0
 	,	west__onresize: function(){
 			$('#wNavigation').accordion('resize');
+		}
+	,	east__onresize: function(){
+			$('#eHistory').accordion('resize');
 		}
 	,	center__onresize: function(){
 			var centerWidth = pexLayout.cssWidth('center');
@@ -31,13 +33,6 @@ $(document).ready(function () {
 			$('#childrenGrid').setGridWidth(centerWidth-60);
 			$('#parentsGrid').setGridWidth(centerWidth-70);
 		}
-	});
-
-	// navigation accordion
-	pexAccordion = $('#wNavigation').accordion({
-		fillSpace: true
-	,	navigation: true
-	,	header: "h3"
 	});
 
 	// prima riga tabs

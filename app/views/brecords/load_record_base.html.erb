@@ -168,5 +168,9 @@
 		$('#recordTabName').html("<span><%= fam_img_tag_rectype @record.brectype %> <%=@record.name%>-<%=@record.brecalt%></span>");
 		
 		$("#record_attributes_filters").radio({checked: "/images/tick.png", unchecked: "/images/fam/cross.png"});
+		
+		// gestione workspace
+		$('#workspace_container').load("<%= url_for(:controller => 'brecords', :action => 'show_workspace') %>");
+		$('#eWorkspace').accordion('resize');
 	});
 </script>

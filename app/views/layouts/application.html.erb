@@ -33,7 +33,7 @@
 	</head>
 	<body>
 		<% if !session[:user] %>
-                  <%= render :file => 'session/login' %>
+			<%= render :file => 'session/login' %>
 		<% else %>
 			<%= javascript_include_tag 'onfirstload.js' %>
 		<% end %>
@@ -48,6 +48,10 @@
 
 		<div class="ui-layout-center">
 			<%= render :partial => 'layouts/content' %>
+		</div>
+		
+		<div class="ui-layout-east">
+			<%= render :partial => 'layouts/workspace' %>
 		</div>
 
 		<div class="ui-layout-south">

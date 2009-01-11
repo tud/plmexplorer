@@ -71,6 +71,24 @@ button:focus, a.button:focus, button:active, a.button:active {
 	background: #1c94c4;
 	color: #e78f08;
 }
+.pex-accordion {
+
+	margin:0 0 -10px 0 !important;
+}
+.pex-accordion a {
+	color:#1C94C4;
+	outline-color:-moz-use-text-color;
+	outline-style:none;
+	outline-width:medium;
+	text-decoration:none;
+}
+
+.pex-accordion a:hover, .pex-accordion a:focus {
+	background: #fdf5ce url(images/fdf5ce_40x100_textures_02_glass_100.png) 50% 50% repeat-x
+	font-weight: bold;
+	color: #c77405;
+	outline: none;
+}
 
 /**************************************/
 /*              NORTH                 */
@@ -90,26 +108,10 @@ button:focus, a.button:focus, button:active, a.button:active {
 .ui-layout-west img {
 	margin:0 3px -3px 0 !important;
 }
-
 #wNavigation {
 	font-size: 1.2em;
-	margin:0 0 -10px 0 !important;
 }
-#wNavigation a {
-	color:#1C94C4;
-	outline-color:-moz-use-text-color;
-	outline-style:none;
-	outline-width:medium;
-	text-decoration:none;
-}
-
-#wNavigation a:hover, #wNavigation a:focus {
-	background: #fdf5ce url(images/fdf5ce_40x100_textures_02_glass_100.png) 50% 50% repeat-x
-	font-weight: bold;
-	color: #c77405;
-	outline: none;
-}
-.ui-accordion-content a {
+#wNavigation .ui-accordion-content a {
 	line-height:2em;
 }
 
@@ -192,6 +194,21 @@ button:focus, a.button:focus, button:active, a.button:active {
 .tree li {
     padding:0 0 0 20px;
 }
+
+/**************************************/
+/*              EAST                  */
+/**************************************/
+
+.ui-layout-east {
+	text-align: left;
+}
+.ui-layout-east img {
+	margin:0 3px -3px 0 !important;
+}
+#eWorkspace .ui-accordion-content {
+	padding:1em .5em;
+}
+
 
 /**************************************/
 /*              SOUTH                 */

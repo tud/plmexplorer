@@ -1,0 +1,17 @@
+<div id="eWorkspace" class="pex-accordion">
+	<div>
+		<h3 class="header"><a href="#">Workspace</a></h3>
+		<div id="workspace_container"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	$(function() {
+		$('#eWorkspace').accordion({
+			fillSpace: true
+		,	navigation: true
+		,	header: "h3"
+		});
+		$('#eWorkspace').accordion("activate", 0);
+	});
+</script>
