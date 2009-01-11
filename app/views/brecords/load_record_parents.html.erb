@@ -31,6 +31,7 @@ $(function(){
 		pager: 'parentsPager',
 		ondblClickRow: function(id) {
 			if (id!=null) {
+				$.history(id);
 				$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
 			}
 			$('#record_content > ul').tabs('select', 0);

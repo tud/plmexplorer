@@ -173,4 +173,13 @@
 		$('#workspace_container').load("<%= url_for(:controller => 'brecords', :action => 'show_workspace') %>");
 		$('#eWorkspace').accordion('resize');
 	});
+
+        $.history.callback = function ( id, cursor ) {
+          if (id == 'undefined') {
+            history.back();
+          } else {
+            $('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
+          }
+        };
+
 </script>
