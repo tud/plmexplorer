@@ -176,8 +176,9 @@
 
         $.history.callback = function ( id, cursor ) {
           if (typeof(id) == 'undefined') {
-            history.go(1)
+            $("#cMenuTabs > ul").tabs('select',0);
           } else {
+            $("#cMenuTabs > ul").tabs('select',2);
             $('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
           }
         };

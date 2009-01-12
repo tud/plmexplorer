@@ -14,9 +14,6 @@ class SessionController < ApplicationController
         session[:user] = user
         uri = session[:original_uri]
         session[:original_uri] = nil
-        if session[:workspace]
-          session[:workspace].clear
-        end
         redirect_to(uri || '/')
       else
         flash[:notice] = user[:log_message]
