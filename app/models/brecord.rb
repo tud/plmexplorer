@@ -44,6 +44,16 @@ class Brecord < ActiveRecord::Base
     @udas.map { |uda| uda.bvalue if uda.bname == name }.compact.to_s
   end
 
+  def files
+    bfiles + parents('IMAGE_FOR').map { |image| image.bfiles }.flatten
+  end
+
+  def file(balias)
+    for file in files
+      return file if file.balias == balias
+    end
+  end
+
   def children(reftypes = '', order = nil, limit = nil, offset = 0)
     brefs.of_type(reftypes).all(:order => order, :limit => limit, :offset => offset).each { |ref| ref.resolve }
   end

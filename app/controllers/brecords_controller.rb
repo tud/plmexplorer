@@ -396,7 +396,14 @@ class BrecordsController < ApplicationController
   
   def load_record_files
     @id = params[:id]
+    @record = Brecord.find(@id)
     render :layout => false
+  end
+
+  def export
+    record = Brecord.find(params[:id])
+    file = record.file(params[:balias])
+    send_file(file.path, :filename => file.name)
   end
 
   def show_workspace
@@ -408,8 +415,6 @@ class BrecordsController < ApplicationController
     redirect_to(:action => 'show_workspace')
   end
   
-  
-
 
 private
 

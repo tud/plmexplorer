@@ -1,0 +1,8 @@
+<h3>
+<% for file in @record.files %>
+  <li>
+    <%= link_to h(file.name), :action => 'export', :id => @record.id, :balias => file.balias %>
+  </li>
+<% end %>
+</h3>
+
