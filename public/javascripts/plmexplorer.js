@@ -1,10 +1,7 @@
 var pexLayout;
 var grid_imgpath='/javascripts/themes/plmexplorer/images';
 
-$(document).ready(function () {
-	// fix png for ie6
-	$(document).pngFix();
-	
+$(function() {
 	// fix for jQuery
 	$.ajaxSetup({ 
 		'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
@@ -22,7 +19,7 @@ $(document).ready(function () {
 			$('#wNavigation').accordion('resize');
 		}
 	,	east__onresize: function(){
-			$('#eHistory').accordion('resize');
+			$('#eWorkspace').accordion('resize');
 		}
 	,	center__onresize: function(){
 			var centerWidth = pexLayout.cssWidth('center');
@@ -43,4 +40,14 @@ $(document).ready(function () {
 		$('#cFind').load('/rectype/'+rectype+'/find');
 		$("#cMenuTabs > ul").tabs('select',0);
 	});
+
+	// gestione history
+	$.history.callback = function ( id, cursor ) {
+		if (typeof(id) == 'undefined') {
+			$("#cMenuTabs > ul").tabs('select',1);
+		} else {
+			$("#cMenuTabs > ul").tabs('select',2);
+			$('#cRecord').load("/brecords/load_record_base",{id:id});
+		}
+	};
 });

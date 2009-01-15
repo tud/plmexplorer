@@ -11,7 +11,7 @@ class Bfile < ActiveRecord::Base
     else
       filename = bid
     end
-    "#{PREFS['STORAGE_PATH']}/#{bstorage}/#{filename}.#{'%05d' % bversion}"
+    "#{PREF['STORAGE_PATH']}/#{bstorage}/#{filename}.#{'%05d' % bversion}"
   end
 
   def name

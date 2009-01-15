@@ -1,0 +1,13 @@
+<script type="text/javascript">
+$(function () {
+	// caricata la pagina Find Parts come default
+	if ($('#cFind').html() == "") {
+		$('#cFind').load('/rectype/part/find');
+		$("#cMenuTabs > ul").tabs('select',0);
+	}
+	
+	// caricato il workspace
+	$('#workspace_container').load("<%= url_for(:controller => 'brecords', :action => 'show_workspace') %>");
+});
+
+</script>

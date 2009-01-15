@@ -72,7 +72,6 @@ button:focus, a.button:focus, button:active, a.button:active {
 	color: #e78f08;
 }
 .pex-accordion {
-
 	margin:0 0 -10px 0 !important;
 }
 .pex-accordion a {
@@ -82,7 +81,6 @@ button:focus, a.button:focus, button:active, a.button:active {
 	outline-width:medium;
 	text-decoration:none;
 }
-
 .pex-accordion a:hover, .pex-accordion a:focus {
 	background: #fdf5ce url(images/fdf5ce_40x100_textures_02_glass_100.png) 50% 50% repeat-x
 	font-weight: bold;
@@ -207,6 +205,24 @@ button:focus, a.button:focus, button:active, a.button:active {
 }
 #eWorkspace .ui-accordion-content {
 	padding:1em .5em;
+}
+.
+.wrksp_records {
+	margin:0 0 -10px 0 !important;
+}
+.wrksp_records a {
+	color:#1C94C4;
+	outline-color:-moz-use-text-color;
+	outline-style:none;
+	outline-width:medium;
+	text-decoration:none;
+}
+
+.wrksp_records a:hover, .wrksp_records a:focus {
+	background: #fdf5ce url(images/fdf5ce_40x100_textures_02_glass_100.png) 50% 50% repeat-x
+	font-weight: bold;
+	color: #c77405;
+	outline: none;
 }
 
 

@@ -407,6 +407,7 @@ class BrecordsController < ApplicationController
   end
 
   def show_workspace
+    @workspace = session[:workspace]
     render :layout => false
   end
   
@@ -414,7 +415,7 @@ class BrecordsController < ApplicationController
     session[:workspace].clear
     redirect_to(:action => 'show_workspace')
   end
-  
+
 
 private
 

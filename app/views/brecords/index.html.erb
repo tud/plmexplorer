@@ -34,7 +34,7 @@
 			pager: 'findPager',
 			ondblClickRow: function(id) {
 				if (id!=null) {
-                                        $.history(id);
+					$.history(id);
 					$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
 					$('#cMenuTabs > ul').tabs('select',2);
 				}
@@ -44,6 +44,6 @@
 				joins: '<%=escape_javascript @joins%>'
 			}
 		})
-		.navGrid('#findPager', {refresh: false, edit: false, add: false, del: false, search: false})
+		.navGrid('#findPager', {refresh: false, edit: false, add: false, del: false, search: false});
 	});
 </script>
