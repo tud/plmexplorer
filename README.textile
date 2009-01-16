@@ -23,6 +23,7 @@ h4(. "jQuery _1.2.6_":http://jquery.com/
 ** "jQuery Form Plugin":http://malsup.com/jquery/form/
 ** "jQuery.pngFix _1.1_":http://jquery.andreaseberhard.de/pngFix/
 ** "jQuery Editable Combobox _0.5.2_":http://code.google.com/p/jquery-jec/
+** "JHISTORY _0.3.0_":http://plugins.jquery.com/files/jquery.jhistory.js_.txt
 
 h4(. "Blueprint _0.8_":http://blueprintcss.org/
 
