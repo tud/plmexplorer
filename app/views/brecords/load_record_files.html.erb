@@ -27,7 +27,10 @@ $(function(){
 			if (rowid!=null) {
 				var rowValues = $('#filesGrid').getRowData(rowid);
 				var file_url ="<%= url_for(:controller => 'brecords', :action => 'export') %>/<%= @id %>?balias="+rowValues.balias;
-				window.open(file_url,"", "width=1,height=1,top=0,left=0,directories=no,location=no,resizable=no,menubar=no,toolbar=no,scrollbars=no,status=no");
+				var download_form = '<form id="download_form" method="post" action="'+file_url+'"></form>'
+				$('body').append(download_form);
+				$('#download_form').submit();
+				$('#download_form').remove();
 				return false;
 			}
 		}
@@ -35,3 +38,4 @@ $(function(){
 	.navGrid('#filesPager', {refresh: false, edit: false, add: false, del: false, search: false})
 });
 </script>
+
