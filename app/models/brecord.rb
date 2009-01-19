@@ -21,6 +21,14 @@ class Brecord < ActiveRecord::Base
     self[:bpromdate].to_s(:db)
   end
 
+  def project
+    @project ||= Bproject.find_by_bname(bproject)
+  end
+
+  def migrated?
+    project.migrated?
+  end
+
   def self.tree_label u
     u[:breftype] ||= ""
     u.breftype+" "+u.brecname.gsub(/&/,'~')+" Rev. "+u.brecalt+" at Status "+u.breclevel+" - "+u.bdesc
