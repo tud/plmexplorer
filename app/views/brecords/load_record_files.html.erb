@@ -26,8 +26,8 @@ $(function(){
 		ondblClickRow: function(rowid) {
 			if (rowid!=null) {
 				var rowValues = $('#filesGrid').getRowData(rowid);
-				var balias = rowValues.balias;
-				window.open("<%= url_for(:controller => 'brecords', :action => 'export') %>/<%= @id %>?balias="+balias,"Download file","width=1,height=1,top=0,left=0,directories=no,location=no,resizable=no,menubar=no,toolbar=no,scrollbars=no,status=no");
+				var file_url ="<%= url_for(:controller => 'brecords', :action => 'export') %>/<%= @id %>?balias="+rowValues.balias;
+				window.open(file_url,"", "width=1,height=1,top=0,left=0,directories=no,location=no,resizable=no,menubar=no,toolbar=no,scrollbars=no,status=no");
 				return false;
 			}
 		}

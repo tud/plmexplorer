@@ -16,3 +16,7 @@ Move these to your IE specific stylesheet if possible
 .uniForm .inlineLabel input,
 .uniForm .inlineLabels .inlineLabel input,
 .uniForm .blockLabels .inlineLabel input{ margin-top: -.3em; }
+
+.uniForm .inlineLabels .selectInput, .uniForm .inlineLabels select {
+	margin-left:3px;
+}

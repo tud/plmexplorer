@@ -26,7 +26,7 @@
 	font-weight: bold;
 }
 select {
-	height:2em;
+	height:1.9em;
 }
 .centered {
 	text-align:center;
@@ -173,11 +173,6 @@ button:focus, a.button:focus, button:active, a.button:active {
 
 #record_attributes_filters label {
 	display:inline
-}
-
-#find_records legend, #view_record_form legend {
-	padding-right:1em;
-	padding-left:1em;
 }
 
 .tree li a.clicked,
