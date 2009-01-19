@@ -340,6 +340,47 @@ class BrecordsController < ApplicationController
     # Convert the hash to a json object
     render :text => @return_data.to_json, :layout => false
   end
+  
+  def format_icon_files type
+    if type == 'pdf'
+      image = "page_white_acrobat"
+    elsif type == 'zip'
+      image = "page_white_compressed"
+    elsif type == 'doc'
+      image = "page_white_word"
+    elsif type == 'dwg'
+      image = "vector"
+    elsif type == 'tif'
+      image = "image"
+    elsif type == '.c4'
+      image = "image"
+    elsif type == 'xls'
+      image = "page_white_excel"
+    else
+      image = "page_white"
+    end
+    "<img src='/images/fam/"+image+".gif' />"
+  end
+  
+  def grid_files
+    prep_query
+    
+    record = session[:curr_record] || Brecord.find(params[:id])
+    count = record.files.size
+    files = record.files
+
+    prep_return_data(count)
+    @return_data[:rows] = files.collect{|u| {
+      :id => u.id,
+      :cell => [
+        u.id,
+        format_icon_files(u.format),
+        u.name,
+        u.balias] }}
+
+    # Convert the hash to a json object
+    render :text => @return_data.to_json, :layout => false
+  end
 
   def load_record_base
     @record = Brecord.find(params[:id])
@@ -401,6 +442,8 @@ class BrecordsController < ApplicationController
   end
 
   def export
+    logger.info(params[:id])
+    logger.info(params[:balias])
     record = Brecord.find(params[:id])
     file = record.file(params[:balias])
     send_file(file.path, :filename => file.name)

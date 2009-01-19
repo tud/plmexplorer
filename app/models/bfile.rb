@@ -17,5 +17,9 @@ class Bfile < ActiveRecord::Base
   def name
     bunixalias
   end
+  
+  def format
+    bunixalias[-3..-1].downcase
+  end
 
 end
