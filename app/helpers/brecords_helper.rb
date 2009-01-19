@@ -47,7 +47,7 @@ module BrecordsHelper
   end
   
   def fam_img_tag famimg
-    "<img src='/images/fam/"+famimg+".png'/>&nbsp;"
+    "<img src='/images/fam/"+famimg+".gif'/>&nbsp;"
   end
   
   def fam_img_tag_rectype rectype

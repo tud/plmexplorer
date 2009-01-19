@@ -2,11 +2,11 @@
 	<a href="#" id="clear_history" class="button ui-state-default ui-corner-all">Clear</a>
 </p>
 <%
-@workspace && @workspace.items.each { |record|
+	@workspace.items.each { |record|
 %>
-	<div id="h_<%=record[:id]%>"><a class="wrksp_records"><%=fam_img_tag_rectype record[:rectype]%><%=record[:label]%></a></div>
+		<div id="h_<%=record[:id]%>"><a class="wrksp_records"><%=fam_img_tag_rectype record[:rectype]%><%=record[:label]%></a></div>
 <%
-}
+	}
 %>
 <script type="text/javascript">
 $(function () {

@@ -148,7 +148,7 @@ class BrecordsController < ApplicationController
   end
 
   def fam_icon_rectype rectype
-    "/images/fam/"+NAVIGATION['FIND'].find {|hash| hash['type'] == rectype}['iconclass']+".png"
+    "/images/fam/"+NAVIGATION['FIND'].find {|hash| hash['type'] == rectype}['iconclass']+".gif"
   end
   
   def tree_children
@@ -407,7 +407,7 @@ class BrecordsController < ApplicationController
   end
 
   def show_workspace
-    @workspace = session[:workspace]
+    @workspace = session[:workspace] ||= Workspace.new
     render :layout => false
   end
   
