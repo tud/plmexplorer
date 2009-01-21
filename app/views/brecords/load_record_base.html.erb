@@ -165,7 +165,7 @@
 		$('#record_attributes_filters').uniform();
 		
 		// nome tab
-		$('#recordTabName').html("<span><%= fam_img_tag_rectype @record.brectype %> <%=@record.name%>-<%=@record.brecalt%></span>");
+		$('#recordTabName').html("<span><%= fam_img_tag_rectype @record.brectype %> <%=@record.name%>-<%=@record.brecalt%>  <%=pdmlink_icon @record.migrated?.to_s %></span>");
 		
 		$("#record_attributes_filters").radio({checked: "/images/tick.png", unchecked: "/images/fam/cross.gif"});
 		

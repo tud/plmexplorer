@@ -33,9 +33,9 @@ class Brecord < ActiveRecord::Base
     u[:breftype] ||= ""
     u.breftype+" "+u.brecname.gsub(/&/,'~')+" Rev. "+u.brecalt+" at Status "+u.breclevel+" - "+u.bdesc
   end
-  
+
   def workspace_label
-    brecname.gsub(/&/,'~')+" "+brecalt
+    name+"-"+brecalt
   end
 
   def self.latest(brectype, brecname, brecalt = '#')
@@ -77,7 +77,7 @@ class Brecord < ActiveRecord::Base
       parent[:breftype] = rec.breftype
       parent
     }
-  end  
+  end
 
   private
 
@@ -93,6 +93,6 @@ class Brecord < ActiveRecord::Base
                                                :order => order,
                                                :limit => limit,
                                                :offset => offset)
-  end  
+  end
 
 end

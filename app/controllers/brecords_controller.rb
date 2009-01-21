@@ -94,6 +94,15 @@ class BrecordsController < ApplicationController
     render :layout => false
   end
 
+  def pdmlink_icon show
+    html = ""
+    logger.info(show)
+    if show == "true"
+      html = "<img src='/images/pdmlink.jpg' />"
+    end
+    html
+  end
+
   def grid_records
     prep_query
 
@@ -101,7 +110,7 @@ class BrecordsController < ApplicationController
       :order => @order,
       :limit => @limit,
       :offset => @offset,
-      :select => 'id, brecname, brecalt, breclevel, bdesc, bname1',
+      :select => 'id, brecname, brecalt, breclevel, bdesc, bname1, bproject',
       :conditions => @conditions,
       :joins => @joins
     count = Brecord.count :all, :conditions => @conditions, :joins => @joins
@@ -115,7 +124,8 @@ class BrecordsController < ApplicationController
         u.bname1,
         u.brecalt,
         u.breclevel,
-        u.bdesc]}}
+        u.bdesc,
+        pdmlink_icon (u.migrated?.to_s)]}}
 
     # Convert the hash to a json object
     render :text => @return_data.to_json, :layout => false

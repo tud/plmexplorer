@@ -53,5 +53,14 @@ module BrecordsHelper
   def fam_img_tag_rectype rectype
     fam_img_tag NAVIGATION['FIND'].find {|hash| hash['type'] == rectype}['iconclass']
   end
+  
+  def pdmlink_icon show
+    html = ""
+    logger.info(show)
+    if show == "true"
+      html = "<img src='/images/pdmlink.jpg' />"
+    end
+    html
+  end
 
 end

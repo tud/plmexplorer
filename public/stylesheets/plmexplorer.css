@@ -204,6 +204,7 @@ button:focus, a.button:focus, button:active, a.button:active {
 .
 .wrksp_records {
 	margin:0 0 -10px 0 !important;
+	height:.9em;
 }
 .wrksp_records a {
 	color:#1C94C4;
