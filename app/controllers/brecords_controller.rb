@@ -96,7 +96,6 @@ class BrecordsController < ApplicationController
 
   def pdmlink_icon show
     html = ""
-    logger.info(show)
     if show == "true"
       html = "<img src='/images/pdmlink.jpg' />"
     end
