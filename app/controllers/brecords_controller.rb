@@ -385,6 +385,7 @@ class BrecordsController < ApplicationController
         u.id,
         format_icon_files(u.format),
         u.name,
+        u.size,
         u.balias] }}
 
     # Convert the hash to a json object
