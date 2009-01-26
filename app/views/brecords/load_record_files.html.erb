@@ -11,9 +11,9 @@ $(function(){
 		colNames: ['id', 'Type', 'Name', 'Size', 'Alias'],
 		colModel :[
 			{name:'id',		index:'id',		hidden:true},
-			{name:'format_icon',	index:'format_icon',	width:20},
-			{name:'name',		index:'name',		width:80},
-			{name:'size',		index:'size',		width:80},
+			{name:'format_icon',	index:'format_icon',	width:20, sortable:false},
+			{name:'name',		index:'name',		width:80, sortable:false},
+			{name:'size',		index:'size',		width:80, sortable:false},
 			{name:'balias',		index:'balias',		hidden:true}],
 		rowNum: 20,
 		rowList: [10,20,30,50,100],
@@ -27,11 +27,14 @@ $(function(){
 		ondblClickRow: function(rowid) {
 			if (rowid!=null) {
 				var rowValues = $('#filesGrid').getRowData(rowid);
-				var file_url ="<%= url_for(:controller => 'brecords', :action => 'export') %>/<%= @id %>?balias="+rowValues.balias;
-				var download_form = '<form id="download_form" method="post" action="'+file_url+'"></form>'
-				$('body').append(download_form);
-				$('#download_form').submit();
-				$('#download_form').remove();
+                                // Avvio lo scaricamento del file solo se accessibile
+				if (rowValues.size != "<%= MSG['NO_FILE'] %>") {
+					var file_url ="<%= url_for(:controller => 'brecords', :action => 'export') %>/<%= @id %>?balias="+rowValues.balias;
+					var download_form = '<form id="download_form" method="post" action="'+file_url+'"></form>'
+					$('body').append(download_form);
+					$('#download_form').submit();
+					$('#download_form').remove();
+                                }
 				return false;
 			}
 		}

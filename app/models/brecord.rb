@@ -53,7 +53,7 @@ class Brecord < ActiveRecord::Base
   end
 
   def files
-    bfiles + parents('IMAGE_FOR').map { |image| image.bfiles }.flatten
+    (bfiles + parents('IMAGE_FOR').map { |image| image.bfiles }.flatten).sort { |f1,f2| f1.name <=> f2.name }
   end
 
   def file(balias)

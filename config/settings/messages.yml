@@ -2,4 +2,5 @@ AUTH_KO: Invalid username/password
 AUTH_OK: User successfully logged in
 CONN_KO: Connection to server failed
 LOGGED_OUT: Logged out
+NO_FILE: File not available
 STARS: "****************************** "

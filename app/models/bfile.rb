@@ -25,17 +25,21 @@ class Bfile < ActiveRecord::Base
   end
 
   def size
-    bytes = File.size(path)
-    if bytes >= UNITS[:GB]
-      unit = :GB
-    elsif bytes >= UNITS[:MB]
-      unit = :MB
-    elsif bytes >= UNITS[:KB]
-      unit = :KB
-    else
-      unit = :B
+    begin
+      bytes = File.size(path)
+      if bytes >= UNITS[:GB]
+        unit = :GB
+      elsif bytes >= UNITS[:MB]
+        unit = :MB
+      elsif bytes >= UNITS[:KB]
+        unit = :KB
+      else
+        unit = :B
+      end
+      "#{bytes / UNITS[unit]} #{unit}"
+    rescue
+      MSG['NO_FILE']
     end
-    "#{bytes / UNITS[unit]} #{unit}"
   end
 
 end
