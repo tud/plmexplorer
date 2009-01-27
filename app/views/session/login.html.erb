@@ -20,7 +20,7 @@
 <script type="text/javascript">
 	$(function() {
 		$('#login_dialog').dialog({
-			height: 280,
+			height: 290,
 			width: 350,
 			modal: true,
 			closeOnEscape: false,
@@ -37,6 +37,7 @@
 			}
 		});
 		$('#login_form').uniform();
+		$('.ui-dialog-titlebar-close:first').hide();
 
 		$('#login_dialog').bind('keydown', function(event) {
 			if (event.keyCode == $.ui.keyCode.ENTER) {
