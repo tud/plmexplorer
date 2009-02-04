@@ -12,7 +12,7 @@ module BrecordsHelper
   end
 
   def get_uda_value udas, uda_name
-    uda_value = nil
+    uda_value = ""
     udas.each do |u|
       if (u.bname == uda_name)
         uda_value = u.bvalue
