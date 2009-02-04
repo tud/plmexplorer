@@ -4,15 +4,15 @@
 		<%= f.hidden_field :find_rec_brectype, :value => @rectype %>
 		<div class='ctrlHolder'>
 		<% if @rectype == 'WORKAUTH' %>
-			<label for="brecord_find_rec_brecname">Name :</label>
+			<label for="brecord_find_rec_brecname">Number :</label>
 			<%= f.text_field :find_rec_brecname, :maxlength => "32", :tabindex => "1", :class => "uppercase" %>
 		<% else %>
-			<label for="brecord_find_rec_name">Name :</label>
+			<label for="brecord_find_rec_name">Number :</label>
 			<%= f.text_field :find_rec_name, :maxlength => "26", :tabindex => "1", :class => "uppercase" %>
 			<% end %>
 		</div>
 		<div class='ctrlHolder'>
-			<label for="brecord_find_rec_bname1">Bus. ID :</label>
+			<label for="brecord_find_rec_bname1">CAGE code :</label>
 			<select id="brecord_find_rec_bname1" name="brecord[find_rec_bname1]" tabindex="2">
 				<option value="" />
 				<%= option_groups_from_collection_for_select(CAGE_CODES, :options, :label, :value, :key) %>

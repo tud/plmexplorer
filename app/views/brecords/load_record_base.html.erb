@@ -32,9 +32,6 @@
 		%>
 		<li><a href="/<%= controller.controller_name %>/load_record_parents<%= view %>?id=<%= @record.id %>&amp;reftypes=<%= parents_reftypes %>" id="parents_tab">Parents</a></li>
 		<li><a href="/<%= controller.controller_name %>/load_record_history?id=<%= @record.id %>" id="history_tab">History</a></li>
-		<!--
-		<li><a href="#lifecycle">Lifecycle</a></li>
-		-->
 	</ul>
 </div>
 
@@ -111,14 +108,14 @@
 								multi_attrname = "#{attrname}_#{suffix}"
 								uda = get_uda_value udas, multi_attrname
 								if (uda)
-									value = "#{value}#{uda}\n"
+									value = "#{value}#{uda} "
 								end
 								ii = ii + 1
 							end
 %>
 							<div class='ctrlHolder'>
 								<label><%=field['label']%> :</label>
-								<textarea readonly="readonly" cols="80" rows="<%=field['size']%>" value="<%= escape_javascript h(value) %>"></textarea>
+								<textarea readonly="readonly" cols="80" rows="<%=field['size']%>"><%= escape_javascript h(value) %></textarea>
 <%
 						end
 					end
