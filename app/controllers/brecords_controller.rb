@@ -124,7 +124,7 @@ class BrecordsController < ApplicationController
         u.brecalt,
         u.breclevel,
         u.bdesc,
-        pdmlink_icon (u.migrated?.to_s)]}}
+        pdmlink_icon(u.migrated?.to_s)]}}
 
     # Convert the hash to a json object
     render :text => @return_data.to_json, :layout => false

@@ -68,16 +68,18 @@ PART:
     - label: Quantity UM
       id:    record_bmeasure
       size:  2
-    - label: Control Item
+    - label: Comments
+      id:    uda_comment
+      size:  80
+      type:  multi_15
+  - label: Sec Info
+    fields:
+    - label: Proprietary
       id:    uda_proprietary
       size:  32
     - label: Security Class
       id:    uda_sec_class
       size:  32
-    - label: Comments
-      id:    uda_comment
-      size:  80
-      type:  multi_15
 
 DOCUMENT:
   - label: Identification
