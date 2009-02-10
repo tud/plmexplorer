@@ -58,7 +58,7 @@ module BrecordsHelper
     html = ""
     logger.info(show)
     if show == "true"
-      html = "<img src='/images/pdmlink.jpg' />"
+      html = "<img src='/images/windchill.png' />"
     end
     html
   end
