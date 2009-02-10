@@ -1,10 +1,10 @@
 FIND:
   - type: PART
     label: Part
-    iconclass: page_white_gear
+    iconclass: table_gear
   - type: DOCUMENT
     label: Document
-    iconclass: page_white_word
+    iconclass: book_open
   - type: WORKAUTH
     label: Workauth
     iconclass: application_form_edit
