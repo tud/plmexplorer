@@ -12,7 +12,7 @@
 			<% end %>
 		</div>
 		<div class='ctrlHolder'>
-			<label for="brecord_find_rec_bname1">CAGE code :</label>
+			<label for="brecord_find_rec_bname1">Cage Code :</label>
 			<select id="brecord_find_rec_bname1" name="brecord[find_rec_bname1]" tabindex="2">
 				<option value="" />
 				<%= option_groups_from_collection_for_select(CAGE_CODES, :options, :label, :value, :key) %>
@@ -72,12 +72,8 @@
 				<%= f.text_field :find_uda_snd_part_recname, :maxlength => "26", :tabindex => "24" %>
 			</div>
 			<div class='ctrlHolder'>
-				<label for="brecord_find_uda_snd_part_cagec">Secondary CAGE :</label>
+				<label for="brecord_find_uda_snd_part_cagec">Secondary Cage :</label>
 				<%= f.text_field :find_uda_snd_part_cagec, :maxlength => "5", :tabindex => "25" %>
-			</div>
-			<div class='ctrlHolder'>
-				<label for="brecord_find_uda_snd_part_recalt">Secondary Rev. :</label>
-				<%= f.text_field :find_uda_snd_part_recalt, :maxlength => "4", :tabindex => "26" %>
 			</div>
 		<% end %>
 		<% if @rectype == 'DOCUMENT' %>
@@ -93,12 +89,8 @@
 				<%= f.text_field :find_uda_snd_doc_recname, :maxlength => "26", :tabindex => "22" %>
 			</div>
 			<div class='ctrlHolder'>
-				<label for="brecord_find_uda_snd_doc_cagec">Secondary CAGE :</label>
+				<label for="brecord_find_uda_snd_doc_cagec">Secondary Cage :</label>
 				<%= f.text_field :find_uda_snd_doc_cagec, :maxlength => "5", :tabindex => "23" %>
-			</div>
-			<div class='ctrlHolder'>
-				<label for="brecord_find_uda_snd_doc_recalt">Secondary Rev. :</label>
-				<%= f.text_field :find_uda_snd_doc_recalt, :maxlength => "4", :tabindex => "24" %>
 			</div>
 		<% end %>
 		<% if @rectype == 'WORKAUTH' %>

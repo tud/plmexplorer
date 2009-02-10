@@ -109,7 +109,7 @@ class BrecordsController < ApplicationController
       :order => @order,
       :limit => @limit,
       :offset => @offset,
-      :select => 'id, brecname, brecalt, breclevel, bdesc, bname1, bproject',
+      :select => 'id, brectype, brecname, brecalt, breclevel, bdesc, bname1, bproject',
       :conditions => @conditions,
       :joins => @joins
     count = Brecord.count :all, :conditions => @conditions, :joins => @joins
@@ -122,6 +122,7 @@ class BrecordsController < ApplicationController
         u.name,
         u.bname1,
         u.brecalt,
+        u.ext_rev,
         u.breclevel,
         u.bdesc,
         pdmlink_icon(u.migrated?.to_s)]}}

@@ -4,12 +4,15 @@ PART:
     - label: Number
       id:    record_name
       size:  26
-    - label: CAGE code
+    - label: Cage Code
       id:    record_bname1
       size:  5
     - label: Revision
       id:    record_brecalt
       size:  4
+    - label: External Rev.
+      id:    uda_ext_part_recalt
+      size:  6
     - label: Type
       id:    record_bfamily
       size:  16
@@ -22,7 +25,7 @@ PART:
     - label: Secondary ID
       id:    uda_snd_part_recname
       size:  26
-    - label: Secondary CAGE
+    - label: Secondary Cage
       id:    uda_snd_part_cagec
       size:  5
     - label: Secondary Rev.
@@ -87,12 +90,15 @@ DOCUMENT:
     - label: Number
       id:    record_name
       size:  26
-    - label: CAGE code
+    - label: Cage Code
       id:    record_bname1
       size:  5
     - label: Revision
       id:    record_brecalt
       size:  4
+    - label: External Rev.
+      id:    uda_ext_doc_recalt
+      size:  6
     - label: Type
       id:    record_bfamily
       size:  16
@@ -105,7 +111,7 @@ DOCUMENT:
     - label: Secondary ID
       id:    uda_snd_doc_recname
       size:  26
-    - label: Secondary CAGE
+    - label: Secondary Cage
       id:    uda_snd_doc_cagec
       size:  5
     - label: Secondary Rev.
@@ -158,7 +164,7 @@ WORKAUTH:
     - label: Number
       id:    record_name
       size:  26
-    - label: CAGE code
+    - label: Cage Code
       id:    record_bname1
       size:  5
     - label: Revision
@@ -234,7 +240,7 @@ SOFTWARE:
     - label: Number
       id:    record_name
       size:  26
-    - label: CAGE code
+    - label: Cage Code
       id:    record_bname1
       size:  5
     - label: Revision

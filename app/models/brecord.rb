@@ -47,9 +47,19 @@ class Brecord < ActiveRecord::Base
     latest_rev = self.find(:first, :conditions => conditions, :order => 'brecalt DESC')
   end
 
+  def ext_rev
+    if brectype == 'PART'
+      uda('EXT_PART_RECALT')
+    elsif brectype == 'DOCUMENT'
+      uda('EXT_DOC_RECALT')
+    else
+      ''
+    end
+  end
+
   def uda(name)
     @udas ||= budas
-    @udas.map { |uda| uda.bvalue if uda.bname == name }.compact.to_s
+    @udas.map { |uda| uda.bvalue if uda.bname == name.upcase }.compact.to_s
   end
 
   def files

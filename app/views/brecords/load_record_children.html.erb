@@ -10,11 +10,11 @@ $(function(){
 		url: '/brecords/grid_children',
 		datatype: 'json',
 		mtype: 'GET',
-		colNames: ['id', 'Relationship', 'Item Type', 'Identifier', 'Bus Id', 'Rev', 'Status', 'Description', 'Qty'],
+		colNames: ['id', 'Relationship', 'ItemType', 'Number', 'Cage', 'Rev', 'Status', 'Description', 'Qty'],
 		colModel :[
 			{name:'id',        index:'id',        hidden:true},
 			{name:'breftype',  index:'breftype',  width:70},
-			{name:'brectype',  index:'brectype',  width:50},
+			{name:'brectype',  index:'brectype',  width:55},
 			{name:'name',      index:'brecname',  width:80},
 			{name:'busid',     index:'cage_code', width:35, sortable:false},
 			{name:'brecalt',   index:'brecalt',   width:30, sortable:false},
