@@ -187,7 +187,16 @@ button:focus, a.button:focus, button:active, a.button:active {
 .tree li {
     padding:0 0 0 20px;
 }
-
+.ui-widget img {
+	margin:0 3px -3px 0 !important;
+}
+.ui-state-error {
+	padding: 0 .7em;
+}
+.ui-icon-alert{
+	float: left;
+	margin-right: .3em;
+}
 /**************************************/
 /*              EAST                  */
 /**************************************/

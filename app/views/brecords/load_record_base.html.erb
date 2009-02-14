@@ -1,5 +1,14 @@
 <div id="record_title" class="ui-corner-all"></div>
 <div>&nbsp;</div>
+<% if @record.migrated? %>
+<div class="ui-widget">
+	<div class="ui-state-error ui-corner-all"> 
+		<span class="ui-icon ui-icon-alert"></span> 
+		Record already <strong>migrated</strong> to <%=pdmlink_icon @record.migrated?.to_s %>
+	</div>
+</div>
+<div>&nbsp;</div>
+<% end %>
 
 <div id="record_tabs">
 	<ul>
@@ -162,7 +171,7 @@
 		$('#record_attributes_filters').uniform();
 		
 		// nome tab
-		$('#recordTabName').html("<span><%= fam_img_tag_rectype @record.brectype %> <%=@record.name%>-<%=@record.brecalt%>  <%=pdmlink_icon @record.migrated?.to_s %></span>");
+		$('#recordTabName').html("<span><%= fam_img_tag_rectype @record.brectype %> <%=@record.name%>-<%=@record.brecalt%></span>");
 		
 		$("#record_attributes_filters").radio({checked: "/images/tick.png", unchecked: "/images/fam/cross.gif"});
 		
