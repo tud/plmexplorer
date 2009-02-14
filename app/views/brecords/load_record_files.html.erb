@@ -27,14 +27,14 @@ $(function(){
 		ondblClickRow: function(rowid) {
 			if (rowid!=null) {
 				var rowValues = $('#filesGrid').getRowData(rowid);
-                                // Avvio lo scaricamento del file solo se accessibile
+                // Avvio lo scaricamento del file solo se accessibile
 				if (rowValues.size != "<%= MSG['NO_FILE'] %>") {
 					var file_url ="<%= url_for(:controller => 'brecords', :action => 'export') %>/<%= @id %>?balias="+rowValues.balias;
 					var download_form = '<form id="download_form" method="post" action="'+file_url+'"></form>'
 					$('body').append(download_form);
 					$('#download_form').submit();
 					$('#download_form').remove();
-                                }
+                }
 				return false;
 			}
 		}

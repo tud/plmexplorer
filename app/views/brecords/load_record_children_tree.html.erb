@@ -20,6 +20,7 @@ $(function(){
 			ondblclk: function(NODE, TREE_OBJ) {
 				$.history(NODE.id);
 				$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:NODE.id});
+				return false;
 			}
 		}
 	});

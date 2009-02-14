@@ -15,10 +15,12 @@ $(function () {
 		$.history(id);
 		$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
 		$('#cMenuTabs > ul').tabs('select',2);
+		return false;
 	});
 	$('#clear_history').click(function() {
 		$('#workspace_container').load("<%= url_for(:controller => 'brecords', :action => 'clear_workspace') %>");
 		$('#eWorkspace').accordion('resize');
+		return false;
 	});
 });
 </script>

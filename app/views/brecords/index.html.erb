@@ -41,6 +41,7 @@
 					$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
 					$('#cMenuTabs > ul').tabs('select',2);
 				}
+				return false;
 			},
 			postData: {
 				conditions: '<%=escape_javascript @conditions%>',

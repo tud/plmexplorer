@@ -69,6 +69,7 @@ $(function(){
 				$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
 				$('#record_content > ul').tabs('select', 0);
 			}
+			return false;
 		},
 		postData: {id: id}
 	})

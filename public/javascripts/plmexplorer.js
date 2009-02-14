@@ -39,6 +39,7 @@ $(function() {
 		var rectype = $(this).attr('title');
 		$('#cFind').load('/rectype/'+rectype+'/find');
 		$("#cMenuTabs > ul").tabs('select',0);
+		return false;
 	});
 
 	// gestione history
