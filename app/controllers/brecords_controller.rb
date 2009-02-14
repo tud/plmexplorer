@@ -101,6 +101,14 @@ class BrecordsController < ApplicationController
     end
     html
   end
+  
+  def fam_img_tag famimg
+    "<img src='/images/fam/"+famimg+".gif'/>&nbsp;"
+  end
+  
+  def fam_img_tag_rectype rectype
+    fam_img_tag NAVIGATION['FIND'].find {|hash| hash['type'] == rectype}['iconclass']
+  end
 
   def grid_records
     prep_query
@@ -119,6 +127,7 @@ class BrecordsController < ApplicationController
       :id => u.id,
       :cell => [
         u.id,
+        fam_img_tag_rectype(u.brectype),
         u.name,
         u.bname1,
         u.brecalt,

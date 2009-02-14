@@ -14,15 +14,16 @@
 			url: '/brecords/grid_records',
 			datatype: 'json',
 			mtype: 'GET',
-			colNames: ['Id', 'Number', 'Cage', 'Rev', 'Ext Rev', 'Status', 'Description', 'PDMLink'],
+			colNames: ['Id', 'Type', 'Number', 'Cage', 'Rev', 'Ext Rev', 'Status', 'Description', 'PDMLink'],
 			colModel :[
 				{name:'id',        index:'id',        hidden:true},
+				{name:'rectype',   index:'brectype',  hidden:true,  width:18},
 				{name:'name',      index:'brecname',  width:80},
 				{name:'bname1',    index:'bname1',    width:35},
 				{name:'brecalt',   index:'brecalt',   width:30},
-				{name:'ext_rev',   index:'ext_rev',   width:45},
+				{name:'ext_rev',   index:'ext_rev',   width:30},
 				{name:'breclevel', index:'breclevel', width:50}, 
-				{name:'bdesc',     index:'bdesc',     width:300},
+				{name:'bdesc',     index:'bdesc',     width:200},
 				{name:'migrated',  index:'migrated',  width:50} ],
 			rowNum: 10,
 			rowList: [10,20,30,50,100],
@@ -47,5 +48,10 @@
 			}
 		})
 		.navGrid('#findPager', {refresh: false, edit: false, add: false, del: false, search: false});
+		
+		var rectype = "<%=@rectype%>";
+		if (rectype == "GENERIC") {
+			$('#findGrid').showCol('rectype');
+		}
 	});
 </script>
