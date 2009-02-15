@@ -23,3 +23,9 @@ PROJECT_LIST.unshift('')
 
 USER_LIST = Bdbuser.find(:all).map { |user| user.buser }.sort.uniq
 USER_LIST.unshift('')
+
+#################################################################################
+# Le costanti sottostanti sono funzione delle precedenti
+#################################################################################
+
+APPL_RECTYPES = NAVIGATION['FIND'].map { |nav| nav['type'] } - ['GENERIC']

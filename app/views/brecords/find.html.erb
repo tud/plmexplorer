@@ -39,13 +39,15 @@
 			<label for="brecord_find_rec_bcreateuser">Created By :</label>
 			<%= f.select :find_rec_bcreateuser, USER_LIST, {}, {:tabindex => "7", :class => "uppercase editableCombobox"} %>
 		</div>
-		<div class='ctrlHolder'>
-			<label for="brecord_find_rec_bfamily">Type :</label>
-			<select id="brecord_find_rec_bfamily" name="brecord[find_rec_bfamily]" tabindex="8">
-				<option value="" />
-				<%= option_groups_from_collection_for_select(@typeList, :options, :label, :value, :key) %>
-			</select>
-		</div>
+		<% if @rectype != 'GENERIC' %>
+                        <div class='ctrlHolder'>
+                                <label for="brecord_find_rec_bfamily">Type :</label>
+                                <select id="brecord_find_rec_bfamily" name="brecord[find_rec_bfamily]" tabindex="8">
+                                        <option value="" />
+                                        <%= option_groups_from_collection_for_select(@typeList, :options, :label, :value, :key) %>
+                                </select>
+                        </div>
+		<% end %>
 		<div class='ctrlHolder'>
 			<label for="brecord_find_rec_name4">Short Description :</label>
 			<%= f.text_field :find_rec_name4, :maxlength => "32", :tabindex => "9" %>

@@ -11,6 +11,9 @@ FIND:
   - type: SOFTWARE
     label: Software
     iconclass: page_white_code
+  - type: GENERIC
+    label: Generic
+    iconclass: page_white
     
 REPORT:
   - type: REPORT

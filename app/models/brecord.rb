@@ -29,6 +29,10 @@ class Brecord < ActiveRecord::Base
     project.migrated?
   end
 
+  def obsolete?
+    project.obsolete?
+  end
+
   def self.tree_label u
     u[:breftype] ||= ""
     u.breftype+" "+u.brecname.gsub(/&/,'~')+" Rev. "+u.brecalt+" at Status "+u.breclevel+" - "+u.bdesc
@@ -36,6 +40,16 @@ class Brecord < ActiveRecord::Base
 
   def workspace_label
     name+"-"+brecalt
+  end
+
+  def effective_icon
+    html = ""
+    if migrated?
+      html = "<img src='/images/windchill.png' />"
+    elsif obsolete?
+      html = "<img src='/images/obsolete.png' />"
+    end
+    html
   end
 
   def self.latest(brectype, brecname, brecalt = '#')

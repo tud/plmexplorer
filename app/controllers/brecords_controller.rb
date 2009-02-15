@@ -20,7 +20,11 @@ class BrecordsController < ApplicationController
           if field != 'bdesc'
             normalize(value)
           end
-          if field == 'name'
+          if field == 'brectype' and value == 'GENERIC'
+            # Limito comunque la ricerca ai soli rectypes gestiti
+            rectypes = APPL_RECTYPES.map { |rectype| "'#{rectype}'" }.join(',')
+            condition << "brectype in (#{rectypes})"
+          elsif field == 'name'
             name = value
           elsif field == 'bname1'
             cage_code = value
@@ -71,13 +75,14 @@ class BrecordsController < ApplicationController
   def find
     @rectype = params[:rectype].upcase
 
-    if @rectype == '*'
-      @statusList = Blevel.find(:all).map { |level| level.bname }.sort.uniq
+    if @rectype == 'GENERIC'
+      rectypes = APPL_RECTYPES
     else
-      @statusList = Blevel.find(:all,
-                                :conditions => "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname = '" + @rectype + "'",
-                                :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
+      rectypes = [ @rectype ]
     end
+    @statusList = Blevel.find(:all,
+                              :conditions => [ "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname in (?)", rectypes ],
+                              :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
     @statusList.unshift('')
 
     if @rectype == 'PART'
@@ -94,14 +99,6 @@ class BrecordsController < ApplicationController
     render :layout => false
   end
 
-  def pdmlink_icon show
-    html = ""
-    if show == "true"
-      html = "<img src='/images/windchill.png' />"
-    end
-    html
-  end
-  
   def fam_img_tag famimg
     "<img src='/images/fam/"+famimg+".gif'/>&nbsp;"
   end
@@ -134,7 +131,7 @@ class BrecordsController < ApplicationController
         u.ext_rev,
         u.breclevel,
         u.bdesc,
-        pdmlink_icon(u.migrated?.to_s)]}}
+        u.effective_icon ]}}
 
     # Convert the hash to a json object
     render :text => @return_data.to_json, :layout => false

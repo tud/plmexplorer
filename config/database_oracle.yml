@@ -1,5 +1,12 @@
-development:
+login: &login
   adapter: oracle_enhanced
-  database: pdm_otomelara
   username: rails
   password: rails
+
+development:
+  database: pdm_otomelara
+  <<: *login
+
+production:
+  database: pdm_otomelara
+  <<: *login

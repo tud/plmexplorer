@@ -1,10 +1,14 @@
 <div id="record_title" class="ui-corner-all"></div>
 <div>&nbsp;</div>
-<% if @record.migrated? %>
+<% if @record.migrated? or @record.obsolete? %>
 <div class="ui-widget">
 	<div class="ui-state-error ui-corner-all"> 
 		<span class="ui-icon ui-icon-alert"></span> 
-		Record already <strong>migrated</strong> to <%=pdmlink_icon @record.migrated?.to_s %>
+                <% if @record.migrated? %>
+                        Object already <strong>migrated</strong> to <%= @record.effective_icon %>
+                <% else %>
+                        Object belongs to an <strong>obsolete</strong> configuration
+                <% end %>
 	</div>
 </div>
 <div>&nbsp;</div>

@@ -1,0 +1,13 @@
+login: &login
+  adapter: jdbc
+  driver: oracle.jdbc.driver.OracleDriver
+  username: rails
+  password: rails
+
+development:
+  url: jdbc:oracle:thin:@taurus2k:1521:AAAA
+  <<: *login
+
+production:
+  url: jdbc:oracle:thin:@taurus2k:1521:AAAA
+  <<: *login

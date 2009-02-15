@@ -4,4 +4,8 @@ class Bproject < ActiveRecord::Base
   def migrated?
     bdesc.downcase.include? '*** migrato'
   end
+
+  def obsolete?
+    bdesc.downcase.include? '*** config. obsoleta'
+  end
 end
