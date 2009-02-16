@@ -45,9 +45,9 @@ class Brecord < ActiveRecord::Base
   def effective_icon
     html = ""
     if migrated?
-      html = "<img src='/images/windchill.png' />"
+      html = "<img src='/images/windchill.png' title='Migrated object'/>"
     elsif obsolete?
-      html = "<img src='/images/obsolete.png' />"
+      html = "<img src='/images/obsolete.png' title='Obsolete object'/>"
     end
     html
   end

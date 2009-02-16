@@ -151,7 +151,7 @@ class BrecordsController < ApplicationController
       :cell => [
         u.id,
         u.breftype,
-        u.brectype,
+        fam_img_tag_rectype(u.brectype),
         u.name,
         u.cage_code,
         u.brecalt,
@@ -226,7 +226,7 @@ class BrecordsController < ApplicationController
       :cell => [
         u.id,
         u.breftype,
-        u.brectype,
+        fam_img_tag_rectype(u.brectype),
         u.name,
         u.cage_code,
         u.brecalt,
