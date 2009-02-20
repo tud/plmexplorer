@@ -30,6 +30,7 @@
 		<%= javascript_include_tag 'jquery.jqGrid.js','js/jqModal.js','js/jqDnR.js' %>
 		<%= javascript_include_tag 'css.js','jquery.listen.js','tree_component.js' %>
 		<%= javascript_include_tag 'jquery.jhistory.js' %>
+		<%= javascript_include_tag 'jquery.tooltip.js' %>
 	</head>
 	<body>
 		<% if !session[:user] %>
@@ -56,6 +57,6 @@
 
 		<div class="ui-layout-south">
 			<%= render :partial => 'layouts/footer' %>
-		</div> 
+		</div>
 	</body>
 </html>

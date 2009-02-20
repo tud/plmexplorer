@@ -33,7 +33,7 @@ module BrecordsHelper
   def navigation_find_items
     items = Array.new
     NAVIGATION['FIND'].each do |entry|
-      items << "<a class='wNavigation_find' href='#' title='"+entry['type'].downcase+"'>"+fam_img_tag(entry['iconclass'])+entry['label']+"</a>"
+      items << "<a class='wNavigation_find tooltip' href='"+entry['type']+"' title='"+entry['title']+"'>"+fam_img_tag(entry['iconclass'])+entry['label']+"</a>"
     end
     items
   end
@@ -41,7 +41,7 @@ module BrecordsHelper
   def navigation_report_items
     items = Array.new
     NAVIGATION['REPORT'].each do |entry|
-      items << "<a class='wNavigation_report' href='#' title='"+entry['type'].downcase+"'>"+fam_img_tag(entry['iconclass'])+entry['label']+"</a>"
+      items << "<a class='wNavigation_report tooltip' href='"+entry['type']+"' title='"+entry['title']+"'>"+fam_img_tag(entry['iconclass'])+entry['label']+"</a>"
     end
     items
   end

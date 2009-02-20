@@ -15,6 +15,7 @@ $(function() {
 	,	west__spacing_open: 3
 	,	east__spacing_open: 3
 	,	south__spacing_open: 0
+	,	west__showOverflowOnHover: true
 	,	west__onresize: function(){
 			$('#wNavigation').accordion('resize');
 		}
@@ -35,10 +36,19 @@ $(function() {
 	// prima riga tabs
 	$('#cMenuTabs > ul').tabs();
 
+	// gestione tab find
 	$('.wNavigation_find').click(function() {
-		var rectype = $(this).attr('title');
+		var rectype = $(this).attr('href');
 		$('#cFind').load('/rectype/'+rectype+'/find');
 		$("#cMenuTabs > ul").tabs('select',0);
+		return false;
+	});
+	
+	// gestione tab report
+	$('.wNavigation_report').click(function() {
+		var reportname = $(this).attr('href');
+		$('#cReport').load('/rectype/'+reportname+'/find');
+		$("#cMenuTabs > ul").tabs('select',3);
 		return false;
 	});
 
