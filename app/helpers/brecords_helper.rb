@@ -54,4 +54,36 @@ module BrecordsHelper
     fam_img_tag NAVIGATION['FIND'].find {|hash| hash['type'] == rectype}['iconclass']
   end
   
+  def children_default_reftypes rectype
+    reftypes = ''
+    ii = 0
+    CHILDREN["#{rectype.upcase}"].each do |child|
+      if child['default']
+        if ii == 0
+          ii = 1
+          reftypes = child['reftype']
+        else
+          reftypes = reftypes + ',' + child['reftype']
+        end
+      end
+    end
+    reftypes
+  end
+  
+  def parents_default_reftypes rectype
+    reftypes = ''
+    ii = 0
+    CHILDREN["#{rectype.upcase}"].each do |child|
+      if child['default']
+        if ii == 0
+          ii = 1
+          reftypes = child['reftype']
+        else
+          reftypes = reftypes + ',' + child['reftype']
+        end
+      end
+    end
+    reftypes
+  end
+  
 end

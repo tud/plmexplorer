@@ -1,6 +1,7 @@
 PART:
   - reftype: USES
     label: Parts
+    default: true
   - reftype: USES_FRZ
     label: PartsFrz
   - reftype: RAISED_AGAINST
@@ -10,6 +11,7 @@ PART:
 DOCUMENT:
   - reftype: DESC_BY
     label: Documents
+    default: true
   - reftype: DESC_BY_FRZ
     label: DocumentsFrz
   - reftype: RAISED_AGAINST
@@ -19,6 +21,7 @@ DOCUMENT:
 SOFTWARE:
   - reftype: USES
     label: Parts
+    default: true
   - reftype: USES_FRZ
     label: PartsFrz
   - reftype: RAISED_AGAINST
@@ -28,5 +31,6 @@ SOFTWARE:
 WORKAUTH:
   - reftype: COMPOSED_OF
     label: ComposedOf
+    default: true
   - reftype: CLOSES
     label: Closes

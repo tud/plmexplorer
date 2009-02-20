@@ -16,15 +16,21 @@ FIND:
     iconclass: page_white
     
 REPORT:
-  - type: REPORT
-    label: Report 1
+  - type: OTO-BOMNEW
+    label: BOMNEW
     iconclass: report
-  - type: REPORT
-    label: Report 2
+  - type: OTO-BOMVALNEW
+    label: BOMVALNEW
     iconclass: report
-  - type: REPORT
-    label: Report 3
+  - type: OTO-EI
+    label: EI
     iconclass: report
-  - type: REPORT
-    label: Report 4
+  - type: OTO-ODM
+    label: ODM
+    iconclass: report
+  - type: OTO-REQ
+    label: REQ
+    iconclass: report
+  - type: OTO-WA
+    label: WA
     iconclass: report
