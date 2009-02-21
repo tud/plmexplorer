@@ -27,7 +27,7 @@
 				children_reftypes = session[cookiename][:reftypes]
 				view = session[cookiename][:view]
 			else
-				children_reftypes = children_default_reftypes @record.brectype
+				children_reftypes = default_reftypes CHILDREN, @record.brectype
 				view = ""
 			end
 		%>
@@ -39,7 +39,7 @@
 				parents_reftypes = session[cookiename][:reftypes]
 				view = session[cookiename][:view]
 			else
-				parents_reftypes = parents_default_reftypes @record.brectype
+				parents_reftypes = default_reftypes PARENTS, @record.brectype
 				view = ""
 			end
 		%>
