@@ -47,7 +47,7 @@ $(function() {
 	// gestione tab report
 	$('.wNavigation_report').click(function() {
 		var reportname = $(this).attr('href');
-		$('#cReport').load('/rectype/'+reportname+'/find');
+		$('#cReport').load('/reports/'+reportname);
 		$("#cMenuTabs > ul").tabs('select',3);
 		return false;
 	});
