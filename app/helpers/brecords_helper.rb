@@ -62,4 +62,8 @@ module BrecordsHelper
     reftypes.join(',')
   end
   
+  def get_report_title action
+    NAVIGATION['REPORT'].find {|hash| hash['type'] == action}['title']
+  end
+  
 end

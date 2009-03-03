@@ -1,1 +1,14 @@
-<h1><%=controller.action_name%></h1>
+<%= render :partial => 'title' %>
+
+<% form_for :brecord, :html => {:id => controller.action_name, :class => 'uniForm'} do |f| %>
+	<fieldset class='inlineLabels'>
+
+
+
+		<%= render :partial => 'output', :locals => {:f => f} %>
+	</fieldset>
+<% end %>
+
+<script type="text/javascript">
+	$('form.uniForm').uniform();
+</script>

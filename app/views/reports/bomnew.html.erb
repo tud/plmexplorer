@@ -1,1 +1,66 @@
-<h1><%=controller.action_name%></h1>
+<%= render :partial => 'title' %>
+
+<% form_for :brecord, :html => {:id => controller.action_name, :class => 'uniForm'} do |f| %>
+	<fieldset class='inlineLabels'>
+		<legend id="legend_report_record"></legend>
+		<%= f.hidden_field :report_rec_brectype, :value => @rectype %>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_rec_name">Number :</label>
+			<%= f.text_field :report_rec_name, :maxlength => "26", :tabindex => "1", :class => "uppercase" %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_rec_bname1">Cage Code :</label>
+			<select id="brecord_report_rec_bname1" name="brecord[report_rec_bname1]" tabindex="2">
+				<option value="" />
+				<%= option_groups_from_collection_for_select(CAGE_CODES, :options, :label, :value, :key) %>
+			</select>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_rec_brecalt">Rev. :</label>
+			<%= f.text_field :report_rec_brecalt, :value => "#", :maxlength => "4", :tabindex => "3", :class => "uppercase" %>
+			<span class='hint'> # = latest revision</span>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_data_maturity">Data Maturity :</label>
+			<select id="brecord_report_data_maturity" name="brecord[report_data_maturity]" tabindex="5">
+
+			</select>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_record_type">Record Type :</label>
+			<select id="brecord_report_record_type" name="brecord[report_record_type]" tabindex="6">
+
+			</select>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_level">Level :</label>
+			<%= f.text_field :report_level, :maxlength => "3", :tabindex => "7" %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_alternate_language">Alternate Language :</label>
+			<select id="brecord_report_alternate_language" name="brecord[report_alternate_language]" tabindex="8">
+
+			</select>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_print_header">Print Header :</label>
+			<select id="brecord_report_print_header" name="brecord[report_print_header]" tabindex="9">
+				<option value="YES" selected="selected">YES</option>
+				<option value="NO">NO</option>
+			</select>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_separating_char">Separating Char :</label>
+			<select id="brecord_report_separating_char" name="brecord[report_separating_char]" tabindex="10">
+				<option value="YES">YES</option>
+				<option value="NO" selected="selected">NO</option>
+			</select>
+		</div>
+
+		<%= render :partial => 'output', :locals => {:f => f} %>
+	</fieldset>
+<% end %>
+
+<script type="text/javascript">
+	$('form.uniForm').uniform();
+</script>

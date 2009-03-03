@@ -97,6 +97,13 @@ button:focus, a.button:focus, button:active, a.button:active {
 	display:none;
 	z-index:5;
 }
+hr {
+	color: #1c94c4;
+	background-color: #1c94c4;
+	height: 3px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
 /**************************************/
 /*              NORTH                 */
 /**************************************/
@@ -205,6 +212,9 @@ button:focus, a.button:focus, button:active, a.button:active {
 .ui-icon-alert{
 	float: left;
 	margin-right: .3em;
+}
+.title {
+	color: #1c94c4;
 }
 /**************************************/
 /*              EAST                  */
