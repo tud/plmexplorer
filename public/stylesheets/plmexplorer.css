@@ -90,7 +90,7 @@ button:focus, a.button:focus, button:active, a.button:active {
 
 #tooltip{
 	position:absolute;
-	border:1px solid #1C94C4;
+	border:1px solid #c77405;
 	background:#fdf5ce;
 	padding:2px 5px;
 	color:#c77405;
