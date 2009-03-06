@@ -14,7 +14,7 @@ $(function () {
 		var id = $(this).parent().attr('id').substring(2);
 		$.history(id);
 		$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
-		$('#cMenuTabs > ul').tabs('select',2);
+		$('#cMenuTabs').tabs('select',2);
 		return false;
 	});
 	$('#clear_history').click(function() {

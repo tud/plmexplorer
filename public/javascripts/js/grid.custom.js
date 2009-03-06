@@ -61,7 +61,13 @@ $.fn.extend({
 				if ( this.p.pager ) {
 					$(this.p.pager).remove();
 				}
-				$("#lui_"+this.id).remove();
+				var gid = this.id;
+				$("#lui_"+gid).remove();
+				try {
+					$("#editmod"+gid).remove();
+					$("#delmod"+gid).remove();
+					$("#srchmod"+gid).remove();
+				} catch (_) {}
 				$(this.grid.bDiv).remove();
 				$(this.grid.hDiv).remove();
 				$(this.grid.cDiv).remove();
@@ -81,11 +87,18 @@ $.fn.extend({
 			var newtable = document.createElement('table');
 			$(newtable).attr({id:defgrid['id']});
 			newtable.className = defgrid['cl'];
-			$("#lui_"+this.id).remove();
+			var gid = this.id;
+			$("#lui_"+gid).remove();
+			try {
+				$("#editmod"+gid).remove();
+				$("#delmod"+gid).remove();
+				$("#srchmod"+gid).remove();
+			} catch (_) {}
 			if(this.p.toolbar[0]) { $(this.grid.uDiv).remove(); }
 			$(this.grid.cDiv).remove();
 			$(this.grid.bDiv).remove();
 			$(this.grid.hDiv).before(newtable).remove();
+			// here code to remove modals of form editing
 			this.p = null;
 			this.grid =null;
 		});
@@ -180,7 +193,7 @@ $.fn.extend({
 				$.each(self.p.filterModel,function(i,n){
 					switch (this.stype) {
 						case 'select' :
-							v = $("select[@name="+this.name+"]",self).val();
+							v = $("select[name="+this.name+"]",self).val();
 							if(v) {
 								sdata[this.index] = v;
 								if(self.p.marksearched){
@@ -198,7 +211,7 @@ $.fn.extend({
 							}
 							break;
 						default:
-							v = $("input[@name="+this.name+"]",self).val();
+							v = $("input[name="+this.name+"]",self).val();
 							if(v) {
 								sdata[this.index] = v;
 								if(self.p.marksearched){
@@ -236,9 +249,17 @@ $.fn.extend({
 					if(!this.stype){this.stype=='text';}
 					switch (this.stype) {
 						case 'select' :
-							$("select[@name="+this.name+"]",self).val(v);
 							if(v) {
-								sdata[this.index] = v;
+								var v1;
+								$("select[name="+this.name+"] option",self).each(function (){
+									if ($(this).text() == v) {
+										this.selected = true;
+										v1 = $(this).val();
+										return false;
+									}
+								});
+								// post the key and not the text
+								sdata[this.index] = v1 || "";
 								if(self.p.marksearched){
 									$("#jqgh_"+this.name,gr.grid.hDiv).addClass("dirty-cell");
 								}
@@ -254,7 +275,7 @@ $.fn.extend({
 							}
 							break;
 						case 'text':
-							$("input[@name="+this.name+"]",self).val(v);
+							$("input[name="+this.name+"]",self).val(v);
 							if(v) {
 								sdata[this.index] = v;
 								if(self.p.marksearched){

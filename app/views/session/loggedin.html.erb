@@ -3,7 +3,7 @@ $(function () {
 	// caricata la pagina Find Parts come default
 	if ($('#cFind').html() == "") {
 		$('#cFind').load('/rectype/part/find');
-		$("#cMenuTabs > ul").tabs('select',0);
+		$('#cMenuTabs').tabs('select',0);
 	}
 	
 	// caricato il workspace

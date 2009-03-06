@@ -133,7 +133,8 @@ function createEl(eltype,options,vl,elm) {
 			elem.type = "checkbox";
 			jQuery(elem).attr({id:options.id,name:options.name});
 			if( !options.value) {
-				if(vl.toLowerCase() =='on') {
+				vl=vl.toLowerCase();
+				if(vl.search(/(false|0|no|off|undefined)/i)<0 && vl!=="") {
 					elem.checked=true;
 					elem.defaultChecked=true;
 					elem.value = vl;
@@ -152,33 +153,52 @@ function createEl(eltype,options,vl,elm) {
 			}
 			break;
 		case "select" :
-			var so = options.value.split(";"),sv, ov;
 			elem = document.createElement("select");
-			var msl =  options.multiple === true ? true : false;
-			jQuery(elem).attr({id:options.id,name:options.name,size:Math.min(options.size,so.length), multiple:msl });
-			for(var i=0; i<so.length;i++){
-				sv = so[i].split(":");
-				ov = document.createElement("option");
-				ov.value = sv[0]; ov.innerHTML = sv[1];
-				if (!msl &&  sv[1]==vl) ov.selected ="selected";
-				if (msl && jQuery.inArray(sv[1],vl.split(","))>-1) ov.selected ="selected";
-				elem.appendChild(ov);
+			var msl = options.multiple==true ? true : false;
+			if(options.value) {
+				var ovm = [];
+				if(msl) {jQuery(elem).attr({multiple:"multiple"}); ovm = vl.split(","); ovm = jQuery.map(ovm,function(n){return jQuery.trim(n)});}
+				if(typeof options.size === 'undefined') {options.size =1;}
+				if(typeof options.value == 'string') {
+					var so = options.value.split(";"),sv, ov;
+					jQuery(elem).attr({id:options.id,name:options.name,size:Math.min(options.size,so.length)});
+					for(var i=0; i<so.length;i++){
+						sv = so[i].split(":");
+						ov = document.createElement("option");
+						ov.value = sv[0]; ov.innerHTML = jQuery.htmlDecode(sv[1]);
+						if (!msl &&  sv[1]==vl) ov.selected ="selected";
+						if (msl && jQuery.inArray(jQuery.trim(sv[1]), ovm)>-1) {ov.selected ="selected";}
+						elem.appendChild(ov);
+					}
+				} else if (typeof options.value == 'object') {
+					var oSv = options.value;
+					var i=0;
+					for ( var key in oSv) {
+						i++;
+						ov = document.createElement("option");
+						ov.value = key; ov.innerHTML = jQuery.htmlDecode(oSv[key]);
+						if (!msl &&  oSv[key]==vl) {ov.selected ="selected";}
+						if (msl && jQuery.inArray(jQuery.trim(oSv[key]),ovm)>-1) {ov.selected ="selected";}
+						elem.appendChild(ov);
+					}
+					jQuery(elem).attr({id:options.id,name:options.name,size:Math.min(options.size,i) });
+				}
 			}
 			break;
 		case "text" :
 			elem = document.createElement("input");
 			elem.type = "text";
-			vl = vl.replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"').replace(/\&nbsp\;/ig,'');
+			vl = jQuery.htmlDecode(vl);
 			elem.value = vl;
 			if(!options.size && elm) {
-				jQuery(elem).css("width","99%");
+				jQuery(elem).css({width:"98%"});
 			}
 			jQuery(elem).attr(options);
 			break;
 		case "password" :
 			elem = document.createElement("input");
 			elem.type = "password";
-			vl = vl.replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"').replace(/\&nbsp\;/ig,'');
+			vl = jQuery.htmlDecode(vl);
 			elem.value = vl;
 			if(!options.size && elm) { jQuery(elem).css("width","99%"); }
 			jQuery(elem).attr(options);
@@ -196,11 +216,15 @@ function checkValues(val, valref,g) {
 		var edtrul = g.p.colModel[valref].editrules;
 	}
 	if(edtrul) {
-		if(edtrul.required == true) {
+		if(edtrul.required === true) {
 			if( val.match(/^s+$/) || val == "" )  return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.required,""];
 		}
-		if(edtrul.number == true) {
-			if(isNaN(val)) return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.number,""];
+		// force required
+		var rqfield = edtrul.required === false ? false : true;
+		if(edtrul.number === true) {
+			if( !(rqfield === false && isEmpty(val)) ) {
+				if(isNaN(val)) return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.number,""];
+			}
 		}
 		if(edtrul.minValue && !isNaN(edtrul.minValue)) {
 			if (parseFloat(val) < parseFloat(edtrul.minValue) ) return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.minValue+" "+edtrul.minValue,""];
@@ -208,18 +232,24 @@ function checkValues(val, valref,g) {
 		if(edtrul.maxValue && !isNaN(edtrul.maxValue)) {
 			if (parseFloat(val) > parseFloat(edtrul.maxValue) ) return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.maxValue+" "+edtrul.maxValue,""];
 		}
-		if(edtrul.email == true) {
+		if(edtrul.email === true) {
+			if( !(rqfield === false && isEmpty(val)) ) {
 			// taken from jquery Validate plugin
-			var filter = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i;
-			if(!filter.test(val)) {return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.email,""];}
+				var filter = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$/i;
+				if(!filter.test(val)) {return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.email,""];}
+			}
 		}
-		if(edtrul.integer == true) {
-			if(isNaN(val)) return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.integer,""];
-			if ((val < 0) || (val % 1 != 0) || (val.indexOf('.') != -1)) return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.integer,""];
+		if(edtrul.integer === true) {
+			if( !(rqfield === false && isEmpty(val)) ) {
+				if(isNaN(val)) return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.integer,""];
+				if ((val % 1 != 0) || (val.indexOf('.') != -1)) return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.integer,""];
+			}
 		}
-		if(edtrul.date == true) {
-			var dft = g.p.colModel[valref].datefmt || "Y-m-d";
-			if(!checkDate (dft, val)) return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.date+" - "+dft,""];
+		if(edtrul.date === true) {
+			if( !(rqfield === false && isEmpty(val)) ) {
+				var dft = g.p.colModel[valref].datefmt || "Y-m-d";
+				if(!checkDate (dft, val)) return [false,g.p.colNames[valref]+": "+jQuery.jgrid.edit.msg.date+" - "+dft,""];
+			}
 		}
 	}
 	return [true,"",""];
@@ -298,6 +328,18 @@ function DaysArray(n) {
 		this[i] = 31;
 		if (i==4 || i==6 || i==9 || i==11) {this[i] = 30;}
 		if (i==2) {this[i] = 29;}
-   } 
-   return this;
+	} 
+	return this;
+}
+
+function isEmpty(val)
+{
+	if (val.match(/^s+$/) || val == "")	{
+		return true;
+	} else {
+		return false;
+	} 
+}
+function htmlEncode (value){
+    return !value ? value : String(value).replace(/&/g, "&amp;").replace(/>/g, "&gt;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 }

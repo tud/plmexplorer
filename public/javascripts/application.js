@@ -34,13 +34,13 @@ $(function() {
 	});
 
 	// prima riga tabs
-	$('#cMenuTabs > ul').tabs();
+	$('#cMenuTabs').tabs();
 
 	// gestione tab find
 	$('.wNavigation_find').click(function() {
 		var rectype = $(this).attr('href');
 		$('#cFind').load('/rectype/'+rectype+'/find');
-		$("#cMenuTabs > ul").tabs('select',0);
+		$("#cMenuTabs").tabs('select',0);
 		return false;
 	});
 	
@@ -48,16 +48,16 @@ $(function() {
 	$('.wNavigation_report').click(function() {
 		var reportname = $(this).attr('href');
 		$('#cReport').load('/reports/'+reportname);
-		$("#cMenuTabs > ul").tabs('select',3);
+		$("#cMenuTabs").tabs('select',3);
 		return false;
 	});
 
 	// gestione history
 	$.history.callback = function ( id, cursor ) {
 		if (typeof(id) == 'undefined') {
-			$("#cMenuTabs > ul").tabs('select',1);
+			$("#cMenuTabs").tabs('select',1);
 		} else {
-			$("#cMenuTabs > ul").tabs('select',2);
+			$("#cMenuTabs").tabs('select',2);
 			$('#cRecord').load("/brecords/load_record_base",{id:id});
 		}
 	};

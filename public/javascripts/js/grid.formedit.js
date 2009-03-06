@@ -27,6 +27,7 @@ $.fn.extend({
 			beforeShowSearch: null,
 			afterShowSearch : null,
 			onInitializeSearch: null,
+			closeAfterSearch : false,
 			// translation
 			// if you want to change or remove the order change it in sopt
 			// ['bw','eq','ne','lt','le','gt','ge','ew','cn'] 
@@ -39,9 +40,9 @@ $.fn.extend({
 			var gID = $("table:first",$t.grid.bDiv).attr("id");
 			var IDs = { themodal:'srchmod'+gID,modalhead:'srchhead'+gID,modalcontent:'srchcnt'+gID };
 			if ( $("#"+IDs.themodal).html() != null ) {
-				if( $.isFunction('beforeShowSearch') ) { beforeShowSearch($("#srchcnt"+gID)); }
+				if( $.isFunction('beforeShowSearch') ) { p.beforeShowSearch($("#srchcnt"+gID)); }
 				viewModal("#"+IDs.themodal,{modal: p.modal});
-				if( $.isFunction('afterShowSearch') ) { afterShowSearch($("#srchcnt"+gID)); }
+				if( $.isFunction('afterShowSearch') ) { p.afterShowSearch($("#srchcnt"+gID)); }
 			} else {
 				var cM = $t.p.colModel;
 				var cNames = "<select id='snames' class='search'>";
@@ -84,17 +85,17 @@ $.fn.extend({
 				var bReset  = "<input id='sreset' class='buttonsearch' type='button' value='"+p.Reset+"'/>";
 				var cnt = $("<table width='100%'><tbody><tr style='display:none' id='srcherr'><td colspan='5'></td></tr><tr><td>"+cNames+"</td><td>"+sOpt+"</td><td>"+sField+"</td><td>"+bSearch+"</td><td>"+bReset+"</td></tr></tbody></table>");
 				createModal(IDs,cnt,p,$t.grid.hDiv,$t.grid.hDiv);
-				if ( $.isFunction('onInitializeSearch') ) { onInitializeSearch( $("#srchcnt"+gID) ); };
-				if ( $.isFunction('beforeShowSearch') ) { beforeShowSearch($("#srchcnt"+gID)); };
+				if ( $.isFunction('onInitializeSearch') ) { p.onInitializeSearch( $("#srchcnt"+gID) ); };
+				if ( $.isFunction('beforeShowSearch') ) { p.beforeShowSearch($("#srchcnt"+gID)); };
 				viewModal("#"+IDs.themodal,{modal:p.modal});
-				if($.isFunction('afterShowSearch')) { afterShowSearch($("#srchcnt"+gID)); }
+				if($.isFunction('afterShowSearch')) { p.afterShowSearch($("#srchcnt"+gID)); }
 				if(p.drag) { DnRModal("#"+IDs.themodal,"#"+IDs.modalhead+" td.modaltext"); }
 				$("#sbut","#"+IDs.themodal).click(function(){
 					if( $("#sval","#"+IDs.themodal).val() !="" ) {
 						var es=[true,"",""];
 						$("#srcherr >td","#srchcnt"+gID).html("").hide();
-						$t.p.searchdata[p.sField] = $("option[@selected]","#snames").val();
-						$t.p.searchdata[p.sOper] = $("option[@selected]","#sopt").val();
+						$t.p.searchdata[p.sField] = $("option[selected]","#snames").val();
+						$t.p.searchdata[p.sOper] = $("option[selected]","#sopt").val();
 						$t.p.searchdata[p.sValue] = $("#sval","#"+IDs.modalcontent).val();
 						if(p.checkInput) {
 							for(var i=0; i< cM.length;i++) {
@@ -111,6 +112,9 @@ $.fn.extend({
 							if(p.dirty) { $(".no-dirty-cell",$t.p.pager).addClass("dirty-cell"); }
 							$t.p.page= 1;
 							$($t).trigger("reloadGrid");
+							if(p.closeAfterSearch === true) {
+								hideModal("#"+IDs.themodal);
+							}
 						} else {
 							$("#srcherr >td","#srchcnt"+gID).html(es[1]).show();
 						}
@@ -232,8 +236,9 @@ $.fn.extend({
 								if($(this).attr("checked")) {
 									postdata[this.name]= $(this).val();
 								}else {
-									postdata[this.name]= "";
-									extpost[this.name] = $(this).attr("offval");
+									var ofv = $(this).attr("offval");
+									postdata[this.name]= ofv;
+									extpost[this.name] = ofv;
 								}
 							break;
 							case "select-one":
@@ -254,8 +259,12 @@ $.fn.extend({
 							case "text":
 							case "textarea":
 								postdata[this.name] = $(this).val();
-								ret = checkValues($(this).val(),valref[i],$t);
-								if(ret[0] === false) { suc=false; }
+								ret = checkValues(postdata[this.name],valref[i],$t);
+								if(ret[0] === false) {
+									suc=false;
+								} else {
+									postdata[this.name] = htmlEncode(postdata[this.name]);
+								}
 							break;
 						}
 						j++;
@@ -431,7 +440,11 @@ $.fn.extend({
 						if(nm == obj.p.ExpandColumn && obj.p.treeGrid === true) {
 							tmp = $(this).text();
 						} else {
-							tmp = $(this).html();
+							try {
+								tmp =  $.unformat(this,{colModel:obj.p.colModel[i]},i);
+							} catch (_) {
+								tmp = $.htmlDecode($(this).html());
+							}
 						}
 						var opt = $.extend(obj.p.colModel[i].editoptions || {} ,{id:nm,name:nm});
 						if(!obj.p.colModel[i].edittype) obj.p.colModel[i].edittype = "text";
@@ -471,12 +484,17 @@ $.fn.extend({
 						if(nm == obj.p.ExpandColumn && obj.p.treeGrid === true) {
 							tmp = $(this).text();
 						} else {
-							tmp = $(this).html();
+							try {
+								tmp =  $.unformat(this,{colModel:obj.p.colModel[i]},i);
+							} catch (_) {
+								tmp = $.htmlDecode($(this).html());
+							}
 						}
+						nm= nm.replace('.',"\\.");
 						switch (obj.p.colModel[i].edittype) {
 							case "password":
 							case "text":
-								tmp = tmp.replace(/&amp;/g, "&").replace(/&gt;/g, ">").replace(/&lt;/g, "<").replace(/&quot;/g, '"').replace(/\&nbsp\;/ig,'');
+								tmp = $.htmlDecode(tmp);
 								$("#"+nm,"#"+frmtb).val(tmp);
 								break;
 							case "textarea":

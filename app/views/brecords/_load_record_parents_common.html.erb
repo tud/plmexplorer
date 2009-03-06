@@ -14,10 +14,10 @@ $(function(){
 			}
 		});
 		var action = $("input[name='filter_type_parents']:checked").val();
-		var selected = $('#record_tabs > ul').tabs().data('selected.tabs');
+		var selected = $('#record_tabs').tabs().data('selected.tabs');
 		var url = '/<%= controller.controller_name %>/'+action+'?id=<%= @id %>&reftypes='+reftypes;
-		$('#record_tabs > ul').tabs("url", selected, url);
-		$('#record_tabs > ul').tabs("load", selected );
+		$('#record_tabs').tabs("url", selected, url);
+		$('#record_tabs').tabs("load", selected );
 		return false;
 	});
 	$("#parents_filters").checkbox({checked: "/images/fam/add.gif", unchecked: "/images/fam/delete.gif"});

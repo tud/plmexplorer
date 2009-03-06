@@ -13,13 +13,13 @@ h4(. "Ruby on Rails _2.2.2_":http://rubyonrails.org/
 * plugins:
 ** "jRails _0.4_":http://ennerchi.com/projects/jrails
 
-h4(. "jQuery _1.2.6_":http://jquery.com/
+h4(. "jQuery _1.3.2_":http://jquery.com/
 
 * plugins:
-** "jQuery UI _1.6rc4_":http://ui.jquery.com/
-** "jQuery Grid _3.3.2_":http://www.trirand.com/blog/
-** "jQuery Ui.Layout _1.2.0_":http://layout.jquery-dev.net/
-** "jQuery jsTree _0.9.5_":http://www.jstree.com/
+** "jQuery UI _1.7_":http://ui.jquery.com/
+** "jQuery Grid _3.4.2_":http://www.trirand.com/blog/
+** "jQuery UI.Layout _1.2.0_":http://layout.jquery-dev.net/
+** "jQuery jsTree _0.9.6_":http://www.jstree.com/
 ** "jQuery Form Plugin":http://malsup.com/jquery/form/
 ** "jQuery.pngFix _1.1_":http://jquery.andreaseberhard.de/pngFix/
 ** "jQuery Editable Combobox _0.5.2_":http://code.google.com/p/jquery-jec/

@@ -1,5 +1,4 @@
 .GridHeader {
-	display: none;
 }
 .Header {
 	width: 100%;
@@ -190,14 +189,25 @@ div.loading {
 }
 
 div.loadingui {
-	display:none;
-	z-index:6000;
-	opacity:0.1;
-	-moz-opacity: 0.1;
-	filter: alpha(opacity=10);
-	background-color:#000;
-	position:absolute;
+   display:none;
+   z-index:6000;
+   position:absolute;
 }
+
+
+div.loadingui div.msgbox {
+   position: relative;
+   z-index:6001;
+   left: 35%;
+   top:45%;
+   background: url(images/loading.gif)  no-repeat left;
+   width: 100px;
+   border: 2px solid #B2D2FF;
+   text-align: right;
+   height: auto;
+   padding:2px;
+   margin: 0px;
+} 
 
 /* end loading div */
 /* toolbar */
@@ -360,7 +370,7 @@ td.EditButton {
 	
 }
 .FormElement {
-	font-size: 10px;
+	font-size: 10px;	
 }
 input[type="text"].FormElement{
 	color: #15428B;		
@@ -369,9 +379,8 @@ input[type="checkbox"].FormElement{
 	width: 15px;
 	color: #15428B;		
 }
-textarea.FormElement{
+input[type="textarea"].FormElement{
 	color: #15428B;		
-	font-size: 11px;
 }
 select.FormElement {
 	font-size: 10px;

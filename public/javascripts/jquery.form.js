@@ -1,14 +1,12 @@
 /*
  * jQuery Form Plugin
- * version: 2.17 (06-NOV-2008)
+ * version: 2.21 (08-FEB-2009)
  * @requires jQuery v1.2.2 or later
  *
  * Examples and documentation at: http://malsup.com/jquery/form/
  * Dual licensed under the MIT and GPL licenses:
  *   http://www.opensource.org/licenses/mit-license.php
  *   http://www.gnu.org/licenses/gpl.html
- *
- * Revision: $Id$
  */
 ;(function($) {
 
@@ -140,7 +138,7 @@ $.fn.ajaxSubmit = function(options) {
    if (options.iframe || found) { 
        // hack to fix Safari hang (thanks to Tim Molendijk for this)
        // see:  http://groups.google.com/group/jquery-dev/browse_thread/thread/36395b7ab510dd5d
-       if ($.browser.safari && options.closeKeepAlive)
+       if (options.closeKeepAlive)
            $.get(options.closeKeepAlive, fileUpload);
        else
            fileUpload();
@@ -157,7 +155,7 @@ $.fn.ajaxSubmit = function(options) {
     function fileUpload() {
         var form = $form[0];
         
-        if ($(':input[@name=submit]', form).length) {
+        if ($(':input[name=submit]', form).length) {
             alert('Error: Form elements must not be named "submit".');
             return;
         }
@@ -166,11 +164,9 @@ $.fn.ajaxSubmit = function(options) {
 		var s = jQuery.extend(true, {}, $.extend(true, {}, $.ajaxSettings), opts);
 
         var id = 'jqFormIO' + (new Date().getTime());
-        var $io = $('<iframe id="' + id + '" name="' + id + '" />');
+        var $io = $('<iframe id="' + id + '" name="' + id + '" src="about:blank" />');
         var io = $io[0];
 
-        if ($.browser.msie || $.browser.opera) 
-            io.src = 'javascript:false;document.write("");';
         $io.css({ position: 'absolute', top: '-1000px', left: '-1000px' });
 
         var xhr = { // mock object
@@ -221,12 +217,14 @@ $.fn.ajaxSubmit = function(options) {
         setTimeout(function() {
             // make sure form attrs are set
             var t = $form.attr('target'), a = $form.attr('action');
-            $form.attr({
-                target:   id,
-                method:   'POST',
-                action:   opts.url
-            });
-            
+
+			// update form attrs in IE friendly way
+			form.setAttribute('target',id);
+			if (form.getAttribute('method') != 'POST')
+				form.setAttribute('method', 'POST');
+			if (form.getAttribute('action') != opts.url)
+				form.setAttribute('action', opts.url);
+							
             // ie borks in some cases when setting encoding
             if (! options.skipEncodingOverride) {
                 $form.attr({
@@ -255,18 +253,19 @@ $.fn.ajaxSubmit = function(options) {
             }
             finally {
                 // reset attrs and remove "extra" input elements
-                $form.attr('action', a);
-                t ? $form.attr('target', t) : $form.removeAttr('target');
+				form.setAttribute('action',a);
+                t ? form.setAttribute('target', t) : $form.removeAttr('target');
                 $(extraInputs).remove();
             }
         }, 10);
 
+        var nullCheckFlag = 0;
+		
         function cb() {
             if (cbInvoked++) return;
             
             io.detachEvent ? io.detachEvent('onload', cb) : io.removeEventListener('load', cb, false);
 
-            var operaHack = 0;
             var ok = true;
             try {
                 if (timedOut) throw 'timeout';
@@ -275,10 +274,10 @@ $.fn.ajaxSubmit = function(options) {
 
                 doc = io.contentWindow ? io.contentWindow.document : io.contentDocument ? io.contentDocument : io.document;
                 
-                if (doc.body == null && !operaHack && $.browser.opera) {
-                    // In Opera 9.2.x the iframe DOM is not always traversable when
-                    // the onload callback fires so we give Opera 100ms to right itself
-                    operaHack = 1;
+                if ((doc.body == null || doc.body.innerHTML == '') && !nullCheckFlag) {
+                    // in some browsers (cough, Opera 9.2.x) the iframe DOM is not always traversable when
+                    // the onload callback fires, so we give them a 2nd chance
+                    nullCheckFlag = 1;
                     cbInvoked--;
                     setTimeout(cb, 100);
                     return;
@@ -539,8 +538,9 @@ $.fieldValue = function(el, successful) {
         for(var i=(one ? index : 0); i < max; i++) {
             var op = ops[i];
             if (op.selected) {
-                // extra pain for IE...
-                var v = $.browser.msie && !(op.attributes['value'].specified) ? op.text : op.value;
+				var v = op.value;
+				if (!v) // extra pain for IE...
+                	v = (op.attributes && op.attributes['value'] && !(op.attributes['value'].specified)) ? op.text : op.value;
                 if (one) return v;
                 a.push(v);
             }

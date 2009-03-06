@@ -1,7 +1,7 @@
 /* TREE LAYOUT */
 .tree ul {
 	margin:0 0 0 5px;
-	padding:0;
+	padding:0 0 0 0;
 	list-style-type:none;
 }
 .tree li {
@@ -10,16 +10,22 @@
 	line-height:18px;
 	padding:0 0 0 15px;
 	margin:0 0 0 0;
+
+	/* Background fix */
 	clear:both;
+	_height:18px;
+	#height:auto;
 }
 .tree li ul {
 	display:none;
-	clear:both;
 }
 .tree li a,
 .tree li span {
-	display:inline;
-	float:left;
+	/*
+	vertical-align:bottom;
+	display:-moz-inline-stack;
+	*/
+	display:inline-block;
 	line-height:16px;
 	height:16px;
 	padding:1px 4px 1px 23px !important;
@@ -29,7 +35,6 @@
 	background-color:transparent;
 	background-repeat:no-repeat;
 	background-position:4px 1px; 
-	-moz-border-radius:3px;
 	border:0;
 	margin:0;
 }
@@ -84,23 +89,23 @@
 .tree li.last {
 	background-position:5px top;
 	background-repeat:no-repeat;
+	float:left;
 }
 /* NO DOTS */
 .no_dots ul {
-	background:transparent;
+	background:transparent !important;
 }
-.no_dots li {
-	background:transparent;
+.no_dots li, .no_dots li.last {
+	background-color:transparent !important;
 }
-.no_dots li.last {
-	background:transparent;
+.no_dots li.leaf {
+	background-image:none !important;
 	background-color:transparent !important;
 }
 
 /* OPEN OR CLOSE */
 .tree li.open ul {
 	display:block;
-	clear:both;
 }
 .tree li.closed ul {
 	display:none !important;
@@ -127,40 +132,6 @@
 	display:none;
 }
 
-/* HACKY-HACKY */
-/* EXPLORER 7 */
-*:first-child+html .tree li {
-	margin-bottom:-2px;
-} 
-*:first-child+html .tree li ul {
-	padding-bottom:2px;
-}
-/* EXPLORER 6 */
-.tree li {
-	_width:50%;
-	_margin-bottom:-2px;
-}
-.tree li ul {
-	_padding-bottom:2px;
-}
-
-/* 
- * FF & OPERA FIXES
-.tree li:not([class="xxx"]) {
-	margin-bottom:0px;
-}
-html:first-child .tree li {
-	margin-bottom:0px;
-}
-.tree li ul:not([class="xxx"]) {
-	padding-bottom:0;
-}
-html:first-child .tree ul {
-	padding-bottom:0;
-}
-*/
-
-
 /* RTL modification */
 .rtl * {
 	direction:rtl;
@@ -173,6 +144,7 @@ html:first-child .tree ul {
 }
 .rtl li.last {
 	background-position:right top;
+	float:right;
 }
 .rtl li a,
 .rtl li span {
@@ -228,3 +200,10 @@ html:first-child .tree ul {
 	margin:0;
 	padding:0;
 }
+
+.tree li, x:-moz-any-link { overflow:auto; #overflow:visible; }
+/** FF2 stuff **/
+.tree li a, x:-moz-any-link { display:inline; float:left; }
+.tree li, .tree li ul, .tree li.open ul, x:-moz-any-link { clear:both; }
+.tree li a, x:-moz-any-link, x:default { display:inline-block; float:none; }
+.tree li ul, .tree li.open ul, x:-moz-any-link, x:default { clear:none; }

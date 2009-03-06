@@ -133,7 +133,7 @@
 	    target: 	'#cFindResultTable'
 	,	url: 		'/rectype/'+rectype
 	,	success: 	function() {
-			$('#cMenuTabs > ul').tabs('select',1);
+			$('#cMenuTabs').tabs('select',1);
 		}
 	};
 	$('#find_records').ajaxForm(formOptions);

@@ -146,7 +146,7 @@
 <script type="text/javascript">
 	$(function () {
 		// creazione tabs
-		$('#record_tabs > ul').tabs();
+		$('#record_tabs').tabs();
 
 		// visualizzazione title del record
 		$('#record_title').html("<%= fam_img_tag_rectype @record.brectype  %><%= escape_javascript h(@record.title) %>");

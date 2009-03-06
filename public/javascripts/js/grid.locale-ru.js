@@ -1,6 +1,6 @@
 ;(function($){
 /**
- * jqGrid Russian Translation
+ * jqGrid Russian Translation v1.1 21.01.2009
  * Alexey Kanaev softcore@rambler.ru
  * http://softcore.com.ru 
  * Dual licensed under the MIT and GPL licenses:
@@ -67,6 +67,42 @@ $.jgrid.col ={
 $.jgrid.errors = {
 	errcap : "Ошибка",
 	nourl : "URL не установлен",
-	norecords: "Нет записей для обработки"
+	norecords: "Нет записей для обработки",
+    model : "Число полей не соответствует числу столбцов таблицы!"
+};
+$.jgrid.formatter = {
+	integer : {thousandsSeparator: " ", defaulValue: 0},
+	number : {decimalSeparator:",", thousandsSeparator: " ", decimalPlaces: 2, defaulValue: 0},
+	currency : {decimalSeparator:",", thousandsSeparator: " ", decimalPlaces: 2, prefix: "", suffix:"", defaulValue: 0},
+	date : {
+		dayNames:   [
+			"Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб",
+			"Воскресение", "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота"
+		],
+		monthNames: [
+			"Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек",
+			"Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"
+		],
+		AmPm : ["am","pm","AM","PM"],
+		S: function (j) {return j < 11 || j > 13 ? ['st', 'nd', 'rd', 'th'][Math.min((j - 1) % 10, 3)] : 'th'},
+		srcformat: 'Y-m-d',
+		newformat: 'd.m.Y',
+		masks : {
+            ISO8601Long:"Y-m-d H:i:s",
+            ISO8601Short:"Y-m-d",
+            ShortDate: "n.j.Y",
+            LongDate: "l, F d, Y",
+            FullDateTime: "l, F d, Y G:i:s",
+            MonthDay: "F d",
+            ShortTime: "G:i",
+            LongTime: "G:i:s",
+            SortableDateTime: "Y-m-d\\TH:i:s",
+            UniversalSortableDateTime: "Y-m-d H:i:sO",
+            YearMonth: "F, Y"
+        },
+        reformatAfterEdit : false
+	},
+	baseLinkUrl: '',
+	showAction: 'show'
 };
 })(jQuery);

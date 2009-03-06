@@ -1,14 +1,5 @@
 /*
  Transform a table to a jqGrid.
  Peter Romianowski <peter.romianowski@optivo.de> 
- If the first column of the table contains checkboxes or
- radiobuttons then the jqGrid is made selectable.
 */
-
-function tableToGrid(selector){$(selector).each(function(){if(this.grid){return;}
-$(this).width("99%");var w=$(this).width();var inputCheckbox=$('input[type=checkbox]:first',$(this));var inputRadio=$('input[type=radio]:first',$(this));var selectMultiple=inputCheckbox.length>0;var selectSingle=!selectMultiple&&inputRadio.length>0;var selectable=selectMultiple||selectSingle;var inputName=inputCheckbox.attr("name")||inputRadio.attr("name");var colModel=[];var colNames=[];$('th',$(this)).each(function(){if(colModel.length==0&&selectable){colModel.push({name:'__selection__',index:'__selection__',width:0,hidden:true});colNames.push('__selection__');}else{colModel.push({name:$(this).html(),index:$(this).html(),width:$(this).width()||150});colNames.push($(this).html());}});var data=[];var rowIds=[];var rowChecked=[];$('tbody > tr',$(this)).each(function(){var row={};var rowPos=0;data.push(row);$('td',$(this)).each(function(){if(rowPos==0&&selectable){var input=$('input',$(this));var rowId=input.attr("value");rowIds.push(rowId||data.length);if(input.attr("checked")){rowChecked.push(rowId);}
-row[colModel[rowPos].name]=input.attr("value");}else{row[colModel[rowPos].name]=$(this).html();}
-rowPos++;});});$(this).empty();$(this).addClass("scroll");$(this).jqGrid({datatype:"local",width:w,colNames:colNames,colModel:colModel,multiselect:selectMultiple});for(var a=0;a<data.length;a++){var id=null;if(rowIds.length>0){id=rowIds[a];if(id&&id.replace){id=encodeURIComponent(id).replace(/[.\-%]/g,"_");}}
-if(id==null){id=a+1;}
-$(this).addRowData(id,data[a]);}
-for(var a=0;a<rowChecked.length;a++){$(this).setSelection(rowChecked[a]);}});};
+function tableToGrid(p){$(p).each(function(){if(this.grid){return}$(this).width("99%");var q=$(this).width();var l=$('input[type=checkbox]:first',$(this));var m=$('input[type=radio]:first',$(this));var f=l.length>0;var r=!f&&m.length>0;var n=f||r;var s=l.attr("name")||m.attr("name");var c=[];var g=[];$('th',$(this)).each(function(){if(c.length==0&&n){c.push({name:'__selection__',index:'__selection__',width:0,hidden:true});g.push('__selection__')}else{c.push({name:$(this).html(),index:$(this).html(),width:$(this).width()||150});g.push($(this).html())}});var d=[];var h=[];var i=[];$('tbody > tr',$(this)).each(function(){var j={};var e=0;d.push(j);$('td',$(this)).each(function(){if(e==0&&n){var k=$('input',$(this));var o=k.attr("value");h.push(o||d.length);if(k.attr("checked")){i.push(o)}j[c[e].name]=k.attr("value")}else{j[c[e].name]=$(this).html()}e++})});$(this).empty();$(this).addClass("scroll");$(this).jqGrid({datatype:"local",width:q,colNames:g,colModel:c,multiselect:f});for(var a=0;a<d.length;a++){var b=null;if(h.length>0){b=h[a];if(b&&b.replace){b=encodeURIComponent(b).replace(/[.\-%]/g,"_")}}if(b==null){b=a+1}$(this).addRowData(b,d[a])}for(var a=0;a<i.length;a++){$(this).setSelection(i[a])}})};
