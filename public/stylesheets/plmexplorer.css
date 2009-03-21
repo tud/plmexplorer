@@ -128,6 +128,9 @@ hr {
 #wNavigation .ui-accordion-content a {
 	line-height:2em;
 }
+#dialog_about {
+	text-align: center;
+}
 
 /**************************************/
 /*              CENTER                */
