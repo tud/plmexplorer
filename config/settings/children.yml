@@ -3,7 +3,7 @@ PART:
     label: Parts
     default: true
   - reftype: USES_FRZ
-    label: UsesFrz
+    label: PartsFrz
   - reftype: DESC_BY
     label: Documents
   - reftype: DESC_BY_FRZ
