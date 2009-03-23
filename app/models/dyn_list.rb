@@ -2,15 +2,6 @@ class DynList
 
   DEFAULT_LABEL = 'Choose from:'
 
-  LOGISTIC_ITEMS = [
-    [ '',                      ''   ],
-    [ 'Ricambio',              'R'  ],
-    [ 'Dotazione',             'D'  ],
-    [ 'Dotazione-Ricambio',    'DR' ],
-    [ 'Attrezzatura',          'A'  ],
-    [ 'Attrezzatura-Ricambio', 'AR' ]
-  ]
-
   Option = Struct.new(:value, :key)
 
   class OptGroup

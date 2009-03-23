@@ -1,6 +1,12 @@
 class ReportsController < ApplicationController
   
   def bomnew
+    if request.post?
+      brecord = params[:brecord]
+      brecord.each do |key, value|
+        logger.info "key: #{key} -- value: #{value}"
+      end
+    end
     render :layout=>false
   end
   

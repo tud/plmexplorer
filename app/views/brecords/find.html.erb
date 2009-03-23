@@ -59,7 +59,7 @@
 		<% if @rectype == 'PART' %>
 			<div class='ctrlHolder'>
 				<label for="brecord_find_uda_logistic_item">Logistic Item Type :</label>
-				<%= f.select :find_uda_logistic_item, DynList::LOGISTIC_ITEMS, {}, {:tabindex => "21"} %>
+				<%= f.select :find_uda_logistic_item, LOGISTIC_ITEMS, {:include_blank => true}, {:tabindex => "21"} %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_find_uda_comm_number">Commercial Code :</label>
