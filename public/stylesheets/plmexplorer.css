@@ -27,6 +27,7 @@
 }
 select {
 	height:1.9em;
+	margin:0;
 }
 .centered {
 	text-align:center;

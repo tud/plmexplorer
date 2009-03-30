@@ -1,11 +1,11 @@
 ;(function ($) {
 /*
- * jqGrid  3.4.2 - jQuery Grid
+ * jqGrid  3.4.3 - jQuery Grid
  * Copyright (c) 2008, Tony Tomov, tony@trirand.com
  * Dual licensed under the MIT and GPL licenses
  * http://www.opensource.org/licenses/mit-license.php
  * http://www.gnu.org/licenses/gpl.html
- * Date: 2009-03-01 rev 82
+ * Date: 2009-03-12 rev 84
  */
 $.fn.jqGrid = function( p ) {
 	p = $.extend(true,{
@@ -71,6 +71,7 @@ $.fn.jqGrid = function( p ) {
 	treeGrid : false,
 	treeGridModel : 'nested',
 	treeReader : {},
+	treeANode : 0,
 	ExpandColumn: null,
 	tree_root_level : 0,
 	prmNames: {page:"page",rows:"rows", sort: "sidx",order: "sord"},
@@ -277,7 +278,11 @@ $.fn.jqGrid = function( p ) {
 				$('td',$t.rows[ind]).each( function(i) {
 					nm = $t.p.colModel[i].name; 
 					if ( nm !== 'cb' && nm !== 'subgrid') {
-						res[nm] = $.htmlDecode($(this).html());
+						if($t.p.treeGrid===true && nm == $t.p.ExpandColumn) {
+							res[nm] = $.htmlDecode($("span:first",this).html());
+						} else {
+							res[nm] = $.htmlDecode($(this).html());
+						}
 					}
 				});
 			});
@@ -588,7 +593,7 @@ $.fn.jqGrid = function( p ) {
 			} else {pos = parseInt(colname,10);}
 			if(pos>=0) {
 				var ind = $($t).getInd($t.rows,rowid);
-				if (ind){
+				if (ind>=0){
 					var tcell = $("td:eq("+pos+")",$t.rows[ind]);
 					if(nData != "") {
 						$t.formatter(tcell, $t.rows[ind], nData, pos,'edit');
@@ -613,9 +618,9 @@ $.fn.jqGrid = function( p ) {
 					}
 				});
 			} else {pos = parseInt(col,10);}
-			if(rowid && pos>=0) {
+			if(pos>=0) {
 				var ind = $($t).getInd($t.rows,rowid);
-				if(ind) {
+				if(ind>=0) {
 					ret = $.htmlDecode($("td:eq("+pos+")",$t.rows[ind]).html());
 				}
 			}
@@ -780,6 +785,7 @@ $.fn.jqGrid = function( p ) {
 				if(j%2 == 1) {row.className = cn;} $(row).addClass("jqgrow");
 				if( ts.p.treeGrid === true) {
 					try {$(ts).setTreeNode(rd,row);} catch (e) {}
+					ts.p.treeANode = 0;
 				}
 				$(ts.rows[j+fpos+rcnt]).after(row);
 				if(afterInsRow) {ts.p.afterInsertRow(row.id,rd,this);}
@@ -849,6 +855,7 @@ $.fn.jqGrid = function( p ) {
 				if(i%2 == 1) {row.className = cn;} $(row).addClass("jqgrow");
 				if( ts.p.treeGrid === true) {
 					try {$(ts).setTreeNode(rd,row);} catch (e) {}
+					ts.p.treeANode = 0;
 				}
 				$(ts.rows[i+fpos+rcnt]).after(row);
 				if(afterInsRow) {ts.p.afterInsertRow(row.id,rd,drows[i]);}
@@ -1069,7 +1076,7 @@ $.fn.jqGrid = function( p ) {
 				str +="</SELECT>";
 				$(ts.p.pager).append("&#160;"+str+"&#160;<span id='sp_2'></span>");
 				$(ts.p.pager).find("select").bind('change',function() { 
-					ts.p.rowNum = (this.value>0) ? this.value : ts.p.rowNum; 
+					ts.p.rowNum = this.value; 
 					if (typeof ts.p.onPaging =='function') {ts.p.onPaging('records');}
 					populate();
 					ts.p.selrow = null;
@@ -1540,8 +1547,9 @@ $.fn.jqGrid = function( p ) {
 					$(grid.bDiv).width(gwdt).css("overflow-x",overfl);
 					$(grid.hDiv).width(gwdt);
 				}
+				return false;
 			}
-			return false;
+			return true;
 		});
 		ts.formatCol = function(a,b) {formatCol(a,b);};
 		ts.sortData = function(a,b,c){sortData(a,b,c);};

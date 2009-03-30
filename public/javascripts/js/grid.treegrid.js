@@ -116,7 +116,7 @@ $.fn.extend({
 		return this.each(function (){
 			var $t = this;
 			if(!$t.p.treeGrid) { return; }
-			$.extend($t.p,{treeANode : 0,treedatatype: null});
+			$.extend($t.p,{treedatatype: null});
 			if($t.p.treeGridModel == 'nested') {
 				$t.p.treeReader = $.extend({
 					level_field: "level",
@@ -178,9 +178,8 @@ $.fn.extend({
 					});
 					break;
 				case 'adjacency' :
-					var parid = $t.p.treeReader.parent_id_field;
 					$($t.rows).each(function(i){
-						if(this[parid] == null) {
+						if(this.parent_id.toLowerCase() == "null") {
 							result.push(this);
 						}
 					});
@@ -317,7 +316,6 @@ $.fn.extend({
 						$(this).setGridParam({postData:{nodeid:rc.id,parentid:rc.parent_id,n_level:rc.level}});
 					}
 					$(this).trigger("reloadGrid");
-					this.treeANode = 0;
 					if(this.p.treeGridModel == 'nested') {
 						$(this).setGridParam({postData:{nodeid:'',n_left:'',n_right:'',n_level:''}});
 					} else {

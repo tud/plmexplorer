@@ -111,8 +111,8 @@
 		    	monthNames: opts.monthNames
 			};
 			format = format.toLowerCase();
-		    date = date.split(/[\\\/:_;.\s-]/);
-		    format = format.split(/[\\\/:_;.\s-]/);
+			date = date.split(/[\\\/:_;.tT\s-]/);
+			format = format.split(/[\\\/:_;.tT\s-]/);
 			// !!!!!!!!!!!!!!!!!!!!!!
 			// Here additional code to parse for month names
 			// !!!!!!!!!!!!!!!!!!!!!!
