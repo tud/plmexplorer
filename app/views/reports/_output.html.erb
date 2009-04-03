@@ -2,8 +2,8 @@
 <div class='ctrlHolder'>
 	<label for="brecord_report_print_queue">Print Queue :</label>
 	<select id="brecord_report_print_queue" name="brecord[report_print_queue]" tabindex="21">
-                <option value="" />
-                <%= option_groups_from_collection_for_select(PRINTERS, :options, :label, :value, :key) %>
+		<option value="" />
+		<%= option_groups_from_collection_for_select(PRINTERS, :options, :label, :value, :key) %>
 	</select>
 </div>
 <div class='ctrlHolder'>
@@ -11,7 +11,24 @@
 	<%= f.text_field :report_output_file, :maxlength => "80", :tabindex => "22" %>
 </div>
 <div class="buttonHolder">
-        <label>&nbsp;</label>
-        <button type="submit" class="ui-corner-all"><%=fam_img_tag('find')-%>Submit</button>
-        <button type="reset" class="ui-corner-all"><%=fam_img_tag('delete')-%>Reset</button>
+	<label>&nbsp;</label>
+	<button type="submit" class="ui-corner-all"><%=fam_img_tag('find')-%>Submit</button>
+	<button type="reset" class="ui-corner-all"><%=fam_img_tag('delete')-%>Reset</button>
 </div>
+
+
+<script type="text/javascript">
+
+	var idname = '<%= controller.action_name %>';
+
+	var formOptions = { 
+	    target: 	'#'+idname
+	,	url: 		'/reports/'+idname
+	,	success: 	function() {
+			alert("report lanciato");
+			return false;
+		}
+	};
+	$('#'+idname).ajaxForm(formOptions);
+
+</script>
