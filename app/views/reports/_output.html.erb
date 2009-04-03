@@ -16,17 +16,30 @@
 	<button type="reset" class="ui-corner-all"><%=fam_img_tag('delete')-%>Reset</button>
 </div>
 
+<div id="dialog_report_running" title="About PlmExplorer">
+	<%= MSG['REPORT_RUNNING'] %><br/><br/>
+	<a href="http://www.plmexplorer.com"><img src="/images/logo_button.gif" alt="PlmExplorer"></a>
+</div>
 
 <script type="text/javascript">
+
+	$('#dialog_report_running').dialog({
+		modal: true,
+		autoOpen: false,
+		bgiframe: true,
+		overlay: {
+			opacity: 0.5,
+			background: '#1c94c4'
+		}
+	});
 
 	var idname = '<%= controller.action_name %>';
 
 	var formOptions = { 
-	    target: 	'#'+idname
+	    target: 	'#cReport'
 	,	url: 		'/reports/'+idname
 	,	success: 	function() {
-			alert("report lanciato");
-			return false;
+			$('#dialog_report_running').dialog('open');
 		}
 	};
 	$('#'+idname).ajaxForm(formOptions);
