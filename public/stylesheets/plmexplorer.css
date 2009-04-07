@@ -129,9 +129,6 @@ hr {
 #wNavigation .ui-accordion-content a {
 	line-height:2em;
 }
-#dialog_report_submitted {
-	text-align: center;
-}
 #dialog_about {
 	text-align: center;
 }
@@ -223,6 +220,17 @@ hr {
 .title {
 	color: #1c94c4;
 }
+#dialog_report_submitted {
+	text-align: center;
+}
+.uniForm label.invalid {
+	color: red;
+	margin-left: 1em;
+	display: inline;
+	font-style:italic;
+	float: none;
+}
+
 /**************************************/
 /*              EAST                  */
 /**************************************/

@@ -5,8 +5,8 @@
 		<legend id="legend_report_record"></legend>
 		<%= f.hidden_field :report_rec_brectype, :value => 'PART' %>
 		<div class='ctrlHolder'>
-			<label for="brecord_report_rec_name">Number :</label>
-			<%= f.text_field :report_rec_name, :maxlength => "26", :tabindex => "1", :class => "uppercase" %>
+			<label for="brecord_report_rec_name"><em>*</em> Number :</label>
+			<%= f.text_field :report_rec_name, :maxlength => "26", :tabindex => "1", :class => "required uppercase" %>
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_report_rec_bname1">Cage Code :</label>
@@ -48,7 +48,3 @@
 		<%= render :partial => 'output', :locals => {:f => f} %>
 	</fieldset>
 <% end %>
-
-<script type="text/javascript">
-	$('form.uniForm').uniform();
-</script>

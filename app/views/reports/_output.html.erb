@@ -1,47 +1,69 @@
 <hr/>
 <div class='ctrlHolder'>
-	<label for="brecord_report_print_queue">Print Queue :</label>
+	<label for="brecord_report_print_queue"><em>*</em>Print Queue :</label>
 	<select id="brecord_report_print_queue" name="brecord[report_print_queue]" tabindex="21">
 		<option value="" />
 		<%= option_groups_from_collection_for_select(PRINTERS, :options, :label, :value, :key) %>
 	</select>
 </div>
 <div class='ctrlHolder'>
-	<label for="brecord_report_output_file">Output File :</label>
+	<label for="brecord_report_output_file"><em>*</em>Output File :</label>
 	<%= f.text_field :report_output_file, :maxlength => "80", :tabindex => "22" %>
 </div>
 <div class="buttonHolder">
 	<label>&nbsp;</label>
-	<button type="submit" class="ui-corner-all"><%=fam_img_tag('find')-%>Submit</button>
+	<button type="submit" class="ui-corner-all" id="report_submit"><%=fam_img_tag('find')-%>Submit</button>
 	<button type="reset" class="ui-corner-all"><%=fam_img_tag('delete')-%>Reset</button>
 </div>
 
-<div id="dialog_report_submitted" title="Done">
-	<br/> <%= MSG['REPORT_SUBMITTED'] %> <br/><br/>
-        <img src="/images/logo_button.gif" alt="PlmExplorer"/>
+<div id="dialog_report_submitted" title="Plm Explorer">
+	<div>&nbsp;</div>
+	<div class="ui-state-highlight ui-corner-all">
+		<span class="ui-icon ui-icon-info" style="float: left;"></span>
+		<%= MSG['REPORT_SUBMITTED'] %>
+	</div>
+	<div>&nbsp;</div>
+	<img src="/images/logo_button.gif" alt="PlmExplorer"/>
 </div>
 
 <script type="text/javascript">
+	$(function() {
+		$('#dialog_report_submitted').dialog({
+			modal: true,
+			autoOpen: false,
+			bgiframe: true,
+			overlay: {
+				opacity: 0.5,
+				background: '#1c94c4'
+			}
+		});
+		
+		var idname = '<%= controller.action_name %>';
+		$('#'+idname).validate({
+			errorClass: 'invalid',
+			submitHandler: function(form) {
+				$('#dialog_report_submitted').dialog('open');
+				$(form).ajaxSubmit({
+					target: 	'#cReport'
+				,	url: 		'/reports/'+idname
+				});
+			}
+		});
+		$('#brecord_report_print_queue').rules('add', {
+			required: '#brecord_report_output_file:blank'
+		});
+		$('#brecord_report_output_file').rules('add', {
+			required: '#brecord_report_print_queue:blank'
+		});
+		
+		$("#brecord_report_print_queue").blur(function() {
+		  $("#brecord_report_output_file").valid();
+		});
+		$("#brecord_report_output_file").blur(function() {
+		  $("#brecord_report_print_queue").valid();
+		});
 
-	$('#dialog_report_submitted').dialog({
-		modal: true,
-		autoOpen: false,
-		bgiframe: true,
-		overlay: {
-			opacity: 0.5,
-			background: '#1c94c4'
-		}
+		$('form.uniForm').uniform();
+
 	});
-
-	var idname = '<%= controller.action_name %>';
-
-	var formOptions = { 
-	    target: 	'#cReport'
-	,	url: 		'/reports/'+idname
-	,	success: 	function() {
-			$('#dialog_report_submitted').dialog('open');
-		}
-	};
-	$('#'+idname).ajaxForm(formOptions);
-
 </script>

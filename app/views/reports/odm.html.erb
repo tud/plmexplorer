@@ -2,7 +2,8 @@
 
 <% form_for :brecord, :html => {:id => controller.action_name, :class => 'uniForm'} do |f| %>
 	<fieldset class='inlineLabels'>
-
+		<legend id="legend_report_record"></legend>
+		<%= f.hidden_field :report_rec_brectype, :value => @rectype %>
 
 		<%= render :partial => 'output', :locals => {:f => f} %>
 	</fieldset>
