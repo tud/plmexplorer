@@ -129,6 +129,9 @@ hr {
 #wNavigation .ui-accordion-content a {
 	line-height:2em;
 }
+#dialog_report_submitted {
+	text-align: center;
+}
 #dialog_about {
 	text-align: center;
 }

@@ -16,14 +16,14 @@
 	<button type="reset" class="ui-corner-all"><%=fam_img_tag('delete')-%>Reset</button>
 </div>
 
-<div id="dialog_report_running" title="About PlmExplorer">
-	<%= MSG['REPORT_RUNNING'] %><br/><br/>
-	<a href="http://www.plmexplorer.com"><img src="/images/logo_button.gif" alt="PlmExplorer"></a>
+<div id="dialog_report_submitted" title="Done">
+	<br/> <%= MSG['REPORT_SUBMITTED'] %> <br/><br/>
+        <img src="/images/logo_button.gif" alt="PlmExplorer"/>
 </div>
 
 <script type="text/javascript">
 
-	$('#dialog_report_running').dialog({
+	$('#dialog_report_submitted').dialog({
 		modal: true,
 		autoOpen: false,
 		bgiframe: true,
@@ -39,7 +39,7 @@
 	    target: 	'#cReport'
 	,	url: 		'/reports/'+idname
 	,	success: 	function() {
-			$('#dialog_report_running').dialog('open');
+			$('#dialog_report_submitted').dialog('open');
 		}
 	};
 	$('#'+idname).ajaxForm(formOptions);

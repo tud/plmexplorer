@@ -1,9 +1,9 @@
 class Brecord < ActiveRecord::Base
-  has_many :budas,         :foreign_key => 'bobjid'
-  has_many :bfiles,        :foreign_key => 'bobjid'
-  has_many :bpromotions,   :foreign_key => 'bobjid'
-  has_many :bchkhistories, :foreign_key => 'bobjid'
-  has_many :brefs,         :foreign_key => 'bobjid'
+  has_many   :budas,         :foreign_key => 'bobjid'
+  has_many   :bfiles,        :foreign_key => 'bobjid'
+  has_many   :bpromotions,   :foreign_key => 'bobjid'
+  has_many   :bchkhistories, :foreign_key => 'bobjid'
+  has_many   :brefs,         :foreign_key => 'bobjid'
 
   def name
     self[:brecname].split('&')[0]
