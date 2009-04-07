@@ -22,27 +22,27 @@
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_report_data_maturity">Data Maturity :</label>
-                        <%= f.select :report_data_maturity, DATA_MATURITY, {:selected => 'RELEASED'}, {:tabindex => "5"} %>
+			<%= f.select :report_data_maturity, DATA_MATURITY, {:selected => 'RELEASED'}, {:tabindex => "4"} %>
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_report_record_type">Record Type :</label>
-                        <%= f.select :report_record_type, RECORD_TYPE, {:selected => '0'}, {:tabindex => "6"} %>
+			<%= f.select :report_record_type, RECORD_TYPE, {:selected => '0'}, {:tabindex => "5"} %>
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_report_level">Level :</label>
-			<%= f.text_field :report_level, :value => "1", :maxlength => "2", :tabindex => "7" %>
+			<%= f.text_field :report_level, :value => "1", :maxlength => "2", :tabindex => "6" %>
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_report_alternate_language">Alternate Language :</label>
-                        <%= f.select :report_alternate_language, ALTERNATE_LANGUAGE, {:selected => '0'}, {:tabindex => "8"} %>
+			<%= f.select :report_alternate_language, ALTERNATE_LANGUAGE, {:selected => '0'}, {:tabindex => "7"} %>
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_report_print_header">Print Header :</label>
-                        <%= f.select :report_print_header, YES_NO, {:selected => 'Y'}, {:tabindex => "9"} %>
+			<%= f.select :report_print_header, YES_NO, {:selected => 'Y'}, {:tabindex => "8"} %>
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_report_separating_char">Separating Char :</label>
-                        <%= f.select :report_separating_char, YES_NO, {:selected => 'N'}, {:tabindex => "10"} %>
+			<%= f.select :report_separating_char, YES_NO, {:selected => 'N'}, {:tabindex => "9"} %>
 		</div>
 
 		<%= render :partial => 'output', :locals => {:f => f} %>

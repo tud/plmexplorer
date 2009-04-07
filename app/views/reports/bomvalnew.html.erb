@@ -2,13 +2,68 @@
 
 <% form_for :brecord, :html => {:id => controller.action_name, :class => 'uniForm'} do |f| %>
 	<fieldset class='inlineLabels'>
-
-
+		<legend id="legend_report_record"></legend>
+		<%= f.hidden_field :report_rec_brectype, :value => 'PART' %>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_rec_name"><em>*</em> Number :</label>
+			<%= f.text_field :report_rec_name, :maxlength => "26", :tabindex => "1", :class => "required uppercase" %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_rec_bname1">Cage Code :</label>
+			<select id="brecord_report_rec_bname1" name="brecord[report_rec_bname1]" tabindex="2">
+				<option value="" />
+				<%= option_groups_from_collection_for_select(CAGE_CODES, :options, :label, :value, :key) %>
+			</select>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_rec_brecalt">Rev. :</label>
+			<%= f.text_field :report_rec_brecalt, :value => "#", :maxlength => "4", :tabindex => "3", :class => "uppercase" %>
+			<span class='hint'> # = latest revision</span>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_record_serial_number">Serial Number :</label>
+			<%= f.text_field :report_record_serial_number, :value => "9999999", :maxlength => "7", :tabindex => "4" %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_record_type">Record Type :</label>
+			<%= f.select :report_record_type, RECORD_TYPE, {:selected => '0'}, {:tabindex => "5"} %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_sort_criteria">Sort Criteria :</label>
+			<%= f.select :report_sort_criteria, RECORD_TYPE, {:selected => '0'}, {:tabindex => "6"} %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_data_maturity">Data Maturity :</label>
+			<%= f.select :report_data_maturity, DATA_MATURITY, {:selected => 'RELEASED'}, {:tabindex => "7"} %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_level">Level :</label>
+			<%= f.text_field :report_level, :value => "1", :maxlength => "2", :tabindex => "8" %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_alternate_language">Alternate Language :</label>
+			<%= f.select :report_alternate_language, ALTERNATE_LANGUAGE, {:selected => '0'}, {:tabindex => "9"} %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_print_header">Print Header :</label>
+			<%= f.select :report_print_header, YES_NO, {:selected => 'Y'}, {:tabindex => "10"} %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_separating_char">Separating Char :</label>
+			<%= f.select :report_separating_char, YES_NO, {:selected => 'N'}, {:tabindex => "11"} %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_rec2_name"><em>*</em> End Item Number :</label>
+			<%= f.text_field :report_rec_name, :maxlength => "26", :tabindex => "12", :class => "required uppercase" %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_report_rec2_bname1">End Item Cage Code :</label>
+			<select id="brecord_report_rec2_bname1" name="brecord[report_rec2_bname1]" tabindex="13">
+				<option value="" />
+				<%= option_groups_from_collection_for_select(CAGE_CODES, :options, :label, :value, :key) %>
+			</select>
+		</div>
 
 		<%= render :partial => 'output', :locals => {:f => f} %>
 	</fieldset>
 <% end %>
-
-<script type="text/javascript">
-	$('form.uniForm').uniform();
-</script>
