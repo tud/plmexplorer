@@ -79,7 +79,7 @@ class ReportsController < ApplicationController
 
   def submit(edm_report)
     logfile = Tempfile.new(edm_report[:report])
-    if ENV['RAILS_ENV'] = 'development'
+    if ENV['RAILS_ENV'] == 'development'
       # In sviluppo creo lo script DMS di lancio del report
       # in un file temporaneo
       script = logfile
