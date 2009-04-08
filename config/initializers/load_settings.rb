@@ -12,8 +12,8 @@ CHANGE_SUBCLASSES = DynList.build_from('IPD_CHNGSUBCLASS', :bdesc)
 CHILDREN = YAML::load(File.open("#{RAILS_ROOT}/config/settings/children.yml"))
 
 DATA_MATURITY = [
-  [ 'Current',          'CURRENT'  ],
-  [ 'Current Released', 'RELEASED' ]
+  'CURRENT',
+  'RELEASED'
 ]
 
 DOCUMENT_SIZES = DynList.build_from('IPD_DOCSIZE', :bdesc)
@@ -39,15 +39,30 @@ PREF = YAML::load(File.open("#{RAILS_ROOT}/config/settings/preferences.yml"))
 PRINTERS = DynList.build_from('IPD_PRINTER', :bdesc)
 
 PROJECT_LIST = Bproject.find(:all).map { |prj| prj.bname }.sort
-PROJECT_LIST.unshift('')
 
 RECORD_TYPE = [
   [ 'Part/Document', '0' ],
   [ 'Part',          '1' ]
 ]
 
+REPORT_FORMAT = [
+  'COMPLETO',
+  'LISTA'
+]
+
 USER_LIST = Bdbuser.find(:all).map { |user| user.buser }.sort.uniq
-USER_LIST.unshift('')
+
+WA_STATUS = [
+  'CLOSED',
+  'COMPLETE',
+  'CREATED',
+  'REJECTED'
+]
+
+WA_TYPE = [
+  'CHANGE',
+  'CHANGE_LOG'
+]
 
 YES_NO = [
   [ 'YES', 'Y' ],

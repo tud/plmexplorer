@@ -83,7 +83,6 @@ class BrecordsController < ApplicationController
     @statusList = Blevel.find(:all,
                               :conditions => [ "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname in (?)", rectypes ],
                               :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
-    @statusList.unshift('')
 
     if @rectype == 'PART'
       @typeList = DynList.build_from('IPD_PARTSUBTYPE')

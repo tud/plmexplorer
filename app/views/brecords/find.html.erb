@@ -25,19 +25,19 @@
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_find_rec_breclevel">Status :</label>
-			<%= f.select :find_rec_breclevel, @statusList, {}, {:tabindex => "4"} %>
+			<%= f.select :find_rec_breclevel, @statusList, {:include_blank => true}, {:tabindex => "4"} %>
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_find_rec_bproject">Project :</label>
-			<%= f.select :find_rec_bproject, PROJECT_LIST, {}, {:tabindex => "5"} %>
+			<%= f.select :find_rec_bproject, PROJECT_LIST, {:include_blank => true}, {:tabindex => "5"} %>
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_find_rec_bowner">Owner :</label>
-			<%= f.select :find_rec_bowner, USER_LIST, {}, {:tabindex => "6", :class => "uppercase editableCombobox"} %>
+			<%= f.select :find_rec_bowner, USER_LIST, {:include_blank => true}, {:tabindex => "6", :class => "uppercase editableCombobox"} %>
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_find_rec_bcreateuser">Created By :</label>
-			<%= f.select :find_rec_bcreateuser, USER_LIST, {}, {:tabindex => "7", :class => "uppercase editableCombobox"} %>
+			<%= f.select :find_rec_bcreateuser, USER_LIST, {:include_blank => true}, {:tabindex => "7", :class => "uppercase editableCombobox"} %>
 		</div>
 		<% if @rectype != 'GENERIC' %>
                         <div class='ctrlHolder'>
