@@ -32,6 +32,11 @@ FORMS = YAML::load(File.open("#{RAILS_ROOT}/config/settings/record_forms.yml"))
 
 NAVIGATION = YAML::load(File.open("#{RAILS_ROOT}/config/settings/navigation.yml"))
 
+ODM_TYPE = [
+  'CHANGE',
+  'CHANGE_LOG'
+]
+
 PARENTS = YAML::load(File.open("#{RAILS_ROOT}/config/settings/parents.yml"))
 
 PREF = YAML::load(File.open("#{RAILS_ROOT}/config/settings/preferences.yml"))
@@ -61,7 +66,9 @@ WA_STATUS = [
 
 WA_TYPE = [
   'CHANGE',
-  'CHANGE_LOG'
+  'CHANGE_LOG',
+  'TASK',
+  'TASK_LOG'
 ]
 
 YES_NO = [

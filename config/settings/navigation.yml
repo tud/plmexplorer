@@ -29,3 +29,11 @@ REPORT:
     label: EI
     iconclass: report
     title: Elenco End-Item di appartenenza
+  - type: odm
+    label: ODM
+    iconclass: report
+    title: Anagrafica/Elenco Ordini di Modifica (PA007)
+  - type: wa
+    label: WA
+    iconclass: report
+    title: Anagrafica/Elenco WorkAuth tipo Change e Task 

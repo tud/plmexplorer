@@ -7,13 +7,8 @@ class ReportsController < ApplicationController
   def bomnew
     if request.post?
       brecord = params[:brecord]
-      if brecord[:report_rec_bname1] == ''
-        # Senza Cage Code
-        brecname = brecord[:report_rec_name]
-      else
-        # Con Cage Code
-        brecname = "#{brecord[:report_rec_name]}&#{brecord[:report_rec_bname1]}"
-      end
+      blank2star(brecord)
+      brecname = "#{brecord[:report_rec_name]}&#{brecord[:report_rec_bname1]}"
       edm_report = Hash.new
       edm_report[:report] = 'OTO-BOMNEW'
       edm_report[:edm_p01] = "#{brecord[:report_rec_brectype]}\\#{brecname}\\#{brecord[:report_rec_brecalt]}"
@@ -24,27 +19,26 @@ class ReportsController < ApplicationController
       edm_report[:edm_p06] = brecord[:report_print_header]
       edm_report[:edm_p07] = brecord[:report_separating_char]
       edm_report[:edm_p08] = ''
-      edm_report[:edm_print_queue] = brecord[:report_print_queue]
-      edm_report[:edm_output_file] = brecord[:report_output_file]
       submit edm_report
     end
     render :layout => false
   end
   
   def bomvalnew
+    if request.post?
+      brecord = params[:brecord]
+      edm_report = Hash.new
+      edm_report[:report] = 'OTO-BOMVALNEW'
+      submit edm_report
+    end
     render :layout => false
   end
   
   def ei
     if request.post?
       brecord = params[:brecord]
-      if brecord[:report_rec_bname1] == ''
-        # Senza Cage Code
-        brecname = brecord[:report_rec_name]
-      else
-        # Con Cage Code
-        brecname = "#{brecord[:report_rec_name]}&#{brecord[:report_rec_bname1]}"
-      end
+      blank2star(brecord)
+      brecname = "#{brecord[:report_rec_name]}&#{brecord[:report_rec_bname1]}"
       edm_report = Hash.new
       edm_report[:report] = 'OTO-EI'
       edm_report[:edm_p01] = brecname
@@ -55,29 +49,88 @@ class ReportsController < ApplicationController
       edm_report[:edm_p06] = ''
       edm_report[:edm_p07] = ''
       edm_report[:edm_p08] = ''
-      edm_report[:edm_print_queue] = brecord[:report_print_queue]
-      edm_report[:edm_output_file] = brecord[:report_output_file]
       submit edm_report
     end
     render :layout => false
   end
   
   def odm
+    if request.post?
+      brecord = params[:brecord]
+      blank2star(brecord)
+      edm_report = Hash.new
+      edm_report[:report] = 'OTO-ODM'
+      edm_report[:edm_p01] = "#{brecord[:report_rec_brectype]}\\#{brecord[:report_rec1_name]}\\#{brecord[:report_rec1_brecalt]}"
+      edm_report[:edm_p02] = "#{brecord[:report_rec_brectype]}\\#{brecord[:report_rec2_name]}\\#{brecord[:report_rec2_brecalt]}"
+      edm_report[:edm_p03] = "#{brecord[:report_rec_breclevel]} #{brecord[:report_rec_bproject]} #{brecord[:report_rec_bowner]} Y"
+      edm_report[:edm_p04] = "#{brecord[:report_rec_bname1]} NO_OTO_REQ"
+      edm_report[:edm_p05] = "#{brecord[:report_rec_btype3]} #{brecord[:report_uda_change_subclass]} #{brecord[:report_serial_number]}"
+      edm_report[:edm_p06] = "#{brecord[:report_rec_bpromdate_from]} #{brecord[:report_rec_bpromdate_to]}"
+      edm_report[:edm_p07] = "#{brecord[:report_format]} TEXT #{brecord[:report_record_type]}"
+      edm_report[:edm_p08] = ''
+      submit edm_report
+    end
     render :layout => false
   end
   
   def req
+    if request.post?
+      brecord = params[:brecord]
+      edm_report = Hash.new
+      edm_report[:report] = 'OTO-REQ'
+      submit edm_report
+    end
     render :layout => false
   end
   
   def wa
+    if request.post?
+      brecord = params[:brecord]
+      blank2star(brecord)
+      edm_report = Hash.new
+      edm_report[:report] = 'OTO-WA'
+      edm_report[:edm_p01] = "#{brecord[:report_rec_brectype]}\\#{brecord[:report_rec1_name]}\\#{brecord[:report_rec1_brecalt]}"
+      edm_report[:edm_p02] = "#{brecord[:report_rec_brectype]}\\#{brecord[:report_rec2_name]}\\#{brecord[:report_rec2_brecalt]}"
+      edm_report[:edm_p03] = "#{brecord[:report_rec_breclevel]} #{brecord[:report_rec_bproject]} #{brecord[:report_rec_bowner]} N"
+      edm_report[:edm_p04] = "#{brecord[:report_rec_bname1]} NO_OTO_REQ"
+      edm_report[:edm_p05] = "#{brecord[:report_rec_btype3]} #{brecord[:report_uda_change_subclass]} #{brecord[:report_serial_number]}"
+      edm_report[:edm_p06] = "#{brecord[:report_rec_bpromdate_from]} #{brecord[:report_rec_bpromdate_to]}"
+      edm_report[:edm_p07] = "#{brecord[:report_format]} TEXT #{brecord[:report_record_type]}"
+      edm_report[:edm_p08] = ''
+      submit edm_report
+    end
     render :layout => false
   end
   
 
   private
 
+  def blank2star(brecord)
+    # Compila con un asterisco i campi vuoti
+    fields = [
+      :report_rec1_name,
+      :report_rec1_brecalt,
+      :report_rec2_name,
+      :report_rec2_brecalt,
+      :report_rec_breclevel,
+      :report_rec_bproject,
+      :report_rec_bowner,
+      :report_rec_bname1,
+      :report_rec_btype3,
+      :report_uda_change_subclass,
+      :report_serial_number,
+      :report_rec_bpromdate_from,
+      :report_rec_bpromdate_to
+    ]
+    fields.each do |field|
+      brecord[field] = '*' if brecord[field] && brecord[field] == ''
+    end
+  end
+
   def submit(edm_report)
+    brecord = params[:brecord]
+    edm_report[:edm_print_queue] = brecord[:report_print_queue]
+    edm_report[:edm_output_file] = brecord[:report_output_file]
     logfile = Tempfile.new(edm_report[:report])
     if ENV['RAILS_ENV'] == 'development'
       # In sviluppo creo lo script DMS di lancio del report
