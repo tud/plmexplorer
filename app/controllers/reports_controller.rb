@@ -12,7 +12,7 @@ class ReportsController < ApplicationController
       edm_report = Hash.new
       edm_report[:report] = 'OTO-BOMNEW'
       edm_report[:edm_p01] = "#{brecord[:report_rec_brectype]}\\#{brecname}\\#{brecord[:report_rec_brecalt]}"
-      edm_report[:edm_p02] = brecord[:report_level]
+      edm_report[:edm_p02] = brecord[:report_depth]
       edm_report[:edm_p03] = brecord[:report_data_maturity]
       edm_report[:edm_p04] = brecord[:report_alternate_language]
       edm_report[:edm_p05] = brecord[:report_record_type]
@@ -27,8 +27,19 @@ class ReportsController < ApplicationController
   def bomvalnew
     if request.post?
       brecord = params[:brecord]
+      blank2star(brecord)
+      part_brecname = "#{brecord[:report_rec_name]}&#{brecord[:report_rec_bname1]}"
+      ei_brecname = "#{brecord[:report_ei_name]}&#{brecord[:report_ei_bname1]}"
       edm_report = Hash.new
       edm_report[:report] = 'OTO-BOMVALNEW'
+      edm_report[:edm_p01] = "#{brecord[:report_rec_brectype]}\\#{part_brecname}\\#{brecord[:report_rec_brecalt]}"
+      edm_report[:edm_p02] = "#{brecord[:report_rec_brectype]}\\#{ei_brecname}\\#"
+      edm_report[:edm_p03] = brecord[:report_data_maturity]
+      edm_report[:edm_p04] = brecord[:report_serial_number]
+      edm_report[:edm_p05] = brecord[:report_record_type]
+      edm_report[:edm_p06] = 'COMPLETO'
+      edm_report[:edm_p07] = "#{brecord[:report_sort_criteria]} #{brecord[:report_depth]} #{brecord[:report_alternate_language]} #{brecord[:report_print_header]} #{brecord[:report_separating_char]}"
+      edm_report[:edm_p08] = ''
       submit edm_report
     end
     render :layout => false
@@ -76,8 +87,17 @@ class ReportsController < ApplicationController
   def req
     if request.post?
       brecord = params[:brecord]
+      blank2star(brecord)
       edm_report = Hash.new
       edm_report[:report] = 'OTO-REQ'
+      edm_report[:edm_p01] = "#{brecord[:report_rec_brectype]}\\#{brecord[:report_rec1_name]}\\#{brecord[:report_rec1_brecalt]}"
+      edm_report[:edm_p02] = "#{brecord[:report_rec_brectype]}\\#{brecord[:report_rec2_name]}\\#{brecord[:report_rec2_brecalt]}"
+      edm_report[:edm_p03] = "#{brecord[:report_rec_breclevel]} #{brecord[:report_rec_bproject]} #{brecord[:report_rec_bowner]} N" 
+      edm_report[:edm_p04] = "* #{brecord[:report_progress]}"
+      edm_report[:edm_p05] = ''
+      edm_report[:edm_p06] = "#{brecord[:report_rec_bpromdate_from]} #{brecord[:report_rec_bpromdate_to]}"
+      edm_report[:edm_p07] = "#{brecord[:report_format]} TEXT REQUEST"
+      edm_report[:edm_p08] = ''
       submit edm_report
     end
     render :layout => false
@@ -108,14 +128,13 @@ class ReportsController < ApplicationController
   def blank2star(brecord)
     # Compila con un asterisco i campi vuoti
     fields = [
-      :report_rec1_name,
-      :report_rec1_brecalt,
       :report_rec2_name,
-      :report_rec2_brecalt,
+      :report_ei_name,
+      :report_rec_bname1,
+      :report_ei_bname1,
       :report_rec_breclevel,
       :report_rec_bproject,
       :report_rec_bowner,
-      :report_rec_bname1,
       :report_rec_btype3,
       :report_uda_change_subclass,
       :report_serial_number,

@@ -9,8 +9,8 @@
 			<%= f.select :report_record_type, ODM_TYPE, {:selected => 'CHANGE'}, {:tabindex => "1"} %>
 		</div>
 		<div class='ctrlHolder'>
-			<label for="brecord_report_rec1_name">Starting at Number :</label>
-			<%= f.text_field :report_rec1_name, :maxlength => "26", :tabindex => "2" %>
+			<label for="brecord_report_rec1_name"><em>*</em>Starting at Number :</label>
+			<%= f.text_field :report_rec1_name, :maxlength => "26", :tabindex => "2", :class => "required uppercase" %>
 			&nbsp;&nbsp;&nbsp;Revision : &nbsp;&nbsp;&nbsp;&nbsp;
 			<%= f.text_field :report_rec1_brecalt, :value => "0000", :maxlength => "4", :tabindex => "3" %>
 		</div>

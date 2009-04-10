@@ -25,6 +25,10 @@ REPORT:
     label: BOMNEW
     iconclass: report
     title: Distinta Tecnica OTO Melara
+  - type: bomvalnew
+    label: BOMVALNEW
+    iconclass: report
+    title: Distinte Tecniche a valle di una Distinta
   - type: ei
     label: EI
     iconclass: report
@@ -33,7 +37,11 @@ REPORT:
     label: ODM
     iconclass: report
     title: Anagrafica/Elenco Ordini di Modifica (PA007)
+  - type: req
+    label: REQ
+    iconclass: report
+    title: Anagrafica/Elenco WorkAuth tipo Request
   - type: wa
     label: WA
     iconclass: report
-    title: Anagrafica/Elenco WorkAuth tipo Change e Task 
+    title: Anagrafica/Elenco WorkAuth tipo Change e Task

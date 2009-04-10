@@ -3,48 +3,48 @@
 <% form_for :brecord, :html => {:id => controller.action_name, :class => 'uniForm'} do |f| %>
 	<fieldset class='inlineLabels'>
 		<legend id="legend_report_record"></legend>
-		<%= f.hidden_field :report_rec_brectype, :value => 'PART' %>
+		<%= f.hidden_field :report_rec_brectype, :value => 'WORKAUTH' %>
 		<div class='ctrlHolder'>
 			<label for="brecord_report_rec1_name"><em>*</em>Starting at Id :</label>
 			<%= f.text_field :report_rec1_name, :maxlength => "26", :tabindex => "1", :class => "required uppercase" %>
-			&nbsp;&nbsp;&nbsp;Revision : &nbsp;&nbsp;<em>*</em>&nbsp;&nbsp;
-			<%= f.text_field :report_rec1_brecalt, :value => "0000", :maxlength => "4", :tabindex => "2", :class => "required uppercase" %>
+			&nbsp;&nbsp;&nbsp;Revision : &nbsp;&nbsp;&nbsp;&nbsp;
+			<%= f.text_field :report_rec1_brecalt, :value => "0000", :maxlength => "4", :tabindex => "2" %>
 		</div>
 		<div class='ctrlHolder'>
-			<label for="brecord_report_rec2_name"><em>*</em>Ending with Id :</label>
-			<%= f.text_field :report_rec2_name, :maxlength => "26", :tabindex => "3", :class => "required uppercase" %>
-			&nbsp;&nbsp;&nbsp;Revision : &nbsp;&nbsp;<em>*</em>&nbsp;&nbsp;
-			<%= f.text_field :report_rec2_brecalt, :value => "9999", :maxlength => "4", :tabindex => "4", :class => "required uppercase" %>
+			<label for="brecord_report_rec2_name">Ending with Id :</label>
+			<%= f.text_field :report_rec2_name, :maxlength => "26", :tabindex => "3" %>
+			&nbsp;&nbsp;&nbsp;Revision : &nbsp;&nbsp;&nbsp;&nbsp;
+			<%= f.text_field :report_rec2_brecalt, :value => "9999", :maxlength => "4", :tabindex => "4" %>
 		</div>
 		<div class='ctrlHolder'>
-			<label for="brecord_report_record_status">Status :</label>
-			<%= f.select :report_record_status, RECORD_TYPE, {:selected => '0'}, {:tabindex => "5"} %>
+			<label for="brecord_report_rec_breclevel">Status :</label>
+			<%= f.select :report_rec_breclevel, REQ_STATUS, {:include_blank => true}, {:tabindex => "5"} %>
 		</div>
 		<div class='ctrlHolder'>
-			<label for="brecord_report_record_project">Project :</label>
-			<%= f.select :report_record_project, RECORD_TYPE, {:selected => '0'}, {:tabindex => "6"} %>
+			<label for="brecord_report_rec_bproject">Project :</label>
+			<%= f.select :report_rec_bproject, PROJECT_LIST, {:include_blank => true}, {:tabindex => "6"} %>
 		</div>
 		<div class='ctrlHolder'>
-			<label for="brecord_report_record_owner">Owner :</label>
-			<%= f.select :report_record_owner, RECORD_TYPE, {:selected => '0'}, {:tabindex => "7"} %>
+			<label for="brecord_report_rec_bowner">Owner :</label>
+			<%= f.select :report_rec_bowner, USER_LIST, {:include_blank => true}, {:tabindex => "7"} %>
 		</div>
 		<div class='ctrlHolder'>
-			<label for="brecord_report_record_promdate_from">Promotion Date From :</label>
-			<%= f.text_field :report_record_promdate_from, :maxlength => "12", :tabindex => "8", :class => "pex_datapicker" %>
+			<label for="brecord_report_rec_bpromdate_from">Promotion Date From :</label>
+			<%= f.text_field :report_rec_bpromdate_from, :maxlength => "12", :tabindex => "8", :class => "pex_datapicker" %>
 			<span class='hint'> LISTA report format only</span>
 		</div>
 		<div class='ctrlHolder'>
-			<label for="brecord_report_record_promdate_to">To :</label>
-			<%= f.text_field :report_record_promdate_to, :maxlength => "12", :tabindex => "9", :class => "pex_datapicker" %>
+			<label for="brecord_report_rec_bpromdate_to">To :</label>
+			<%= f.text_field :report_rec_bpromdate_to, :maxlength => "12", :tabindex => "9", :class => "pex_datapicker" %>
 			<span class='hint'> LISTA report format only</span>
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_report_format">Report Format :</label>
-			<%= f.select :report_format, RECORD_TYPE, {:selected => '0'}, {:tabindex => "10"} %>
+			<%= f.select :report_format, REPORT_FORMAT, {:selected => 'LISTA'}, {:tabindex => "10"} %>
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_report_progress">Report Progress :</label>
-			<%= f.select :report_progress, RECORD_TYPE, {:selected => '0'}, {:tabindex => "11"} %>
+			<%= f.select :report_progress, REPORT_PROGRESS, {:selected => 'TUTTE'}, {:tabindex => "11"} %>
 		</div>
 
 		<%= render :partial => 'output', :locals => {:f => f} %>

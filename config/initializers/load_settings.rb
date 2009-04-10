@@ -55,6 +55,25 @@ REPORT_FORMAT = [
   'LISTA'
 ]
 
+REPORT_PROGRESS = [
+  'EVASE',
+  'NON_EVASE',
+  'TUTTE'
+]
+
+REQ_STATUS = [
+  'APPROVED',
+  'CREATED',
+  'PROPOSE',
+  'REJECTED',
+  'REVIEW'
+]
+
+SORT_CRITERIA = [
+  [ 'BREAKDOWN - Report order as Breakdown', 'BREAKDOWN' ],
+  [ 'NUMERICAL - Report order as Numerical', 'NUMERICAL' ]
+]
+
 USER_LIST = Bdbuser.find(:all).map { |user| user.buser }.sort.uniq
 
 WA_STATUS = [
