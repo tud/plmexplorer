@@ -3,7 +3,7 @@
 	<label for="brecord_report_print_queue"><em>*</em>Print Queue :</label>
 	<select id="brecord_report_print_queue" name="brecord[report_print_queue]" tabindex="21">
 		<option value="" />
-		<%= option_groups_from_collection_for_select(PRINTERS, :options, :label, :value, :key) %>
+                <%= option_groups_from_collection_for_select(PRINTERS, :options, :label, :value, :key, cookies[:report_print_queue]) %>
 	</select>
 </div>
 <div class='ctrlHolder'>

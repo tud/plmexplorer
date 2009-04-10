@@ -94,7 +94,7 @@ class ReportsController < ApplicationController
       edm_report[:edm_p02] = "#{brecord[:report_rec_brectype]}\\#{brecord[:report_rec2_name]}\\#{brecord[:report_rec2_brecalt]}"
       edm_report[:edm_p03] = "#{brecord[:report_rec_breclevel]} #{brecord[:report_rec_bproject]} #{brecord[:report_rec_bowner]} N" 
       edm_report[:edm_p04] = "* #{brecord[:report_progress]}"
-      edm_report[:edm_p05] = ''
+      edm_report[:edm_p05] = '* * *'
       edm_report[:edm_p06] = "#{brecord[:report_rec_bpromdate_from]} #{brecord[:report_rec_bpromdate_to]}"
       edm_report[:edm_p07] = "#{brecord[:report_format]} TEXT REQUEST"
       edm_report[:edm_p08] = ''
@@ -148,6 +148,9 @@ class ReportsController < ApplicationController
 
   def submit(edm_report)
     brecord = params[:brecord]
+    if cookies[:report_print_queue] != brecord[:report_print_queue]
+      cookies[:report_print_queue] = { :value => brecord[:report_print_queue], :expires => 1.year.from_now }
+    end
     edm_report[:edm_print_queue] = brecord[:report_print_queue]
     edm_report[:edm_output_file] = brecord[:report_output_file]
     logfile = Tempfile.new(edm_report[:report])
