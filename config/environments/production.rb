@@ -15,6 +15,9 @@ config.action_view.cache_template_loading            = true
 # Use a different logger for distributed setups
 # config.logger = SyslogLogger.new
 
+# Aggiunto da S. Gallelli per rotazione file di log
+config.logger = Logger.new(config.log_path, 10, 50.megabyte)
+
 # Use a different cache store in production
 # config.cache_store = :mem_cache_store
 

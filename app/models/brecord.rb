@@ -18,7 +18,7 @@ class Brecord < ActiveRecord::Base
   end
 
   def promdate
-    self[:bpromdate].to_s(:db)
+    self[:bpromdate].to_s(:db) if self[:bpromdate]
   end
 
   def project
