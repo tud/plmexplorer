@@ -45,3 +45,8 @@ REPORT:
     label: WA
     iconclass: report
     title: Anagrafica/Elenco WorkAuth tipo Change e Task
+  - type: imgexp
+    label: IMGEXP
+    iconclass: report
+    title: Estrazione immagini
+    rule: image_exporter
