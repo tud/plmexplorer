@@ -11,17 +11,6 @@ module BrecordsHelper
     filternames
   end
 
-  def get_uda_value udas, uda_name
-    uda_value = ""
-    udas.each do |u|
-      if (u.bname == uda_name)
-        uda_value = u.bvalue
-        break
-      end
-    end
-    uda_value
-  end
-
   def find_result_table_title rectype
     if (rectype != "*")
       "Find result table -- " + (fam_img_tag_rectype(rectype)) + " " + rectype.capitalize.pluralize

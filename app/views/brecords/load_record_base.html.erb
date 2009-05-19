@@ -69,7 +69,6 @@
 
 <%
 	if (FORMS["#{@record.brectype}"])
-		udas = @record.budas
 		form_for :formid, :html => {:id => 'view_record_form', :class => 'uniForm'} do |f|
 			yy = 0
 			FORMS["#{@record.brectype}"].each do |form|
@@ -102,15 +101,12 @@
 						ftype = field['type']
 						if (ftype == nil)
 							attrname = fid.gsub(/uda_/, '').upcase
-							uda = get_uda_value udas, attrname
-							if (uda)
 %>
-								<div class='ctrlHolder'>
-									<label><%=field['label']%> :</label>
-									<input type="text" readonly="readonly" size="<%=field['size']%>" value="<%= escape_javascript h(uda) %>"/>
-								</div>
+                                                        <div class='ctrlHolder'>
+                                                                <label><%=field['label']%> :</label>
+                                                                <input type="text" readonly="readonly" size="<%=field['size']%>" value="<%= escape_javascript h(@record.uda(attrname)) %>"/>
+                                                        </div>
 <%
-							end
 						elsif (ftype.starts_with? "multi_")
 							attrname = fid.gsub(/uda_/, '').upcase
 							counter = ftype.gsub(/multi_/,'').to_i
@@ -119,16 +115,19 @@
 							while (ii <= counter)
 								suffix = "%02d" % ii  
 								multi_attrname = "#{attrname}_#{suffix}"
-								uda = get_uda_value udas, multi_attrname
-								if (uda)
-									value = "#{value}#{uda} "
+								if not @record.uda(multi_attrname).empty?
+									if ii > 1
+										value << ' '
+									end
+									value << @record.uda(multi_attrname)
 								end
-								ii = ii + 1
+								ii += 1
 							end
 %>
 							<div class='ctrlHolder'>
 								<label><%=field['label']%> :</label>
 								<textarea readonly="readonly" cols="80" rows="<%=field['size']%>"><%= escape_javascript h(value) %></textarea>
+							</div>
 <%
 						end
 					end
