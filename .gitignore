@@ -21,3 +21,4 @@ Capfile
 doc/*.dot
 public/javascripts/cache/*
 public/stylesheets/cache/*
+nbproject
