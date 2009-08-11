@@ -402,7 +402,7 @@ class BrecordsController < ApplicationController
     @record = Brecord.find(params[:id])
     session[:curr_record] = @record
     
-    wrksp = session[:workspace] ||= Workspace.new
+    wrksp = session[:workspace] || Workspace.new
     obj = {:id => @record.id, :rectype => @record.brectype, :label => @record.workspace_label }
     wrksp.add obj
     session[:workspace] = wrksp
@@ -466,7 +466,7 @@ class BrecordsController < ApplicationController
   end
 
   def show_workspace
-    @workspace = session[:workspace] ||= Workspace.new
+    @workspace = session[:workspace] || Workspace.new
     render :layout => false
   end
   
