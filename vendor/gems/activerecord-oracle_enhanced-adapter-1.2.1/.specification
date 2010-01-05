@@ -1,0 +1,123 @@
+--- !ruby/object:Gem::Specification 
+name: activerecord-oracle_enhanced-adapter
+version: !ruby/object:Gem::Version 
+  version: 1.2.1
+platform: ruby
+authors: 
+- Raimonds Simanovskis
+autorequire: 
+bindir: bin
+cert_chain: []
+
+date: 2009-06-07 00:00:00 +02:00
+default_executable: 
+dependencies: 
+- !ruby/object:Gem::Dependency 
+  name: activerecord
+  type: :runtime
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: 2.0.0
+    version: 
+- !ruby/object:Gem::Dependency 
+  name: newgem
+  type: :development
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: 1.3.0
+    version: 
+- !ruby/object:Gem::Dependency 
+  name: hoe
+  type: :development
+  version_requirement: 
+  version_requirements: !ruby/object:Gem::Requirement 
+    requirements: 
+    - - ">="
+      - !ruby/object:Gem::Version 
+        version: 1.8.0
+    version: 
+description: |-
+  Oracle "enhanced" ActiveRecord adapter contains useful additional methods for working with new and legacy Oracle databases
+  from Rails which are extracted from current real projects' monkey patches of original Oracle adapter.
+  
+  See http://github.com/rsim/oracle-enhanced/wikis for more information.
+  
+  For questions and feature discussion please use http://groups.google.com/group/oracle-enhanced
+  
+  Blog posts about oracle-enahnced can be found at http://blog.rayapps.com/category/oracle-enhanced
+  
+  Bugs and enhancement requests can be reported at http://rsim.lighthouseapp.com/projects/11468-oracle-enhanced
+email: 
+- raimonds.simanovskis@gmail.com
+executables: []
+
+extensions: []
+
+extra_rdoc_files: 
+- History.txt
+- License.txt
+- README.rdoc
+files: 
+- History.txt
+- License.txt
+- README.rdoc
+- lib/active_record/connection_adapters/emulation/oracle_adapter.rb
+- lib/active_record/connection_adapters/oracle_enhanced.rake
+- lib/active_record/connection_adapters/oracle_enhanced_adapter.rb
+- lib/active_record/connection_adapters/oracle_enhanced_connection.rb
+- lib/active_record/connection_adapters/oracle_enhanced_core_ext.rb
+- lib/active_record/connection_adapters/oracle_enhanced_cpk.rb
+- lib/active_record/connection_adapters/oracle_enhanced_dirty.rb
+- lib/active_record/connection_adapters/oracle_enhanced_jdbc_connection.rb
+- lib/active_record/connection_adapters/oracle_enhanced_oci_connection.rb
+- lib/active_record/connection_adapters/oracle_enhanced_procedures.rb
+- lib/active_record/connection_adapters/oracle_enhanced_reserved_words.rb
+- lib/active_record/connection_adapters/oracle_enhanced_tasks.rb
+- lib/active_record/connection_adapters/oracle_enhanced_version.rb
+- spec/active_record/connection_adapters/oracle_enhanced_adapter_spec.rb
+- spec/active_record/connection_adapters/oracle_enhanced_connection_spec.rb
+- spec/active_record/connection_adapters/oracle_enhanced_core_ext_spec.rb
+- spec/active_record/connection_adapters/oracle_enhanced_cpk_spec.rb
+- spec/active_record/connection_adapters/oracle_enhanced_data_types_spec.rb
+- spec/active_record/connection_adapters/oracle_enhanced_dirty_spec.rb
+- spec/active_record/connection_adapters/oracle_enhanced_emulate_oracle_adapter_spec.rb
+- spec/active_record/connection_adapters/oracle_enhanced_procedures_spec.rb
+- spec/spec.opts
+- spec/spec_helper.rb
+has_rdoc: true
+homepage: http://rubyforge.org/projects/oracle-enhanced/
+licenses: []
+
+post_install_message: 
+rdoc_options: 
+- --main
+- README.rdoc
+require_paths: 
+- lib
+required_ruby_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+required_rubygems_version: !ruby/object:Gem::Requirement 
+  requirements: 
+  - - ">="
+    - !ruby/object:Gem::Version 
+      version: "0"
+  version: 
+requirements: []
+
+rubyforge_project: oracle-enhanced
+rubygems_version: 1.3.5
+signing_key: 
+specification_version: 3
+summary: Oracle enhaced adapter for Active Record
+test_files: []
+
