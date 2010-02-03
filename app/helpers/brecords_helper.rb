@@ -45,7 +45,7 @@ module BrecordsHelper
   def navigation_new_items
     items = Array.new
     NAVIGATION['NEW'].each do |entry|
-      items << "<a class='wNavigation_find tooltip' href='"+entry['type']+"' title='"+entry['title']+"'>"+fam_img_tag(entry['iconclass'])+entry['label']+"</a>"
+      items << "<a class='wNavigation_new tooltip' href='"+entry['type']+"' title='"+entry['title']+"'>"+fam_img_tag(entry['iconclass'])+entry['label']+"</a>"
     end
     items
   end

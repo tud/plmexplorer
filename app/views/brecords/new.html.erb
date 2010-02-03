@@ -1,0 +1,144 @@
+<% form_for :brecord, :html => {:id => 'find_records', :class => 'uniForm'} do |f| %>
+	<fieldset class='inlineLabels'>
+		<legend id="legend_find_record"></legend>
+		<%= f.hidden_field :find_rec_brectype, :value => @rectype %>
+		<div class='ctrlHolder'>
+		<% if @rectype == 'WORKAUTH' %>
+			<label for="brecord_find_rec_brecname">Number :</label>
+			<%= f.text_field :find_rec_brecname, :maxlength => "32", :tabindex => "1", :class => "uppercase" %>
+		<% else %>
+			<label for="brecord_find_rec_name">Number :</label>
+			<%= f.text_field :find_rec_name, :maxlength => "26", :tabindex => "1", :class => "uppercase" %>
+			<% end %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_find_rec_bname1">Cage Code :</label>
+			<select id="brecord_find_rec_bname1" name="brecord[find_rec_bname1]" tabindex="2">
+				<option value="" />
+				<%= option_groups_from_collection_for_select(CAGE_CODES, :options, :label, :value, :key) %>
+			</select>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_find_rec_brecalt">Rev. :</label>
+			<%= f.text_field :find_rec_brecalt, :value => "#", :maxlength => "4", :tabindex => "3", :class => "uppercase" %>
+                        <span class='hint'> # = latest revision</span>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_find_rec_breclevel">Status :</label>
+			<%= f.select :find_rec_breclevel, @statusList, {:include_blank => true}, {:tabindex => "4"} %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_find_rec_bproject">Project :</label>
+			<%= f.select :find_rec_bproject, PROJECT_LIST, {:include_blank => true}, {:tabindex => "5"} %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_find_rec_bowner">Owner :</label>
+			<%= f.select :find_rec_bowner, USER_LIST, {:include_blank => true}, {:tabindex => "6", :class => "uppercase editableCombobox"} %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_find_rec_bcreateuser">Created By :</label>
+			<%= f.select :find_rec_bcreateuser, USER_LIST, {:include_blank => true}, {:tabindex => "7", :class => "uppercase editableCombobox"} %>
+		</div>
+		<% if @rectype != 'GENERIC' %>
+                        <div class='ctrlHolder'>
+                                <label for="brecord_find_rec_bfamily">Type :</label>
+                                <select id="brecord_find_rec_bfamily" name="brecord[find_rec_bfamily]" tabindex="8">
+                                        <option value="" />
+                                        <%= option_groups_from_collection_for_select(@typeList, :options, :label, :value, :key) %>
+                                </select>
+                        </div>
+		<% end %>
+		<div class='ctrlHolder'>
+			<label for="brecord_find_rec_name4">Short Description :</label>
+			<%= f.text_field :find_rec_name4, :maxlength => "32", :tabindex => "9" %>
+		</div>
+		<div class='ctrlHolder'>
+			<label for="brecord_find_rec_bdesc">Description :</label>
+			<%= f.text_field :find_rec_bdesc, :maxlength => "80", :tabindex => "10" %>
+		</div>
+		<% if @rectype == 'PART' %>
+			<div class='ctrlHolder'>
+				<label for="brecord_find_uda_logistic_item">Logistic Item Type :</label>
+				<%= f.select :find_uda_logistic_item, LOGISTIC_ITEMS, {:include_blank => true}, {:tabindex => "21"} %>
+			</div>
+			<div class='ctrlHolder'>
+				<label for="brecord_find_uda_comm_number">Commercial Code :</label>
+				<%= f.text_field :find_uda_comm_number, :maxlength => "80", :tabindex => "22" %>
+			</div>
+			<div class='ctrlHolder'>
+				<label for="brecord_find_uda_maker">Manufacturer :</label>
+				<%= f.text_field :find_uda_maker, :maxlength => "80", :tabindex => "23" %>
+			</div>
+			<div class='ctrlHolder'>
+				<label for="brecord_find_uda_snd_part_recname">Secondary ID :</label>
+				<%= f.text_field :find_uda_snd_part_recname, :maxlength => "26", :tabindex => "24" %>
+			</div>
+			<div class='ctrlHolder'>
+				<label for="brecord_find_uda_snd_part_cagec">Secondary Cage :</label>
+				<%= f.text_field :find_uda_snd_part_cagec, :maxlength => "5", :tabindex => "25" %>
+			</div>
+		<% end %>
+		<% if @rectype == 'DOCUMENT' %>
+			<div class='ctrlHolder'>
+				<label for="brecord_find_rec_btype4">Document Size :</label>
+				<select id="brecord_find_rec_btype4" name="brecord[find_rec_btype4]" tabindex="21">
+					<option value="" />
+					<%= option_groups_from_collection_for_select(DOCUMENT_SIZES, :options, :label, :value, :key) %>
+				</select>
+			</div>
+			<div class='ctrlHolder'>
+				<label for="brecord_find_uda_snd_doc_recname">Secondary ID :</label>
+				<%= f.text_field :find_uda_snd_doc_recname, :maxlength => "26", :tabindex => "22" %>
+			</div>
+			<div class='ctrlHolder'>
+				<label for="brecord_find_uda_snd_doc_cagec">Secondary Cage :</label>
+				<%= f.text_field :find_uda_snd_doc_cagec, :maxlength => "5", :tabindex => "23" %>
+			</div>
+		<% end %>
+		<% if @rectype == 'WORKAUTH' %>
+			<div class='ctrlHolder'>
+				<label for="brecord_find_rec_btype3">Change Class :</label>
+				<select id="brecord_find_rec_btype3" name="brecord[find_rec_btype3]" tabindex="21">
+					<option value="" />
+					<%= option_groups_from_collection_for_select(CHANGE_CLASSES, :options, :label, :value, :key) %>
+				</select>
+			</div>
+			<div class='ctrlHolder'>
+				<label for="brecord_find_uda_change_subclass">Sub-Class :</label>
+				<select id="brecord_find_uda_change_subclass" name="brecord[find_uda_change_subclass]" tabindex="22">
+					<option value="" />
+					<%= option_groups_from_collection_for_select(CHANGE_SUBCLASSES, :options, :label, :value, :key) %>
+				</select>
+			</div>
+			<div class='ctrlHolder'>
+				<label for="brecord_find_uda_ecp_number">Eng Chg Prop Nr :</label>
+				<%= f.text_field :find_uda_ecp_number, :maxlength => "32", :tabindex => "23" %>
+			</div>
+		<% end %>
+		<div class="buttonHolder">
+			<label>&nbsp;</label>
+			<button type="submit" class="ui-corner-all"><%=fam_img_tag('find')-%>Find</button>
+			<button type="reset" class="ui-corner-all"><%=fam_img_tag('delete')-%>Reset</button>
+		</div>
+	</fieldset>
+<% end %>
+
+<script type="text/javascript">
+	var rectype = "<%= @rectype %>".toLowerCase();
+	var title = 'Find '+rectype.toUpperCase();
+	$('#legend_find_record').html(title);
+	$('#brecord_find_rec_brectype').val(rectype);
+	
+	var formOptions = { 
+	    target: 	'#cFindResultTable'
+	,	url: 		'/rectype/'+rectype
+	,	success: 	function() {
+			$('#cMenuTabs').tabs('select',1);
+		}
+	};
+	$('#find_records').ajaxForm(formOptions);
+	
+	$('.editableCombobox').editableCombobox();
+	
+	$('form.uniForm').uniform();
+</script>

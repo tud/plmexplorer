@@ -44,6 +44,14 @@ $(function() {
 		return false;
 	});
 	
+	// gestione tab new
+	$('.wNavigation_new').click(function() {
+		var rectype = $(this).attr('href');
+		$('#cNew').load('/rectype/'+rectype+'/new');
+		$("#cMenuTabs").tabs('select',4);
+		return false;
+	});
+	
 	// gestione tab report
 	$('.wNavigation_report').click(function() {
 		var reportname = $(this).attr('href');
