@@ -8,6 +8,14 @@
 		</div>
 	</div>
 	<div>
+		<h3 class="header"><a href="#"><%=fam_img_tag 'database_add' %> New</a></h3>
+		<div>
+			<% navigation_new_items.each do |item| %>
+				<%= item %><br/>
+			<% end %>
+		</div>
+	</div>
+	<div>
 		<h3 class="header"><a href="#"><%=fam_img_tag 'printer' %> Reports</a></h3>
 		<div>
 			<% navigation_report_items.each do |item| %>

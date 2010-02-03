@@ -50,3 +50,9 @@ REPORT:
     iconclass: report
     title: Estrazione immagini
     rule: image_exporter
+
+NEW:
+  - type: WORKAUTH
+    label: Workauth
+    iconclass: application_form_edit
+    title: Create Workauth Request 

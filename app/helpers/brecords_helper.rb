@@ -41,6 +41,14 @@ module BrecordsHelper
     end
     items
   end
+  
+  def navigation_new_items
+    items = Array.new
+    NAVIGATION['NEW'].each do |entry|
+      items << "<a class='wNavigation_find tooltip' href='"+entry['type']+"' title='"+entry['title']+"'>"+fam_img_tag(entry['iconclass'])+entry['label']+"</a>"
+    end
+    items
+  end
 
   def fam_img_tag famimg
     "<img src='/images/fam/"+famimg+".gif'/>&nbsp;"
