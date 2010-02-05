@@ -477,27 +477,17 @@ class BrecordsController < ApplicationController
   
   def new
     @rectype = params[:rectype].upcase
-
-    if @rectype == 'GENERIC'
-      rectypes = APPL_RECTYPES
-    else
-      rectypes = [ @rectype ]
-    end
+    rectypes = [ @rectype ]
     @statusList = Blevel.find(:all,
                               :conditions => [ "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname in (?)", rectypes ],
                               :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
 
-    if @rectype == 'PART'
-      @typeList = DynList.build_from('IPD_PARTSUBTYPE')
-    elsif @rectype == 'DOCUMENT'
-      @typeList = DynList.build_from('IPD_DOCSUBTYPE')
-    elsif @rectype == 'WORKAUTH'
-      @typeList = DynList.build_from('IPD_WORKASUBTYP')
-    elsif @rectype == 'SOFTWARE'
-      @typeList = DynList.sw_types
-    else
-      @typeList = []
-    end
+    @typeList = DynList.build_from('IPD_WORKASUBTYP')
+
+    render :layout => false
+  end
+  
+  def create
     render :layout => false
   end
 
