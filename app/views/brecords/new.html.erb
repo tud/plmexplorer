@@ -157,8 +157,10 @@
 			if ($('#autoname').is(':checked')) {
 				$('#brecord_rec_brecname').attr('disabled', 'disabled');
 				$('#brecord_rec_brecname').val('');
+				$('#brecord_rec_brecname').removeClass('required');
 			} else {
 				$('#brecord_rec_brecname').attr('disabled', '');
+				$('#brecord_rec_brecname').addClass('required');
 			}
 		});
 	});
