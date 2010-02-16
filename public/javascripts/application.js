@@ -47,8 +47,7 @@ $(function() {
 	// gestione tab new
 	$('.wNavigation_new').click(function() {
 		var rectype = $(this).attr('href');
-		$('#cNew').load('/rectype/'+rectype+'/new');
-		$("#cMenuTabs").tabs('select',4);
+		$('#dialog_new_modify').load('/rectype/'+rectype+'/new')
 		return false;
 	});
 	

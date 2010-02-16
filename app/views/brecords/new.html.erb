@@ -1,22 +1,39 @@
 <% form_for :brecord, :html => {:id => 'new_record', :class => 'uniForm'} do |f| %>
+<% if @rectype == "WORKAUTH" %>
 	<fieldset class='inlineLabels'>
 		<legend id="legend_new_record"></legend>
 		<%= f.hidden_field :rec_brectype, :value => @rectype %>
-		<div class='ctrlHolder'>
-			<label for="brecord_rec_brecname"><em>*</em>Number :</label>
-			<%= f.text_field :rec_brecname, :maxlength => "32", :tabindex => "1", :class => "uppercase required" %>
-		</div>
-		<div class='ctrlHolder'>
-			<label for="brecord_rec_bname1"><em>*</em>Cage Code :</label>
-			<select id="brecord_rec_bname1" name="brecord[rec_bname1]" tabindex="2" class="required uppercase">
-				<option value="" />
-				<%= option_groups_from_collection_for_select(CAGE_CODES, :options, :label, :value, :key) %>
-			</select>
-		</div>
-		<div class='ctrlHolder'>
-			<label for="brecord_rec_brecalt"><em>*</em>Rev. :</label>
-			<%= f.text_field :new_brecalt, :value => "0000", :maxlength => "3", :tabindex => "3", :disabled => true %>
-		</div>
+		<% if @action_type == 'New' %>
+			<div class='ctrlHolder'>
+				<label for="brecord_rec_brecname"><em>*</em>Number :</label>
+				<%= f.text_field :rec_brecname, :maxlength => "32", :tabindex => "1", :class => "uppercase required" %>
+				<%= check_box_tag :autoname %> Autoname
+			</div>
+			<div class='ctrlHolder'>
+				<label for="brecord_rec_bname1"><em>*</em>Cage Code :</label>
+				<select id="brecord_rec_bname1" name="brecord[rec_bname1]" tabindex="2" class="required uppercase">
+					<option value="" />
+					<%= option_groups_from_collection_for_select(CAGE_CODES, :options, :label, :value, :key) %>
+				</select>
+			</div>
+			<div class='ctrlHolder'>
+				<label for="brecord_rec_brecalt"><em>*</em>Rev. :</label>
+				<%= f.text_field :new_brecalt, :value => "0000", :maxlength => "3", :tabindex => "3", :disabled => true %>
+			</div>
+		<% else %>
+			<div class='ctrlHolder'>
+				<label for="brecord_rec_brecname"><em>*</em>Number :</label>
+				<%= f.text_field :rec_brecname, :maxlength => "32", :tabindex => "1", :class => "uppercase required", :disabled => true %>
+			</div>
+			<div class='ctrlHolder'>
+				<label for="brecord_rec_bname1"><em>*</em>Cage Code :</label>
+				<%= f.text_field :new_brecalt, :maxlength => "3", :tabindex => "2", :class => "uppercase required", :disabled => true %>
+			</div>
+			<div class='ctrlHolder'>
+				<label for="brecord_rec_brecalt"><em>*</em>Rev. :</label>
+				<%= f.text_field :new_brecalt, :value => "0000", :maxlength => "3", :tabindex => "3", :disabled => true %>
+			</div>
+		<% end %>
 		<div class='ctrlHolder'>
 			<label for="brecord_rec_bfamily"><em>*</em>Type :</label>
 			<%= f.text_field :rec_bfamily, :value => "REQUEST", :maxlength => "16", :tabindex => "4", :disabled => true %>
@@ -68,39 +85,81 @@
 			<%= f.text_field :uda_desc_of_chng, :maxlength => "80", :tabindex => "14", :class => "required uppercase" %>
 		</div>
 		<div class='ctrlHolder'>
-			<label for="brecord_uda_desc_of_chng">Comments :</label>
+			<label for="brecord_uda_comments">Comments :</label>
 			<%= f.text_area :uda_comments, :cols => "80", :rows => "15", :tabindex => "15" %>
 		</div>
 		<div class='ctrlHolder'>
-			<label for="brecord_uda_desc_of_chng">Solution :</label>
+			<label for="brecord_solution">Solution :</label>
 			<%= f.text_area :uda_solution, :cols => "80", :rows => "10", :tabindex => "16" %>
 		</div>
-		
+		<div class='ctrlHolder'>
+			<label for="brecord_file">File :</label>
+			<%= f.file_field :file, :tabindex => "17" %>
+		</div>
 		<div class="buttonHolder">
 			<label>&nbsp;</label>
-			<button type="submit" class="ui-corner-all"><%=fam_img_tag('database_add')-%>New</button>
-			<button type="reset" class="ui-corner-all"><%=fam_img_tag('delete')-%>Reset</button>
+			<button type="submit" class="ui-corner-all"><%=fam_img_tag('database_add')-%>Save</button>
+			<button type="button" id="cancel_button" name="cancel_button" class="ui-corner-all"><%=fam_img_tag('delete')-%>Cancel</button>
 		</div>
 	</fieldset>
 <% end %>
+<% end %>
 
 <script type="text/javascript">
-	var rectype = "<%= @rectype %>".toLowerCase();
-	var title = 'New '+rectype.toUpperCase();
-	$('#legend_new_record').html(title);
-	$('#brecord_rec_brectype').val(rectype);
+	$(function() {
+		var rectype = "<%= @rectype %>".toLowerCase();
+		var title = "<%=@action_type %>"+' '+rectype.toUpperCase();
+		$('#legend_new_record').html(title);
+		$('#dialog_new_modify').attr('title', title);
+		$('#brecord_rec_brectype').val(rectype);
 	
-	$('.editableCombobox').editableCombobox();
+		$('.editableCombobox').editableCombobox();
 	
-	$('form.uniForm').uniform();
+		$('form.uniForm').uniform();
 	
-	$('#new_record').validate({
-		errorClass: 'invalid',
-		submitHandler: function(form) {
-			$(form).ajaxSubmit({
-				target: 	'#cRecord'
-			,	url: 		'/rectype/'+rectype+'/create'
-			});
-		}
+		$('#new_record').validate({
+			errorClass: 'invalid',
+			submitHandler: function(form) {
+				$(form).ajaxSubmit({
+					target: 	'#cRecord'
+				,	url: 		'/rectype/'+rectype+'/create'
+				});
+				$('#dialog_new_modify').dialog('close');
+			}
+		});
+	
+		$('#dialog_new_modify').dialog({
+			width: 770,
+			modal: true,
+			closeOnEscape: false,
+			bgiframe: true,
+			overlay: {
+				backgroundColor: '#1c94c4',
+				opacity: 0.5
+			}
+		});
+		$('.ui-dialog-titlebar-close:first').hide();
+		$('#dialog_new_modify').dialog('open');
+
+		$('#dialog_new_modify').bind('keydown', function(event) {
+			if (event.keyCode == $.ui.keyCode.ENTER) {
+				$('#new_record').submit();
+				$(this).dialog('close');
+			}
+		});
+		
+		$('#cancel_button').click(function() {
+			$('#dialog_new_modify').dialog('close');
+			return false;
+		});
+		
+		$('#autoname').click(function() {
+			if ($('#autoname').is(':checked')) {
+				$('#brecord_rec_brecname').attr('disabled', 'disabled');
+				$('#brecord_rec_brecname').val('');
+			} else {
+				$('#brecord_rec_brecname').attr('disabled', '');
+			}
+		});
 	});
 </script>

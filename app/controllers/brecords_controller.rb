@@ -483,6 +483,8 @@ class BrecordsController < ApplicationController
                               :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
 
     @typeList = DynList.build_from('IPD_WORKASUBTYP')
+    
+    @action_type = 'New'
 
     render :layout => false
   end
@@ -491,6 +493,19 @@ class BrecordsController < ApplicationController
     render :layout => false
   end
 
+  def modify
+    @rectype = params[:rectype].upcase
+    @action_type = 'Modify'
+    render :layout => false
+  end
+  
+  def save_modify
+    render :layout => false
+  end
+  
+  def is_modifiable
+    true
+  end
 
 private
 
