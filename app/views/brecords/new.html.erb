@@ -115,19 +115,6 @@
 	
 		$('.editableCombobox').editableCombobox();
 	
-		$('form.uniForm').uniform();
-	
-		$('#new_record').validate({
-			errorClass: 'invalid',
-			submitHandler: function(form) {
-				$(form).ajaxSubmit({
-					target: 	'#cRecord'
-				,	url: 		'/rectype/'+rectype+'/create'
-				});
-				$('#dialog_new_modify').dialog('close');
-			}
-		});
-	
 		$('#dialog_new_modify').dialog({
 			width: 770,
 			modal: true,
@@ -139,14 +126,18 @@
 			}
 		});
 		$('.ui-dialog-titlebar-close:first').hide();
-		$('#dialog_new_modify').dialog('open');
-
-		$('#dialog_new_modify').bind('keydown', function(event) {
-			if (event.keyCode == $.ui.keyCode.ENTER) {
-				$('#new_record').submit();
-				$(this).dialog('close');
+		
+		$('#new_record').validate({
+			errorClass: 'invalid',
+			submitHandler: function(form) {
+				$(form).ajaxSubmit({
+					target: 	'#cRecord'
+				,	url: 		'/rectype/'+rectype+'/create'
+				});
+				$('#dialog_new_modify').dialog('close');
 			}
 		});
+
 		
 		$('#cancel_button').click(function() {
 			$('#dialog_new_modify').dialog('close');
@@ -163,5 +154,7 @@
 				$('#brecord_rec_brecname').addClass('required');
 			}
 		});
+		
+		$('form.uniForm').uniform();
 	});
 </script>
