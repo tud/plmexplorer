@@ -493,9 +493,6 @@ class BrecordsController < ApplicationController
   
   def create
     brecord = params[:brecord]
-    if cookies[:report_print_queue] != brecord[:report_print_queue]
-      cookies[:report_print_queue] = { :value => brecord[:report_print_queue], :expires => 1.year.from_now }
-    end
     edm_report[:edm_print_queue] = brecord[:report_print_queue]
     edm_report[:edm_output_file] = brecord[:report_output_file]
     logfile = Tempfile.new(edm_report[:report])
@@ -510,9 +507,22 @@ class BrecordsController < ApplicationController
       logfile.close
       script = IO.popen("rsh #{PREF['SHERPA_SERVER']} dms > #{logfile.path}", "w")
     end
+    wa_recname = Brecord.find_by_brectype_and_brecname('PIM_AUTONUM', 'WORKAUTH').bdesc.to_i
     script.puts("set db #{PREF['SHERPA_DB']}")
     script.puts("set user #{session[:user][:buser]}")
+
+    # Incremento campo Autonumber
     script.puts("set project PIM")
+    script.puts("modify record PIM_AUTONUM\\WORKAUTH")
+    script.puts "  change attribute DESC \"#{wa_recname + 1}\""
+    script.puts("end modify")
+
+    script.puts("set project #{brecord[:bproject]}")
+    script.puts("create record WORKAUTH\\#{wa_recname}\\0000 \"#{brecord[:bdesc]}\"")
+    script.puts "  change attribute RELPROC #{brecord[:brelproc]}"
+    script.puts "  change attribute FAMILY #{brecord[:brelproc]}"
+    script.puts("end create")
+
     script.puts("update record EDM_REPORT\\#{edm_report[:report]};1")
     edm_report.each do |key, value|
       if key != :report
