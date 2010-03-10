@@ -6,8 +6,8 @@
 		<% if @action_type == 'New' %>
 			<div class='ctrlHolder'>
 				<label for="brecord_rec_brecname"><em>*</em>Number :</label>
-				<%= f.text_field :rec_brecname, :maxlength => "32", :tabindex => "1", :class => "uppercase required" %>
-				<%= check_box_tag :autoname %> Autoname
+				<%= f.text_field :rec_brecname, :maxlength => "32", :tabindex => "1", :class => "uppercase required", :disabled => true %>
+				<%= check_box_tag :autoname, "1", true %> Autoname
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_rec_bname1"><em>*</em>Cage Code :</label>
@@ -82,7 +82,7 @@
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_uda_desc_of_chng"><em>*</em>Description of Change :</label>
-			<%= f.text_field :uda_desc_of_chng, :maxlength => "80", :tabindex => "14", :class => "required uppercase" %>
+			<%= f.text_area :uda_desc_of_chng, :cols => "80", :rows => "15", :tabindex => "14", :class => "required uppercase" %>
 		</div>
 		<div class='ctrlHolder'>
 			<label for="brecord_uda_comments">Comments :</label>
@@ -149,12 +149,18 @@
 			if ($('#autoname').is(':checked')) {
 				$('#brecord_rec_brecname').attr('disabled', 'disabled');
 				$('#brecord_rec_brecname').val('');
+				$('#autoname').val('1');
 				$('#brecord_rec_brecname').removeClass('required');
 			} else {
 				$('#brecord_rec_brecname').attr('disabled', '');
 				$('#brecord_rec_brecname').addClass('required');
+				$('#autoname').val('');
 			}
 		});
+		
+		$('#brecord_uda_desc_of_chng').maxLength(20);
+		$('#brecord_uda_comments').maxLength(20);
+		$('#brecord_uda_solution').maxLength(20);
 		
 		$('form.uniForm').uniform();
 	});
