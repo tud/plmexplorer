@@ -126,12 +126,14 @@ class Brecord < ActiveRecord::Base
       script = IO.popen("rsh #{PREF['SHERPA_SERVER']} dms > #{logfile.path}", "w")
     end
     script.puts("set db #{PREF['SHERPA_DB']}")
-    script.puts("set user #{Bdbuser.logged_user}")
+    script.puts("set user #{self[:bcreateuser]}")
 
-    # Incremento campo Autonumber
-    script.puts("modify record PIM_AUTONUM\\WORKAUTH")
-    script.puts "  change attribute DESC \"#{self[:brecname].to_i + 1}\""
-    script.puts("end modify")
+    # Incremento campo Autonumber, su usato
+    if self[:autonumber]
+      script.puts("modify record PIM_AUTONUM\\WORKAUTH")
+      script.puts "  change attribute DESC \"#{self[:brecname].to_i + 1}\""
+      script.puts("end modify")
+    end
 
     if record_exists
       script.puts "modify record #{recspec}"

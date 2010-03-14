@@ -90,8 +90,8 @@
 				<%= f.text_area :uda_t_solution, :cols => "80", :rows => "10", :tabindex => "16" %>
 			</div>
 			<div class='ctrlHolder'>
-				<label for="brecord_file_bsource">File :</label>
-				<%= f.file_field :file_bsource, :tabindex => "17" %>
+				<label for="brecord_file_upload">File :</label>
+				<%= f.file_field :file_upload, :tabindex => "17" %>
 			</div>
 		</div>
 		<div class="buttonHolder">
@@ -161,16 +161,16 @@
 		});
 		
 		$('#brecord_rec_brecname').attr('disabled', 'disabled');
-		$('#autoname').click(function() {
-			if ($('#autoname').is(':checked')) {
+		$('#autonumber').click(function() {
+			if ($('#autonumber').is(':checked')) {
 				$('#brecord_rec_brecname').attr('disabled', 'disabled');
 				$('#brecord_rec_brecname').val('');
-				$('#autoname').val('1');
+				$('#autonumber').val('1');
 				$('#brecord_rec_brecname').removeClass('required');
 			} else {
 				$('#brecord_rec_brecname').attr('disabled', '');
 				$('#brecord_rec_brecname').addClass('required');
-				$('#autoname').val('');
+				$('#autonumber').val('');
 			}
 		});
 	});

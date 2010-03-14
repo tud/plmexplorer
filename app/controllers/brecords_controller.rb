@@ -492,25 +492,28 @@ class BrecordsController < ApplicationController
   end
   
   def create
-    record_in = params[:brecord]
     brecord = Brecord.new
-    brecord[:brecname] = Brecord.find_by_brectype_and_brecname('PIM_AUTONUM', 'WORKAUTH').bdesc
-    record_in.each do |key, value|
+    params[:brecord].each do |key, value|
       downkey = key.downcase
       case downkey
-      when /rec_(.+)/
+      when /^rec_(.+)/
         brecord[$1] = value
-      when /uda_t_(.+)/
-      when /uda_(.+)/
+      when /^uda_t_(.+)/
+      when /^uda_(.+)/
         buda = Buda.new
         buda[:bname] = $1
         buda[:bvalue] = value
         brecord.budas << buda
-      when /file_(.+)/
+      when /^file_(.+)/
       else
         raise "Illegal field name: #{key}"
       end
     end
+    if params[:autonumber] == "1"
+      brecord[:autonumber] = "1"
+      brecord[:brecname] = Brecord.find_by_brectype_and_brecname('PIM_AUTONUM',  brecord[:brectype].upcase).bdesc
+    end
+    brecord[:bcreateuser] = session[:user][:buser]
     brecord.save
     render :layout => false
   end
