@@ -5,6 +5,10 @@ class Brecord < ActiveRecord::Base
   has_many   :bchkhistories, :foreign_key => 'bobjid'
   has_many   :brefs,         :foreign_key => 'bobjid'
 
+  require 'tempfile'
+
+  CHANGE_ATTRIBUTES = [ :bdesc, :bowner, :bproject, :brelproc, :btype1, :btype2, :btype3, :btype4, :bname1, :bname2, :bname3, :bname4, :bdate1, :bdate2, :bdate3, :bdate4, :blong1, :blong2, :blong3, :blong4, :bdouble1, :bdouble2, :bdouble3, :bdouble4, :bdouble5, :bdouble6, :bdouble7, :bdouble8, :bcost, :bfamily, :bbegindate, :benddate, :bmeasure ]
+
   def name
     self[:brecname].split('&')[0]
   end
@@ -103,6 +107,58 @@ class Brecord < ActiveRecord::Base
     }
   end
 
+  def save
+    recspec = self[:brectype] + '\\' + self[:brecname] + '\\' + self[:brecalt].to_s
+    recalt = self[:brecalt]
+    recalt = ' ' if !recalt || recalt.empty?
+    record_exists = Brecord.exists?(:brectype => self[:brectype], :brecname => self[:brecname], :brecalt => recalt)
+
+    logfile = Tempfile.new(self[:brecname])
+    if ENV['RAILS_ENV'] == 'development'
+      # In sviluppo creo lo script DMS di lancio del report
+      # in un file temporaneo
+      script = logfile
+    else
+      # In produzione uso il file temporaneo come file di log
+      # e creo una pipe verso una sessione DMS remota, cui sottometto
+      # lo script di lancio del report
+      logfile.close
+      script = IO.popen("rsh #{PREF['SHERPA_SERVER']} dms > #{logfile.path}", "w")
+    end
+    script.puts("set db #{PREF['SHERPA_DB']}")
+    script.puts("set user #{Bdbuser.logged_user}")
+
+    # Incremento campo Autonumber
+    script.puts("modify record PIM_AUTONUM\\WORKAUTH")
+    script.puts "  change attribute DESC \"#{self[:brecname].to_i + 1}\""
+    script.puts("end modify")
+
+    if record_exists
+      script.puts "modify record #{recspec}"
+    else
+      script.puts "create record #{recspec}"
+    end
+
+    CHANGE_ATTRIBUTES.each do |attr|
+      if self[attr]
+        script.puts "  change attribute #{attr.to_s.upcase[1..-1]} \"#{self[attr]}\""
+      end
+    end
+    budas.each do |uda|
+      if uda.bvalue
+        script.puts "  change attribute #{uda.bname.upcase} \"#{uda.bvalue}\""
+      end
+    end
+
+    if record_exists
+      script.puts "end modify"
+    else
+      script.puts "end create"
+    end
+    script.puts("exit")
+    script.close
+  end
+
   private
 
   def parent_entries(reftypes, order, limit, offset)
@@ -117,6 +173,10 @@ class Brecord < ActiveRecord::Base
                                                :order => order,
                                                :limit => limit,
                                                :offset => offset)
+  end
+
+  def uda_t_size(rectype, name)
+    Batt.find(:all, :conditions => [ "BRECTYPE = ? and BNAME like ?", rectype.upcase, name.upcase+'_%' ]).count
   end
 
 end

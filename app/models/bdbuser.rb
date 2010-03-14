@@ -1,7 +1,6 @@
 require 'net/ftp'
 
 class Bdbuser < ActiveRecord::Base
-
   belongs_to :bdb, :foreign_key => 'bobjid'
 
   def self.authenticate(username, password)
@@ -39,7 +38,7 @@ class Bdbuser < ActiveRecord::Base
   end
 
   def admin?
-    buser[0..5] == 'SHERPA' || bdb.bdbas.find_by_buser(buser) != nil
+    buser[0..5] == 'SHERPA' || Bdba.find_by_buser(buser) != nil
   end
 
 end

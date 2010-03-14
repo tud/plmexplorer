@@ -1,8 +1,8 @@
+include ActionView::Helpers::TextHelper
+
 class BrecordsController < ApplicationController
 
   before_filter :authorize
-
-  require 'tempfile'
 
   def index
     @joins = ''
@@ -492,48 +492,26 @@ class BrecordsController < ApplicationController
   end
   
   def create
-    brecord = params[:brecord]
-    edm_report[:edm_print_queue] = brecord[:report_print_queue]
-    edm_report[:edm_output_file] = brecord[:report_output_file]
-    logfile = Tempfile.new(edm_report[:report])
-    if ENV['RAILS_ENV'] == 'development'
-      # In sviluppo creo lo script DMS di lancio del report
-      # in un file temporaneo
-      script = logfile
-    else
-      # In produzione uso il file temporaneo come file di log
-      # e creo una pipe verso una sessione DMS remota, cui sottometto
-      # lo script di lancio del report
-      logfile.close
-      script = IO.popen("rsh #{PREF['SHERPA_SERVER']} dms > #{logfile.path}", "w")
-    end
-    wa_recname = Brecord.find_by_brectype_and_brecname('PIM_AUTONUM', 'WORKAUTH').bdesc.to_i
-    script.puts("set db #{PREF['SHERPA_DB']}")
-    script.puts("set user #{session[:user][:buser]}")
-
-    # Incremento campo Autonumber
-    script.puts("set project PIM")
-    script.puts("modify record PIM_AUTONUM\\WORKAUTH")
-    script.puts "  change attribute DESC \"#{wa_recname + 1}\""
-    script.puts("end modify")
-
-    script.puts("set project #{brecord[:bproject]}")
-    script.puts("create record WORKAUTH\\#{wa_recname}\\0000 \"#{brecord[:bdesc]}\"")
-    script.puts "  change attribute RELPROC #{brecord[:brelproc]}"
-    script.puts "  change attribute FAMILY #{brecord[:brelproc]}"
-    script.puts("end create")
-
-    script.puts("update record EDM_REPORT\\#{edm_report[:report]};1")
-    edm_report.each do |key, value|
-      if key != :report
-        script.puts "  change attribute #{key} \"#{value}\""
+    record_in = params[:brecord]
+    brecord = Brecord.new
+    brecord[:brecname] = Brecord.find_by_brectype_and_brecname('PIM_AUTONUM', 'WORKAUTH').bdesc
+    record_in.each do |key, value|
+      downkey = key.downcase
+      case downkey
+      when /rec_(.+)/
+        brecord[$1] = value
+      when /uda_t_(.+)/
+      when /uda_(.+)/
+        buda = Buda.new
+        buda[:bname] = $1
+        buda[:bvalue] = value
+        brecord.budas << buda
+      when /file_(.+)/
+      else
+        raise "Illegal field name: #{key}"
       end
     end
-    script.puts("end update")
-    script.puts("modify record EDM_REPORT\\#{edm_report[:report]}")
-    script.puts("end modify")
-    script.puts("exit")
-    script.close 
+    brecord.save
     render :layout => false
   end
 
@@ -549,6 +527,12 @@ class BrecordsController < ApplicationController
   
   def is_modifiable
     true
+  end
+
+  def get_status_list rectypes
+    @statusList = Blevel.find(:all,
+                              :conditions => [ "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname in (?)", rectypes ],
+                              :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
   end
 
 private
@@ -632,6 +616,13 @@ private
     # Construct a hash from the ActiveRecord result
     @return_data[:total] = total_pages
     @return_data[:records] = count
+  end
+
+  def change_multi_attr(script, name)
+    record = params[:brecord]
+    word_wrap(record[name]).split(/\n/).each_with_index do |line, index|
+      script.puts "  change attribute #{name.to_s.upcase}_#{'%02d' % index} \"#{line}\""
+    end
   end
 
 end
