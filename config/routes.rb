@@ -37,6 +37,7 @@ ActionController::Routing::Routes.draw do |map|
   map.root :controller => 'brecords'
   map.connect 'rectype/:rectype', :controller => 'brecords'
   map.connect 'rectype/:rectype/:action', :controller => 'brecords'
+  map.connect 'rectype/:rectype/:action/:id', :controller => 'brecords'
 
   map.login  'login',  :controller => 'session', :action => 'login'
   map.logout 'logout', :controller => 'session', :action => 'logout'

@@ -141,9 +141,17 @@
 	end
 %>
 </div>
+<% if (@record.brectype == 'WORKAUTH') && @record.modifiable? %>
+<div id="button_modify">
+	<button type="button" id="button_modify" name="button_modify" class="ui-corner-all"><%=fam_img_tag('application_edit')-%>Edit</button>
+</div>
+<% end %>
 
 <script type="text/javascript">
 	$(function () {
+		var rectype = "<%=@record.brectype %>";
+		var record_id = "<%=@record.id %>";
+		
 		// creazione tabs
 		$('#record_tabs').tabs();
 
@@ -182,6 +190,11 @@
 		// gestione workspace
 		$('#workspace_container').load("<%= url_for(:controller => 'brecords', :action => 'show_workspace') %>");
 		$('#eWorkspace').accordion('resize');
+		
+		$('#button_modify').click(function() {
+			$('#dialog_new_modify').load('/rectype/'+rectype+'/show_modify/'+record_id)
+			return false;
+		});
 	});
 
 </script>

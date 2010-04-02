@@ -24,15 +24,15 @@
 			<% else %>
 				<div class='ctrlHolder'>
 					<label for="brecord_rec_brecname"><em>*</em>Number :</label>
-					<%= f.text_field :rec_brecname, :maxlength => "32", :tabindex => "1", :class => "uppercase required", :readonly => true %>
+					<%= f.text_field :rec_brecname, :maxlength => "32", :class => "uppercase", :readonly => true %>
 				</div>
 				<div class='ctrlHolder'>
 					<label for="brecord_rec_bname1"><em>*</em>Cage Code :</label>
-					<%= f.text_field :rec_bname1, :maxlength => "5", :tabindex => "2", :class => "uppercase required", :readonly => true %>
+					<%= f.text_field :rec_bname1, :maxlength => "5", :class => "uppercase", :readonly => true %>
 				</div>
 				<div class='ctrlHolder'>
 					<label for="brecord_rec_brecalt"><em>*</em>Rev. :</label>
-					<%= f.text_field :rec_brecalt, :value => "0000", :maxlength => "4", :tabindex => "3", :readonly => true %>
+					<%= f.text_field :rec_brecalt, :maxlength => "4", :readonly => true %>
 				</div>
 			<% end %>
 			<div class='ctrlHolder'>
@@ -172,5 +172,11 @@
 				$('#autonumber').val('');
 			}
 		});
+		
+		if ("<%=@action_type%>" == 'modify') {
+			$('#brecord_rec_brecname').attr('disabled', 'disabled');
+			$('#brecord_rec_bname1').attr('disabled', 'disabled');
+			$('#brecord_rec_brecalt').attr('disabled', 'disabled');
+		}
 	});
 </script>

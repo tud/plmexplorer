@@ -242,6 +242,10 @@ hr {
 #dialog_new_modify {
 	text-align:left;
 }
+
+#button_modify {
+	text-align: center;
+}
 /**************************************/
 /*              EAST                  */
 /**************************************/

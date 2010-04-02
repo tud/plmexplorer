@@ -38,6 +38,10 @@ class Brecord < ActiveRecord::Base
     project.obsolete?
   end
 
+  def modifiable?
+    true
+  end
+
   def self.tree_label u
     u[:breftype] ||= ""
     u.breftype+" "+u.brecname.gsub(/&/,'~')+" Rev. "+u.brecalt+" at Status "+u.breclevel+" - "+u.bdesc
