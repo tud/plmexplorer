@@ -194,6 +194,27 @@ class Brecord < ActiveRecord::Base
     self[:brecname] = Brecord.find_by_brectype_and_brecname('PIM_AUTONUM', self[:brectype].upcase).bdesc
   end
 
+  alias :original_method_missing :method_missing
+
+  def method_missing(method_name, *args, &block)
+    case method_name.to_s
+    when /^rec_(.+)/
+      send($1, *args, &block)
+    when /^uda_t_(.+)/
+      ""
+    when /^uda_(.+)/
+      uda($1)
+    when /^file_(.+)/
+      if bfiles.count > 0
+        bfiles[0].balias
+      else
+        ""
+      end
+    else
+      original_method_missing(method_name, *args, &block)
+    end
+  end
+
 
   private
 

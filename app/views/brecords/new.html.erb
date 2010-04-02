@@ -53,15 +53,15 @@
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_proprietary"><em>*</em>Proprietary :</label>
-			<%= f.select :uda_proprietary, grouped_options_for_select(PROPRIETARY_LEVELS), {:tabindex => "8"} %>
+                                <%= f.select :uda_proprietary, grouped_options_for_select(PROPRIETARY_LEVELS), {:tabindex => "8"} %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_sec_class"><em>*</em>Security Class :</label>
-			<%= f.select :uda_sec_class, grouped_options_for_select(SECURITY_CLASSES), {:tabindex => "9"} %>
+                                <%= f.select :uda_sec_class, grouped_options_for_select(SECURITY_CLASSES), {:tabindex => "9"} %>
 			</div>
 			<div class='ctrlHolder'>
                                 <label for="brecord_uda_wa_req_author"><em>*</em>Request Author :</label>
-                                <%= f.select :uda_wa_req_author, USER_LIST, {:include_blank => true}, {:tabindex => "10", :class => "editableCombobox required"} %>
+                                <%= f.text_field :uda_wa_req_author, :maxlength => "40", :tabindex => "10", :class => "required" %>
 			</div>
 			<div class='ctrlHolder'>
                                 <label for="brecord_rec_bname3">Reason for Change :</label>

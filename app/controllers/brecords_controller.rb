@@ -482,28 +482,14 @@ class BrecordsController < ApplicationController
   def new
     @rectype = params[:rectype].upcase
     rectypes = [ @rectype ]
-    @statusList = Blevel.find(:all,
-                              :conditions => [ "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname in (?)", rectypes ],
-                              :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
-
-    @typeList = DynList.build_from('IPD_WORKASUBTYP')
-    
     @action_type = 'create'
 
     render :layout => false
   end
 
   def show_modify
-    @record = Brecord.find(params[:id])
-
-	@rectype = params[:rectype].upcase
-    rectypes = [ @rectype ]
-    @statusList = Blevel.find(:all,
-                              :conditions => [ "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname in (?)", rectypes ],
-                              :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
-
-    @typeList = DynList.build_from('IPD_WORKASUBTYP')
-
+    @brecord = Brecord.find(params[:id])
+    @rectype = params[:rectype].upcase
     @action_type = 'modify'
 
     render :action => 'new', :layout => false
