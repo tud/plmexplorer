@@ -45,6 +45,56 @@ PRINTERS = DynList.build_from('IPD_PRINTER', :bdesc)
 
 PROJECT_LIST = Bproject.find(:all).map { |prj| prj.bname }.sort
 
+PROPRIETARY_LEVELS = [
+  [ '',
+    [ 'TUTTI I DIRITTI RIS.',
+      'RISER. INDUSTRIALE',
+      'RIS.(PROD)SU LICENZA'
+    ]
+  ],
+  [ '-----------------------------------',
+    [ 'Unlimited Rights',
+      'Limited Rights',
+      'Restricted Rights',
+      'Proprietary',
+      'Company Private',
+      'Sector Sensitive',
+      'Licensed',
+      'Government'
+    ]
+  ]
+]
+
+REASONS_FOR_CHANGE = [
+  [ '',
+    [ 'MODIFICA DI DISEGNAZIONE',
+      'MODIF.DI PROGETTAZIONE ELETTRICA',
+      'MODIF.DI PROGETTAZIONE MECCANICA',
+      'MODIFICA DEI REQUISITI',
+      'MIGLIORIA PRODOTTO/PRODUCIBILITA',
+      'MODIFICA PER APPROVVIGIONAMENTO',
+      'MODIFICA PER PRODUZIONE',
+      'MODIFICA PER INDUSTRIALIZZAZIONE',
+      'MODIFICA SOFTWARE'
+    ]
+  ],
+  [ '-------------------------------------------------------',
+    [ 'Drawing Error',
+      'Design Error Electrical',
+      'Design Error Mechanical',
+      'Specification Error',
+      'Requirements Change',
+      'Improve Product/Producibility',
+      'Procurement Change',
+      'Manufacturing Change',
+      'Developmental Change',
+      'Software Problem',
+      'Software Documentation Problem',
+      'Software Design Problem'
+    ]
+  ]
+]
+
 RECORD_TYPE = [
   [ 'Part/Document', '0' ],
   [ 'Part',          '1' ]
@@ -67,6 +117,27 @@ REQ_STATUS = [
   'PROPOSE',
   'REJECTED',
   'REVIEW'
+]
+
+SECURITY_CLASSES = [
+  [ '',
+    [ 'NON_CLASSIFICATO',
+      'RISERVATO',
+      'RISERVATISSIMO',
+      'RISERVATO_NATO',
+      'RISERVATISSIMO_NATO',
+      'SEGRETO'
+    ]
+  ],
+  [ '------------------------------------',
+    [ 'Confidential',
+      'Unclassified',
+      'Secret',
+      'Top Secret',
+      'COMSEC Confidential',
+      'COMSEC Secret'
+    ]
+  ]
 ]
 
 SORT_CRITERIA = [

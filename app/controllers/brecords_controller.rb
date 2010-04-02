@@ -2,6 +2,8 @@ include ActionView::Helpers::TextHelper
 
 class BrecordsController < ApplicationController
 
+  require 'tempfile'
+
   before_filter :authorize
 
   def index
@@ -493,39 +495,59 @@ class BrecordsController < ApplicationController
   
   def create
     brecord = Brecord.new
+    brecord[:new] = true
+    save brecord
+    render :layout => false
+  end
+
+  def modify
+    brecord = Brecord.new
+    brecord[:new] = false
+    save brecord
+    render :layout => false
+  end
+  
+  def save(brecord)
+    brecord[:brectype] = params[:rectype]
     params[:brecord].each do |key, value|
       downkey = key.downcase
       case downkey
       when /^rec_(.+)/
         brecord[$1] = value
       when /^uda_t_(.+)/
+        uda_t = $1
+        table_size = brecord.uda_t_size(uda_t)
+        first_empty = 1
+        # Split text area in righe da max 80 caratteri l'una
+        word_wrap(value).split(/\n/).each_with_index do |line, index|
+          if index <= table_size
+            brecord.set_uda(uda_t + '_' + '%02d' % (index+1), line)
+            first_empty += 1
+          end
+        end
+        # Le restanti righe sono vuote
+        (first_empty..table_size).each do |index|
+          brecord.set_uda(uda_t + '_' + '%02d' % index, '')
+        end
       when /^uda_(.+)/
-        buda = Buda.new
-        buda[:bname] = $1
-        buda[:bvalue] = value
-        brecord.budas << buda
+        brecord.set_uda($1, value)
       when /^file_(.+)/
+        # Se non carico nessun file, value è una stringa vuota,
+        # altrimenti è un'istanza di Tempfile.
+        if value.class == Tempfile
+          file = Bfile.new
+          file[:upload] = value
+          brecord.bfiles << file
+        end
       else
         raise "Illegal field name: #{key}"
       end
     end
     if params[:autonumber] == "1"
-      brecord[:autonumber] = "1"
-      brecord[:brecname] = Brecord.find_by_brectype_and_brecname('PIM_AUTONUM',  brecord[:brectype].upcase).bdesc
+      brecord.autonumber
     end
     brecord[:bcreateuser] = session[:user][:buser]
     brecord.save
-    render :layout => false
-  end
-
-  def modify
-    @rectype = params[:rectype].upcase
-    @action_type = 'Modify'
-    render :layout => false
-  end
-  
-  def save_modify
-    render :layout => false
   end
   
   def is_modifiable
@@ -619,13 +641,6 @@ private
     # Construct a hash from the ActiveRecord result
     @return_data[:total] = total_pages
     @return_data[:records] = count
-  end
-
-  def change_multi_attr(script, name)
-    record = params[:brecord]
-    word_wrap(record[name]).split(/\n/).each_with_index do |line, index|
-      script.puts "  change attribute #{name.to_s.upcase}_#{'%02d' % index} \"#{line}\""
-    end
   end
 
 end

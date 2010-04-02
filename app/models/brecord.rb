@@ -5,6 +5,7 @@ class Brecord < ActiveRecord::Base
   has_many   :bchkhistories, :foreign_key => 'bobjid'
   has_many   :brefs,         :foreign_key => 'bobjid'
 
+  require 'ftools'
   require 'tempfile'
 
   CHANGE_ATTRIBUTES = [ :bdesc, :bowner, :bproject, :brelproc, :btype1, :btype2, :btype3, :btype4, :bname1, :bname2, :bname3, :bname4, :bdate1, :bdate2, :bdate3, :bdate4, :blong1, :blong2, :blong3, :blong4, :bdouble1, :bdouble2, :bdouble3, :bdouble4, :bdouble5, :bdouble6, :bdouble7, :bdouble8, :bcost, :bfamily, :bbegindate, :benddate, :bmeasure ]
@@ -84,9 +85,9 @@ class Brecord < ActiveRecord::Base
     (bfiles + parents('IMAGE_FOR').map { |image| image.bfiles }.flatten).sort { |f1,f2| f1.name <=> f2.name }
   end
 
-  def file(balias)
+  def file(name)
     for file in files
-      return file if file.balias == balias
+      return file if file.balias == name.upcase
     end
   end
 
@@ -108,58 +109,87 @@ class Brecord < ActiveRecord::Base
   end
 
   def save
-    recspec = self[:brectype] + '\\' + self[:brecname] + '\\' + self[:brecalt].to_s
-    recalt = self[:brecalt]
-    recalt = ' ' if !recalt || recalt.empty?
-    record_exists = Brecord.exists?(:brectype => self[:brectype], :brecname => self[:brecname], :brecalt => recalt)
+    self[:brectype].upcase!
+    self[:brecname].upcase!
+    recalt = self[:brecalt].to_s.upcase
+    recalt = ' ' if recalt.empty?
+    recspec = self[:brectype] + '\\' + self[:brecname] + '\\' + recalt
 
     logfile = Tempfile.new(self[:brecname])
     if ENV['RAILS_ENV'] == 'development'
       # In sviluppo creo lo script DMS di lancio del report
       # in un file temporaneo
-      script = logfile
+      @script = logfile
     else
       # In produzione uso il file temporaneo come file di log
       # e creo una pipe verso una sessione DMS remota, cui sottometto
       # lo script di lancio del report
       logfile.close
-      script = IO.popen("rsh #{PREF['SHERPA_SERVER']} dms > #{logfile.path}", "w")
+      @script = IO.popen("rsh #{PREF['SHERPA_SERVER']} dms > #{logfile.path}", "w")
     end
-    script.puts("set db #{PREF['SHERPA_DB']}")
-    script.puts("set user #{self[:bcreateuser]}")
+    @script.puts("set db #{PREF['SHERPA_DB']}")
+    @script.puts("set user #{self[:bcreateuser]}")
 
     # Incremento campo Autonumber, su usato
-    if self[:autonumber]
-      script.puts("modify record PIM_AUTONUM\\WORKAUTH")
-      script.puts "  change attribute DESC \"#{self[:brecname].to_i + 1}\""
-      script.puts("end modify")
+    if @autonumber
+      @script.puts("modify record PIM_AUTONUM\\#{self[:brectype]}")
+      @script.puts "  change attribute DESC \"#{self[:brecname].to_i + 1}\""
+      @script.puts("end modify")
     end
 
-    if record_exists
-      script.puts "modify record #{recspec}"
+    if self[:new]
+      @script.puts "create record #{recspec}"
+      @curr_rec = Brecord.new
     else
-      script.puts "create record #{recspec}"
+      @script.puts "modify record #{recspec}"
+      @curr_rec = Brecord.find_by_brectype_and_brecname_and_brecalt(self[:brectype], self[:brecname], recalt,
+                                                                    :conditions => "id = blatest")
     end
 
     CHANGE_ATTRIBUTES.each do |attr|
       if self[attr]
-        script.puts "  change attribute #{attr.to_s.upcase[1..-1]} \"#{self[attr]}\""
+        @script.puts "  change attribute #{attr.to_s.upcase[1..-1]} \"#{self[attr]}\""
       end
     end
     budas.each do |uda|
-      if uda.bvalue
-        script.puts "  change attribute #{uda.bname.upcase} \"#{uda.bvalue}\""
+      puts_uda(uda[:bname], uda[:bvalue])
+    end
+    bfiles.each do |file|
+      if @curr_rec.bfiles.count > 0
+        @script.puts "  remove file *"
       end
+      orig_name = File.basename(file[:upload].original_filename)
+      upload_name = File.basename(file[:upload].path)
+      dest_path = PREF['SHERPA_TMP'][ENV['RAILS_ENV']] + '/' + upload_name
+      File.copy(file[:upload].path, dest_path)
+      @script.puts "  add file /secure \"#{dest_path}\" #{orig_name}"
     end
 
-    if record_exists
-      script.puts "end modify"
+    if self[:new]
+      @script.puts "end create"
     else
-      script.puts "end create"
+      @script.puts "end modify"
     end
-    script.puts("exit")
-    script.close
+    @script.puts("exit")
+    @script.close
   end
+
+  def uda_t_size(name)
+    Batt.find(:all, :conditions => [ "BRECTYPE = ? and BNAME like ?", self[:brectype].upcase, name.upcase+'_%' ]).count
+  end
+
+  def set_uda(name, value)
+    buda = Buda.new
+    buda[:bname] = name
+    buda[:bvalue] = value
+    budas << buda
+  end
+
+  def autonumber
+    @autonumber = true
+    self[:brecname] = Brecord.find_by_brectype_and_brecname('PIM_AUTONUM', self[:brectype].upcase).bdesc
+  end
+
 
   private
 
@@ -177,8 +207,10 @@ class Brecord < ActiveRecord::Base
                                                :offset => offset)
   end
 
-  def uda_t_size(rectype, name)
-    Batt.find(:all, :conditions => [ "BRECTYPE = ? and BNAME like ?", rectype.upcase, name.upcase+'_%' ]).count
+  def puts_uda(name, value)
+    if @curr_rec.uda(name).strip != value
+       @script.puts "  change attribute #{name.upcase} \"#{value}\""
+    end
   end
 
 end

@@ -19,7 +19,7 @@ FIND:
     label: Generic
     iconclass: page_white
     title: Find Generic Object
-    
+
 REPORT:
   - type: bomnew
     label: BOMNEW
@@ -55,4 +55,4 @@ NEW:
   - type: WORKAUTH
     label: Workauth
     iconclass: application_form_edit
-    title: Create Workauth Request 
+    title: Create Workauth Request
