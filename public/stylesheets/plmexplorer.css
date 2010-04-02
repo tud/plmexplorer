@@ -43,10 +43,10 @@ select {
 
 /**************************************
 * Aggiunto da Sergio temporaneamente!
-***************************************/
 .uniForm .inlineLabels textarea, .uniForm .inlineLabels .textarea {
 	height:8em;
 }
+***************************************/
 
 a.button, button {
 	margin: 0.7em 0.5em 0.7em 0;
