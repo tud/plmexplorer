@@ -28,6 +28,7 @@ h4(. "jQuery _1.3.2_":http://jquery.com/
 ** "jQuery Editable Combobox _0.5.2_":http://code.google.com/p/jquery-jec/
 ** "jQuery History _0.3.0_":http://www.overset.com/2008/06/18/jquery-history-plugin/
 ** "jQuery Validation _1.5.2_":http://bassistance.de/jquery-plugins/jquery-plugin-validation/
+** "jQuery FormWizard _2.0.0-RC4_":http://thecodemine.org/
 
 h4(. "Blueprint _0.8_":http://blueprintcss.org/
 

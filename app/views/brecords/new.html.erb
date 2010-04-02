@@ -1,10 +1,10 @@
-<% form_for :brecord, :html => {:id => 'new_record', :class => 'uniForm', :multipart => true} do |f| %>
+<% form_for :brecord, :url => "/rectype/WORKAUTH/"+@action_type, :html => {:id => 'new_record', :class => 'uniForm', :multipart => true} do |f| %>
 <% if @rectype == "WORKAUTH" %>
 	<fieldset class='inlineLabels'>
 		<legend id="legend_new_record"></legend>
 		<%= f.hidden_field :rec_brectype, :value => @rectype %>
 		<div id="step1" class="step">
-			<% if @action_type == 'New' %>
+			<% if @action_type == 'create' %>
 				<div class='ctrlHolder'>
 					<label for="brecord_rec_brecname"><em>*</em>Number :</label>
 					<%= f.text_field :rec_brecname, :maxlength => "32", :tabindex => "1", :class => "uppercase required", :disabled => true %>
@@ -108,6 +108,7 @@
 	$(function() {
 		var rectype = "<%= @rectype %>".toLowerCase();
 		var title = "<%=@action_type %>"+' '+rectype.toUpperCase();
+		
 		$('#legend_new_record').html(title);
 		$('#dialog_new_modify').attr('title', title);
 		$('#brecord_rec_brectype').val(rectype);
@@ -126,18 +127,6 @@
 		});
 		$('.ui-dialog-titlebar-close:first').hide();
 		$('#dialog_new_modify').dialog('open');
-		
-		$('#new_record').validate({
-			errorClass: 'invalid',
-			submitHandler: function(form) {
-				$(form).ajaxSubmit({
-					target: 	'#cRecord'
-				,	url: 		'/rectype/'+rectype+'/create'
-				});
-				$('#dialog_new_modify').dialog('close');
-				return false;
-			}
-		});
 
 		$('#cancel_button').click(function() {
 			$('#dialog_new_modify').dialog('close');
@@ -158,6 +147,16 @@
 			back : '#back_button',
 			textNext : "<%=fam_img_tag('resultset_next')-%>Next",
 			textSubmit : "<%=fam_img_tag('database_add')-%>Save"
+		},
+		{
+			errorClass: 'invalid',
+		},
+		{
+			target: 	'#cRecord',
+			success: 	function(){
+				$('#dialog_new_modify').dialog('close');
+				return false;
+			},
 		});
 		
 		$('#brecord_rec_brecname').attr('disabled', 'disabled');

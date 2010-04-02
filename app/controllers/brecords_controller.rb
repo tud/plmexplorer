@@ -488,7 +488,7 @@ class BrecordsController < ApplicationController
 
     @typeList = DynList.build_from('IPD_WORKASUBTYP')
     
-    @action_type = 'New'
+    @action_type = 'create'
 
     render :layout => false
   end
