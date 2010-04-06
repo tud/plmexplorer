@@ -102,6 +102,19 @@ class Brecord < ActiveRecord::Base
     @udas.map { |uda| uda.bvalue if uda.bname == name.upcase }.compact.to_s
   end
 
+  def uda_t(name)
+    text = ""
+    (1..uda_t_size(name)).each do |index|
+      value = uda(name + '_' + '%02d' % index)
+      text += value + "\n" if not value.empty?
+    end
+    text
+  end
+
+  def uda_t_size(name)
+    Batt.find(:all, :conditions => [ "BRECTYPE = ? and BNAME like ?", self[:brectype].upcase, name.upcase+'_%' ]).count
+  end
+
   def files
     (bfiles + parents('IMAGE_FOR').map { |image| image.bfiles }.flatten).sort { |f1,f2| f1.name <=> f2.name }
   end
@@ -195,10 +208,6 @@ class Brecord < ActiveRecord::Base
     @script.close
   end
 
-  def uda_t_size(name)
-    Batt.find(:all, :conditions => [ "BRECTYPE = ? and BNAME like ?", self[:brectype].upcase, name.upcase+'_%' ]).count
-  end
-
   def set_uda(name, value)
     buda = Buda.new
     buda[:bname] = name
@@ -218,7 +227,7 @@ class Brecord < ActiveRecord::Base
     when /^rec_(.+)/
       send($1, *args, &block)
     when /^uda_t_(.+)/
-      ""
+      uda_t($1)
     when /^uda_(.+)/
       uda($1)
     when /^file_(.+)/

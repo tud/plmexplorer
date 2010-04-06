@@ -149,14 +149,14 @@
 			textSubmit : "<%=fam_img_tag('database_add')-%>Save"
 		},
 		{
-			errorClass: 'invalid',
+			errorClass: 'invalid'
 		},
 		{
 			target: 	'#cRecord',
 			success: 	function(){
 				$('#dialog_new_modify').dialog('close');
 				return false;
-			},
+			}
 		});
 		
 		$('#brecord_rec_brecname').attr('disabled', 'disabled');

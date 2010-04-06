@@ -109,24 +109,10 @@
 <%
 						elsif (ftype.starts_with? "multi_")
 							attrname = fid.gsub(/uda_/, '').upcase
-							counter = ftype.gsub(/multi_/,'').to_i
-							ii = 1
-							value = ""
-							while (ii <= counter)
-								suffix = "%02d" % ii  
-								multi_attrname = "#{attrname}_#{suffix}"
-								if not @record.uda(multi_attrname).empty?
-									if ii > 1
-										value << ' '
-									end
-									value << @record.uda(multi_attrname)
-								end
-								ii += 1
-							end
 %>
 							<div class='ctrlHolder'>
 								<label><%=field['label']%> :</label>
-								<textarea readonly="readonly" cols="80" rows="<%=field['size']%>"><%= escape_javascript h(value) %></textarea>
+								<textarea readonly="readonly" cols="80" rows="<%=field['size']%>"><%= h(@record.uda_t(attrname)) %></textarea>
 							</div>
 <%
 						end
