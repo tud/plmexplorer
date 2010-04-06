@@ -30,6 +30,10 @@ class Brecord < ActiveRecord::Base
     @project ||= Bproject.find_by_bname(bproject)
   end
 
+  def relproc
+    @relproc ||= Brelproc.find_by_bname(brelproc)
+  end
+
   def migrated?
     project.migrated?
   end
@@ -38,8 +42,21 @@ class Brecord < ActiveRecord::Base
     project.obsolete?
   end
 
-  def modifiable?
-    true
+  def modifiable?(by_user)
+    if by_user =~ /^SHERPA/
+      true
+    elsif migrated?
+      false
+    else
+      # Trovo tutte le user classes cui appartiene l'utente nell'ambito del progetto.
+      # Aggiungo sempre la classe DBUSER, cui appartengono tutti gli utenti.
+      uclasses = project.bprjusers.find_all { |prjuser| prjuser.buser == by_user }.collect { |prjuser| prjuser.buclass } + [ 'DBUSER' ]
+      # Calcolo l'unione di tutti i privilegi garantiti alle user classes dell'utente
+      # all'attuale stato di rilascio del record nell'ambito della release procedure.
+      privs = relproc.baccesses.find_all { |access| access.blevelid == blevelid and uclasses.include? access.buclass }.collect { |access| access.bpriv }
+      # Controllo che ad almeno una user class siano garantiti Update e Modify.
+      privs.detect { |priv| priv =~ /UM/ }
+    end
   end
 
   def self.tree_label u

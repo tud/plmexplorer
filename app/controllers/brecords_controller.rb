@@ -523,7 +523,7 @@ class BrecordsController < ApplicationController
         # Split text area in righe da max 80 caratteri l'una
         word_wrap(value).split(/\n/).each_with_index do |line, index|
           if index <= table_size
-            brecord.set_uda(uda_t + '_' + '%02d' % (index+1), line)
+            brecord.set_uda(uda_t + '_' + '%02d' % (index+1), line.rstrip)
             first_empty += 1
           end
         end

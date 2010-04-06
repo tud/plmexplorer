@@ -141,7 +141,7 @@
 	end
 %>
 </div>
-<% if (@record.brectype == 'WORKAUTH') && (@record.bfamily == 'REQUEST') && @record.modifiable? %>
+<% if (@record.brectype == 'WORKAUTH') && (@record.bfamily == 'REQUEST') && @record.modifiable?(session[:user][:buser]) %>
 <div id="button_modify">
 	<button type="button" id="button_modify" name="button_modify" class="ui-corner-all"><%=fam_img_tag('application_edit')-%>Edit</button>
 </div>
