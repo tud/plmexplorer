@@ -112,7 +112,7 @@ class Brecord < ActiveRecord::Base
   end
 
   def uda_t_size(name)
-    Batt.find(:all, :conditions => [ "BRECTYPE = ? and BNAME like ?", self[:brectype].upcase, name.upcase+'_%' ]).count
+    Batt.find(:all, :conditions => [ "BRECTYPE = ? and BNAME like ?", self[:brectype].upcase, name.upcase+'_%' ]).size
   end
 
   def files
