@@ -1,7 +1,7 @@
 class Bfile < ActiveRecord::Base
   belongs_to :brecord,  :foreign_key => 'bobjid'
 
-  UNITS = { :B => 1, :KB => 2**10, :MB => 2**20, :GB => 2**30 }
+  include ActionView::Helpers::NumberHelper
 
   def storage
     @storage ||= Bstorage.find_by_bname(bstorage)
@@ -26,17 +26,7 @@ class Bfile < ActiveRecord::Base
 
   def size
     begin
-      bytes = File.size(path)
-      if bytes >= UNITS[:GB]
-        unit = :GB
-      elsif bytes >= UNITS[:MB]
-        unit = :MB
-      elsif bytes >= UNITS[:KB]
-        unit = :KB
-      else
-        unit = :B
-      end
-      "#{bytes / UNITS[unit]} #{unit}"
+      number_to_human_size(File.size(path))
     rescue
       MSG['NO_FILE']
     end
