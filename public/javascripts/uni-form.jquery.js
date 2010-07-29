@@ -1,3 +1,10 @@
+// Author: Ilija Studen for the purposes of Uni–Form
+
+// Modified by Aris Karageorgos to use the parents function
+
+// Modified by Toni Karlheinz to support input fields' text
+// coloring and removal of their initial values on focus
+
 jQuery.fn.uniform = function(settings) {
   settings = jQuery.extend({
     valid_class    : 'valid',
@@ -39,3 +46,4 @@ jQuery.fn.uniform = function(settings) {
 $(document).ready(function() {
   jQuery('form.uniForm').uniform();
 });
+

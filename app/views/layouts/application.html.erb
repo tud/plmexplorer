@@ -1,7 +1,7 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta charset="utf-8" />
 		<meta name="description"	content="PlmExplorer,PLM Explorer,PLM,PDM,PLM viewer,Sherpa viewer,Sherpa" />
 		<meta name="keywords"		content="PlmExplorer,PLM Explorer,PLM,PDM,PLM viewer,Sherpa viewer,Sherpa,Ruby on Rails,jQuery,jqGrid,UI jQuery" />
 		<meta name="Copyright"		content="Copyright (c) 2009 Tud &amp; Taurus" />
@@ -17,21 +17,19 @@
 		<%= stylesheet_link_tag 'blueprint/print.css', :media => "print" %>
 		<!--[if IE]><%= stylesheet_link_tag 'blueprint/ie.css', :media => "screen, projection" %><![endif]-->
 
-		<%= stylesheet_link_tag 'ui-lightness/jquery-ui-1.7.1.custom.css', 'uni-form.css' %>
+		<%= stylesheet_link_tag 'uni-form.css', 'default.uni-form.css' %>
 		<!--[if lte ie 7]><%= stylesheet_link_tag 'uni-form.ie.css', :media => "screen, projection" %><![endif]-->
-		<%= stylesheet_link_tag '../javascripts/themes/basic/grid.css','../javascripts/themes/jqModal.css','grid_custom.css' %>
-		<%= stylesheet_link_tag 'tree_component.css','tree/default/style.css' %>
+		<%= stylesheet_link_tag 'ui-lightness/jquery-ui-1.8.2.custom.css' %>
+		<%= stylesheet_link_tag 'ui.jqgrid.css','grid_custom.css' %>
 		<%= stylesheet_link_tag 'plmexplorer.css' %>
 		
 		<%= javascript_include_tag :defaults %>
 		<%= javascript_include_tag 'uni-form.jquery.js','jquery.checkbox.js' %>
-		<%= javascript_include_tag 'jquery.layout.min.js','jquery.form.js', 'jquery.form.wizard-2.0.0-RC4.js' %>
-		<%= javascript_include_tag 'jquery.jec.min-0.5.2.js','jquery.bgiframe.min.js', 'jquery.maxlength.js' %>
-		<%= javascript_include_tag 'jquery.jqGrid.js','js/jqModal.js','js/jqDnR.js' %>
-		<%= javascript_include_tag 'css.js','tree_component.js' %>
-		<%= javascript_include_tag 'jquery.jhistory.js' %>
-		<%= javascript_include_tag 'jquery.tooltip.js' %>
-		<%= javascript_include_tag 'jquery.validate.min.js' %>
+		<%= javascript_include_tag 'jquery.layout.min.js','jquery.form.js', 'jquery.form.wizard-2.0.1-min.js' %>
+		<%= javascript_include_tag 'jquery.jec.min.js','jquery.bgiframe.min.js', 'jquery.maxlength.js' %>
+		<%= javascript_include_tag 'grid.locale-en.js', 'jquery.jqGrid.min.js' %>
+		<%= javascript_include_tag 'jquery.jstree.js' %>
+		<%= javascript_include_tag 'jquery.history.js', 'jquery.tooltip.js', 'jquery.validate.min.js' %>
 	</head>
 	<body>
 		<% if !session[:user] %>

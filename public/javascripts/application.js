@@ -1,11 +1,12 @@
 var pexLayout;
-var grid_imgpath='/javascripts/themes/plmexplorer/images';
 
 $(function() {
 	// fix for jQuery
 	$.ajaxSetup({ 
-		'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript")}
+		'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/javascript");}
 	});
+	
+	$.jgrid.defaults = $.extend($.jgrid.defaults,{loadui:"enable"});
 
 	// UI.layout
 	pexLayout = $('body').layout({
@@ -47,7 +48,7 @@ $(function() {
 	// gestione tab new
 	$('.wNavigation_new').click(function() {
 		var rectype = $(this).attr('href');
-		$('#dialog_new_modify').load('/rectype/'+rectype+'/new')
+		$('#dialog_new_modify').load('/rectype/'+rectype+'/new');
 		return false;
 	});
 	

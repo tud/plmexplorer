@@ -187,14 +187,14 @@ class BrecordsController < ApplicationController
       @return_data[:state] = "open"
       @return_data[:data][:title]= Brecord.tree_label record
       @return_data[:data][:icon] = fam_icon_rectype record.brectype
-      @return_data[:attributes][:id] = record.id.to_s
+      @return_data[:attr][:id] = record.id.to_s
       @return_data[:children] = children.collect{|u| {
         :state => "closed",
         :data => {
           :title => u.tree_label,
           :icon => fam_icon_rectype(u.brectype)
         },
-        :attributes => {
+        :attr => {
           :id => u.id.to_s
         }
       }}
@@ -205,7 +205,7 @@ class BrecordsController < ApplicationController
           :title => u.tree_label,
           :icon => fam_icon_rectype(u.brectype)
         },
-        :attributes => {
+        :attr => {
           :id => u.id.to_s
         }
       }}
@@ -257,14 +257,14 @@ class BrecordsController < ApplicationController
       @return_data[:state] = "open"
       @return_data[:data][:title]= Brecord.tree_label record
       @return_data[:data][:icon] = fam_icon_rectype record.brectype
-      @return_data[:attributes][:id] = record.id.to_s
+      @return_data[:attr][:id] = record.id.to_s
       @return_data[:children] = parents.collect{|u| {
         :state => "closed",
         :data => {
           :title => Brecord.tree_label(u),
           :icon => fam_icon_rectype(u.brectype)
         },
-        :attributes => {
+        :attr => {
           :id => u.id.to_s
         }
       }}
@@ -275,7 +275,7 @@ class BrecordsController < ApplicationController
           :title => Brecord.tree_label(u),
           :icon => fam_icon_rectype(u.brectype)
         },
-        :attributes => {
+        :attr => {
           :id => u.id.to_s
         }
       }}

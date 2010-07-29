@@ -8,7 +8,7 @@ h4((. *0.1 - _visualizzatore dati Sherpa_*
 
 h2. Software utilizzato
 
-h4(. "Ruby on Rails _2.3.5_":http://rubyonrails.org/
+h4(. "Ruby on Rails _2.3.8_":http://rubyonrails.org/
 
 * gems:
 ** "activerecord-oracle_enhanced-adapter _1.2.1_":Version must be <= 1.2.1
@@ -16,23 +16,25 @@ h4(. "Ruby on Rails _2.3.5_":http://rubyonrails.org/
 * plugins:
 ** "jRails _0.4_":http://ennerchi.com/projects/jrails/
 
-h4(. "jQuery _1.3.2_":http://jquery.com/
+h4(. "jQuery _1.4.2_":http://jquery.com/
 
 * plugins:
-** "jQuery UI _1.7.1_":http://ui.jquery.com/
-** "jQuery Grid _3.4.3_":http://www.trirand.com/blog/
-** "jQuery UI.Layout _1.2.0_":http://layout.jquery-dev.net/
-** "jQuery jsTree _0.9.6_":http://www.jstree.com/
-** "jQuery Form Plugin":http://malsup.com/jquery/form/
+** "jQuery UI _1.8.2_":http://ui.jquery.com/
+** "jQuery Grid _3.7.2_":http://www.trirand.com/blog/
+** "jQuery UI.Layout _1.3.0.rc29.3_":http://layout.jquery-dev.net/
+** "jQuery jsTree _1.0.rc2_":http://www.jstree.com/
+** "jQuery Form Plugin _2.43_":http://malsup.com/jquery/form/
 ** "jQuery.pngFix _1.1_":http://jquery.andreaseberhard.de/pngFix/
-** "jQuery Editable Combobox _0.5.2_":http://code.google.com/p/jquery-jec/
-** "jQuery History _0.3.0_":http://www.overset.com/2008/06/18/jquery-history-plugin/
-** "jQuery Validation _1.5.2_":http://bassistance.de/jquery-plugins/jquery-plugin-validation/
-** "jQuery FormWizard _2.0.0-RC4_":http://thecodemine.org/
+** "jQuery Editable Combobox _1.3.0_":http://code.google.com/p/jquery-jec/
+** "jQuery History _0.6_":http://www.overset.com/2008/06/18/jquery-history-plugin/
+** "jQuery Validation _1.7_":http://bassistance.de/jquery-plugins/jquery-plugin-validation/
+** "jQuery FormWizard _2.0.1_":http://thecodemine.org/
+** "jQuery Tooltip":http://cssglobe.com/post/1695/easiest-tooltip-and-image-preview-using-jquery
+** "jQuery Bgiframe _2.1.2_":http://brandonaaron.net/code/bgiframe/docs
 
-h4(. "Blueprint _0.8_":http://blueprintcss.org/
+h4(. "Blueprint _0.9_":http://blueprintcss.org/
 
-h4(. "UniForm _1.3_":http://sprawsm.com/uni-form/
+h4(. "UniForm _1.4_":http://sprawsm.com/uni-form/
 
 h4(. "FamFamFam Silk Icons _1.3_":http://www.famfamfam.com/lab/icons/silk/
 

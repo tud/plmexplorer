@@ -14,7 +14,7 @@ $(function(){
 			}
 		});
 		var action = $("input[name='filter_type_children']:checked").val();
-		var selected = $('#record_tabs').tabs().data('selected.tabs');
+		var selected = $('#record_tabs').tabs().tabs('option','selected');
 		var url = '/<%= controller.controller_name %>/'+action+'?id=<%= @id %>&reftypes='+reftypes;
 		$('#record_tabs').tabs("url", selected, url);
 		$('#record_tabs').tabs("load", selected );
