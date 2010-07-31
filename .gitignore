@@ -22,3 +22,4 @@ doc/*.dot
 public/javascripts/cache/*
 public/stylesheets/cache/*
 nbproject
+db/schema.rb

@@ -113,11 +113,12 @@
 		$('#dialog_new_modify').attr('title', title);
 		$('#brecord_rec_brectype').val(rectype);
 	
-		$('.editableCombobox').editableCombobox();
+		$('.editableCombobox').jec();
 	
 		$('#dialog_new_modify').dialog({
 			width: 770,
 			modal: true,
+			autoOpen: false,
 			closeOnEscape: false
 		});
 		$('.ui-dialog-titlebar-close:first').hide();
