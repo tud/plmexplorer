@@ -5,7 +5,11 @@
 <script type="text/javascript">
 $(function(){
 	$('#childrenTree').jstree({
-		"plugins": ["themeroller", "json_data", "ui"],
+		"plugins": ["themes", "json_data", "ui"],
+		"themes" : {
+			"theme" : "default",
+			"dots" : "true"
+		},
 		"json_data" : {
 			"ajax" : {
 				"url": 	"/<%= controller.controller_name %>/tree_children?reftypes=<%=@reftypes%>",
