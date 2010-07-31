@@ -161,7 +161,7 @@ hr {
 }
 
 .uniForm .inlineLabels label, .uniForm .inlineLabels .label {
-	width:15em;
+	width:14em;
 }
 .uniForm fieldset {
 	border:1px solid #1c94c4;
@@ -237,6 +237,54 @@ hr {
 }
 .ui-datepicker {
 	z-index:3;
+}
+
+#wizard_navigation {
+	margin-right: 1em;
+	margin-top: 0.5em;
+	font-size:1.2em;
+}
+
+#new_record .ctrlHolder {
+	padding: 2px 0;
+}
+#new_record .ctrlHolder input, #new_record .ctrlHolder select {
+	font-weight:normal;
+	color:#333;
+	background-color:#fff;
+}
+
+#new_record .ctrlHolder select {
+	font-size:0.9em;
+}
+
+#new_record #brecord_rec_bdesc {
+	width:71%;
+}
+
+.navigation_button {
+	padding:0.4em;
+	width: 90px;
+	
+}
+
+#back_button {
+	background: url(/images/fam/resultset_previous.gif) no-repeat 1px 8px;
+	padding-left:1px;
+	border:1px solid #1C94C4;
+	color:#1C94C4;
+}
+#submit_button {
+	background: url(/images/fam/resultset_next.gif) no-repeat 1px 8px;
+	padding-left:1px;
+	border:1px solid #1C94C4;
+	color:#1C94C4;
+}
+#cancel_button {
+	background: url(/images/fam/delete.gif) no-repeat 3px 8px;
+	padding-left:11px;
+	border:1px solid #1C94C4;
+	color:#1C94C4;
 }
 
 #dialog_new_modify {

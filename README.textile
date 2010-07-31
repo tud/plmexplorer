@@ -28,7 +28,7 @@ h4(. "jQuery _1.4.2_":http://jquery.com/
 ** "jQuery Editable Combobox _1.3.0_":http://code.google.com/p/jquery-jec/
 ** "jQuery History _0.6_":http://www.overset.com/2008/06/18/jquery-history-plugin/
 ** "jQuery Validation _1.7_":http://bassistance.de/jquery-plugins/jquery-plugin-validation/
-** "jQuery FormWizard _2.0.1_":http://thecodemine.org/
+** "jQuery FormWizard _3.0.0_":http://thecodemine.org/
 ** "jQuery Tooltip":http://cssglobe.com/post/1695/easiest-tooltip-and-image-preview-using-jquery
 ** "jQuery Bgiframe _2.1.2_":http://brandonaaron.net/code/bgiframe/docs
 

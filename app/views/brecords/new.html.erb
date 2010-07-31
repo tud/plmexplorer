@@ -53,33 +53,33 @@
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_proprietary"><em>*</em>Proprietary :</label>
-                                <%= f.select :uda_proprietary, grouped_options_for_select(PROPRIETARY_LEVELS), {:tabindex => "8"} %>
+ 				<%= f.select :uda_proprietary, grouped_options_for_select(PROPRIETARY_LEVELS), {:tabindex => "8"} %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_sec_class"><em>*</em>Security Class :</label>
-                                <%= f.select :uda_sec_class, grouped_options_for_select(SECURITY_CLASSES), {:tabindex => "9"} %>
+				<%= f.select :uda_sec_class, grouped_options_for_select(SECURITY_CLASSES), {:tabindex => "9"} %>
 			</div>
 			<div class='ctrlHolder'>
-                                <label for="brecord_uda_wa_req_author"><em>*</em>Request Author :</label>
-                                <%= f.text_field :uda_wa_req_author, :maxlength => "40", :tabindex => "10", :class => "required" %>
+				<label for="brecord_uda_wa_req_author"><em>*</em>Request Author :</label>
+				<%= f.text_field :uda_wa_req_author, :maxlength => "40", :tabindex => "10", :class => "required" %>
 			</div>
 			<div class='ctrlHolder'>
-                                <label for="brecord_rec_bname3">Reason for Change :</label>
-                                <%= f.select :rec_bname3, grouped_options_for_select(REASONS_FOR_CHANGE), {:include_blank => true}, {:tabindex => "11"} %>
+				<label for="brecord_rec_bname3">Reason for Change :</label>
+				<%= f.select :rec_bname3, grouped_options_for_select(REASONS_FOR_CHANGE), {:include_blank => true}, {:tabindex => "11"} %>
 			</div>
 			<div class='ctrlHolder'>
-                                <label for="brecord_rec_btype3">Change Class :</label>
-                                <%= f.select :rec_btype3, option_groups_from_collection_for_select(CHANGE_CLASSES, :options, :label, :value, :key), {:include_blank => true}, {:tabindex => "12"} %>
+				<label for="brecord_rec_btype3">Change Class :</label>
+				<%= f.select :rec_btype3, option_groups_from_collection_for_select(CHANGE_CLASSES, :options, :label, :value, :key), {:include_blank => true}, {:tabindex => "12"} %>
 			</div>
 			<div class='ctrlHolder'>
-                                <label for="brecord_uda_change_subclass">Sub-Class :</label>
-                                <%= f.select :uda_change_subclass, option_groups_from_collection_for_select(CHANGE_SUBCLASSES, :options, :label, :value, :key), {:include_blank => true}, {:tabindex => "13"} %>
-                        </div>
-                </div>
+				<label for="brecord_uda_change_subclass">Sub-Class :</label>
+				<%= f.select :uda_change_subclass, option_groups_from_collection_for_select(CHANGE_SUBCLASSES, :options, :label, :value, :key), {:include_blank => true}, {:tabindex => "13"} %>
+			</div>
+		</div>
 		<div id="step2" class="step">
 			<div class='ctrlHolder'>
-                                <label for="brecord_uda_t_desc_of_chng">Description of Change :</label>
-                                <%= f.text_area :uda_t_desc_of_chng, :cols => "80", :rows => "15", :tabindex => "14" %>
+				<label for="brecord_uda_t_desc_of_chng">Description of Change :</label>
+				<%= f.text_area :uda_t_desc_of_chng, :cols => "80", :rows => "15", :tabindex => "14" %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_t_comment">Comments :</label>
@@ -94,11 +94,11 @@
 				<%= f.file_field :file_upload, :tabindex => "17" %>
 			</div>
 		</div>
-		<div class="buttonHolder">
+		<div class="buttonHolder" id="wizard_navigation">
 			<label>&nbsp;</label>
-			<button type="submit" id="submit_button" name="submit_button" class="ui-corner-all">&nbsp;</button>
-			<button type="button" id="back_button" name="back_button" class="ui-corner-all"><%=fam_img_tag('resultset_previous')-%>Back</button>
-			<button type="button" id="cancel_button" name="cancel_button" class="ui-corner-all"><%=fam_img_tag('delete')-%>Cancel</button>
+			<input class="navigation_button ui-wizard-content ui-helper-reset ui-state-default ui-formwizard-button ui-state-active ui-corner-all" id="back_button" value="Back" type="reset"/>
+			<input class="navigation_button ui-wizard-content ui-helper-reset ui-state-default ui-formwizard-button ui-state-active ui-corner-all" id="submit_button" value="Submit" type="submit"/>
+			<input class="navigation_button ui-wizard-content ui-helper-reset ui-state-default ui-formwizard-button ui-state-active ui-corner-all" id="cancel_button" value="Cancel" type="button"/>
 		</div>
 	</fieldset>
 <% end %>
@@ -134,24 +134,22 @@
 		$('#brecord_uda_solution').maxLength(800);
 		
 		$('form.uniForm').uniform();
-		
+
 		$('#new_record').formwizard({
 			formPluginEnabled : true,
 			validationEnabled : true,
 			focusFirstInput : true,
 			next : '#submit_button',
 			back : '#back_button',
-			textNext : "<%=fam_img_tag('resultset_next')-%>Next",
-			textSubmit : "<%=fam_img_tag('database_add')-%>Save"
-		},
-		{
-			errorClass: 'invalid'
-		},
-		{
-			target: 	'#cRecord',
-			success: 	function(){
-				$('#dialog_new_modify').dialog('close');
-				return false;
+			formOptions: {
+				target: 	'#cRecord',
+				success: 	function(){
+					$('#dialog_new_modify').dialog('close');
+					return false;
+				}
+			},
+			validationOptions: {
+				errorClass: 'invalid'
 			}
 		});
 		
