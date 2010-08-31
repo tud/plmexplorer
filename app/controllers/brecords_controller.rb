@@ -437,6 +437,11 @@ class BrecordsController < ApplicationController
     render :layout => false
   end
   
+  def load_record_workflow
+    @id = params[:id]
+    render :layout => false
+  end
+  
   def load_record_parents
     @record = Brecord.find(params[:id])
     @reftypes = params[:reftypes]

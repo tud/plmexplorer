@@ -1,0 +1,77 @@
+<div id="workflow">
+	<h3><a href="#">CREATED</a></h3>
+	<div>
+		<em>Promoted to CREATED level on 05-MAY-2004 16:44:05 by UFFDOC</em><br><br>
+		<input type="checkbox" id="check_01" checked="checked"/><label for="check_01">OWNER_CK</label> MARTINA on 04-JUL-2007 15:150:04
+	</div>
+	<h3><a href="#">&rArr; REVIEW </a></h3>
+	<div>
+		<em>Promoted to REVIEW level on 06-JUL-2004 01:17:05 by SHERPA</em><br><br>
+		<input type="checkbox" id="check_11" class="approvable"/><label for="check_11">UFF_DOC_CK</label><br>
+		<input type="checkbox" id="check_12" class="approvable"/><label for="check_12">CAPO_SETTORE_OK_CK</label><br>
+		<input type="checkbox" id="check_13" class="approvable"/><label for="check_13">OVERRIDE</label>
+	</div>
+	<h3><a href="#">RELEASED</a></h3>
+	<div>
+		<em></em><br><br>
+	</div>
+</div>
+
+<div id="dialog_approve" title="Approve / Reject">
+	<form action="workflow_approve_submit">
+		<fieldset class='inlineLabels'>
+		<div class="ctrlHolder">
+			Why? <input type="text" size="40"/>
+		</div>
+		<div id="radio">
+			<input type="radio" id="radio1" name="radio" checked="checked"/><label for="radio1">Approve Check</label>
+			<input type="radio" id="radio2" name="radio" /><label for="radio2">Reject Check</label>
+		</div>
+		<br>
+		<div class="buttonHolder">
+			<label>&nbsp;</label>
+			<input class="navigation_button ui-wizard-content ui-helper-reset ui-state-default ui-formwizard-button ui-state-active ui-corner-all" value="OK" type="submit"/>
+			<input class="navigation_button ui-wizard-content ui-helper-reset ui-state-default ui-formwizard-button ui-state-active ui-corner-all" value="Cancel" type="button"/>
+		</div>
+		</fieldset>
+	</form>
+</div>
+<script>
+$(function(){
+	$('#workflow').accordion({
+		header: "h3"
+	,	autoHeight:false
+	});
+	$('#workflow').accordion("activate", 1);
+	
+	$("#radio").buttonset();
+	
+	$("#check_01").button({ 
+		disabled: true
+	,	icons: {
+			primary:'ui-icon-arrowthick-1-n'
+		}
+	});
+	$("#check_11").button({
+		disabled: false
+	});
+	$("#check_12").button({
+		disabled: false
+	});
+	$("#check_13").button({
+		disabled: false
+	});
+
+	$("#dialog_approve").dialog({
+		height: 250
+	,	width: 360
+	,	modal: true
+	,	autoOpen: false
+	});
+
+	$('.approvable').click(function() {
+		$('#dialog_approve').dialog("open");
+		return false;
+	});
+});
+</script>

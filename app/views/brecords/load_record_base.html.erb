@@ -44,6 +44,7 @@
 			end
 		%>
 		<li><a href="/<%= controller.controller_name %>/load_record_parents<%= view %>?id=<%= @record.id %>&amp;reftypes=<%= parents_reftypes %>" id="parents_tab">Parents</a></li>
+		<li><a href="/<%= controller.controller_name %>/load_record_workflow?id=<%= @record.id %>" id="workflow_tab">Workflow</a></li>
 		<li><a href="/<%= controller.controller_name %>/load_record_history?id=<%= @record.id %>" id="history_tab">History</a></li>
 	</ul>
 </div>
