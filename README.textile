@@ -19,9 +19,9 @@ h4(. "Ruby on Rails _2.3.8_":http://rubyonrails.org/
 h4(. "jQuery _1.4.2_":http://jquery.com/
 
 * plugins:
-** "jQuery UI _1.8.2_":http://ui.jquery.com/
+** "jQuery UI _1.8.4_":http://ui.jquery.com/
 ** "jQuery Grid _3.7.2_":http://www.trirand.com/blog/
-** "jQuery UI.Layout _1.3.0.rc29.3_":http://layout.jquery-dev.net/
+** "jQuery UI.Layout _1.3.0.rc-29.4_":http://layout.jquery-dev.net/
 ** "jQuery jsTree _1.0.rc2_":http://www.jstree.com/
 ** "jQuery Form Plugin _2.43_":http://malsup.com/jquery/form/
 ** "jQuery.pngFix _1.1_":http://jquery.andreaseberhard.de/pngFix/
