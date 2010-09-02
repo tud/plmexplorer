@@ -466,7 +466,7 @@ class BrecordsController < ApplicationController
     logger.info(params[:balias])
     record = Brecord.find(params[:id])
     file = record.file(params[:balias])
-    send_file(file.path, :filename => file.name, :x_sendfile => true)
+    send_file(file.path, :filename => file.name, :x_sendfile => (ENV['RAILS_ENV'] == 'production'))
   end
 
   def show_workspace

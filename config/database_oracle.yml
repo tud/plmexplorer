@@ -7,6 +7,10 @@ development:
   database: pdm_otomelara
   <<: *login
 
+test:
+  database: oto_test
+  <<: *login
+
 production:
   database: pdm_otomelara
   <<: *login

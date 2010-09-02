@@ -5,8 +5,10 @@ class Brecord < ActiveRecord::Base
   has_many   :bchkhistories, :foreign_key => 'bobjid'
   has_many   :brefs,         :foreign_key => 'bobjid'
 
-  require 'ftools'
+  require 'fileutils'
   require 'tempfile'
+
+  include FileUtils
 
   CHANGE_ATTRIBUTES = [ :bdesc, :bowner, :bproject, :brelproc, :btype1, :btype2, :btype3, :btype4, :bname1, :bname2, :bname3, :bname4, :bdate1, :bdate2, :bdate3, :bdate4, :blong1, :blong2, :blong3, :blong4, :bdouble1, :bdouble2, :bdouble3, :bdouble4, :bdouble5, :bdouble6, :bdouble7, :bdouble8, :bcost, :bfamily, :bbegindate, :benddate, :bmeasure ]
 
@@ -99,7 +101,7 @@ class Brecord < ActiveRecord::Base
 
   def uda(name)
     @udas ||= budas
-    @udas.map { |uda| uda.bvalue if uda.bname == name.upcase }.compact.to_s
+    @udas.map { |uda| uda.bvalue if uda.bname == name.upcase }.compact.at(0).to_s
   end
 
   def uda_t(name)
@@ -151,17 +153,17 @@ class Brecord < ActiveRecord::Base
 
     logfile = Tempfile.new(self[:brecname])
     if ENV['RAILS_ENV'] == 'development'
-      # In sviluppo creo lo script DMS di lancio del report
+      # In sviluppo creo lo script DMS di creazione/modifica
       # in un file temporaneo
       @script = logfile
     else
       # In produzione uso il file temporaneo come file di log
       # e creo una pipe verso una sessione DMS remota, cui sottometto
-      # lo script di lancio del report
+      # lo script di creazione/modifica
       logfile.close
-      @script = IO.popen("rsh #{PREF['SHERPA_SERVER']} dms > #{logfile.path}", "w")
+      @script = IO.popen("rsh #{PREF['SHERPA_SERVER'][ENV['RAILS_ENV']]} dms > #{logfile.path}", "w")
     end
-    @script.puts("set db #{PREF['SHERPA_DB']}")
+    @script.puts("set db #{PREF['SHERPA_DB'][ENV['RAILS_ENV']]}")
     @script.puts("set user #{self[:bcreateuser]}")
 
     # Incremento campo Autonumber, su usato
@@ -194,8 +196,8 @@ class Brecord < ActiveRecord::Base
       end
       orig_name = File.basename(file[:upload].original_filename)
       upload_name = File.basename(file[:upload].path)
-      dest_path = PREF['SHERPA_TMP'][ENV['RAILS_ENV']] + '/' + upload_name
-      File.copy(file[:upload].path, dest_path)
+      dest_path = File.join(PREF['SHERPA_TMP'][ENV['RAILS_ENV']], upload_name)
+      cp(file[:upload].path, dest_path)
       @script.puts "  add file /secure \"#{dest_path}\" #{orig_name}"
     end
 

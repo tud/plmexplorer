@@ -5,7 +5,7 @@
 	<div class="ui-state-error ui-corner-all"> 
 		<span class="ui-icon ui-icon-alert"></span> 
                 <% if @record.migrated? %>
-                        Object already <strong>migrated</strong> to <%= @record.effective_icon %>
+                        Object belongs to a project already <strong>migrated</strong> to <%= @record.effective_icon %>
                 <% else %>
                         Object belongs to an <strong>obsolete</strong> configuration
                 <% end %>

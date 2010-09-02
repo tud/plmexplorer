@@ -1,6 +1,16 @@
-SHERPA_DB: PDM_OTOMELARA
-SHERPA_SERVER: es40pdm
+SHERPA_DB:
+  development: PDM_OTOMELARA
+  test: OTO_TEST
+  production: PDM_OTOMELARA
+SHERPA_SERVER:
+  development: taurus2k
+  test: es40pdm
+  production: es40pdm
 SHERPA_TMP:
-  development: /tmp
+  development: /var/tmp
+  test: /sherpa_t/dms/tmp
   production: /sherpa/dms/tmp
-STORAGE_PATH: /sherpa/storages/pdm_otomelara
+STORAGE_PATH:
+  development: C:/sherpa/storages/pdm_otomelara
+  test: /sherpa_t/storages/oto_test
+  production: /sherpa/storages/pdm_otomelara

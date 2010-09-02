@@ -11,7 +11,7 @@ class Bdbuser < ActiveRecord::Base
       # Tuttavia, se fornita, viene comunque verificata.
       if ENV['RAILS_ENV'] != 'development' || !password.empty?
         begin
-          connection = Net::FTP.open(PREF['SHERPA_SERVER'], username, password)
+          connection = Net::FTP.open(PREF['SHERPA_SERVER'][ENV['RAILS_ENV']], username, password)
           user[:logged_in] = true
           user[:log_message] = MSG['AUTH_OK']
         rescue Net::FTPPermError

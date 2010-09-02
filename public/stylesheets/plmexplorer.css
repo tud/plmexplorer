@@ -90,7 +90,7 @@ button:focus, a.button:focus, button:active, a.button:active {
 	text-decoration:none;
 }
 .pex-accordion a:hover, .pex-accordion a:focus {
-	background: #fdf5ce url(images/fdf5ce_40x100_textures_02_glass_100.png) 50% 50% repeat-x;
+	background: #fdf5ce;
 	font-weight: bold;
 	color: #c77405;
 	outline: none;
@@ -321,7 +321,7 @@ hr {
 }
 
 .wrksp_records a:hover, .wrksp_records a:focus {
-	background: #fdf5ce url(images/fdf5ce_40x100_textures_02_glass_100.png) 50% 50% repeat-x;
+	background: #fdf5ce;
 	font-weight: bold;
 	color: #c77405;
 	outline: none;
