@@ -142,16 +142,20 @@
 			next : '#submit_button',
 			back : '#back_button',
 			formOptions: {
-				target: 	'#cRecord',
-				success: 	function(){
-					$('#dialog_new_modify').dialog('close');
-					return false;
-				}
+				success: 	success_function
 			},
 			validationOptions: {
 				errorClass: 'invalid'
 			}
 		});
+
+		function success_function(responseText, statusText, xhr, $form) {
+			var id = "21765";
+			$.history(id);
+			$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
+			$('#cMenuTabs').tabs('select',2);
+			$('#dialog_new_modify').dialog('close');
+		}
 		
 		$('#brecord_rec_brecname').attr('disabled', 'disabled');
 		$('#autonumber').click(function() {
