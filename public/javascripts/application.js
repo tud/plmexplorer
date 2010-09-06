@@ -61,6 +61,7 @@ $(function() {
 	});
 
 	// gestione history
+	$.history._cache = 'blank.html';
 	$.history.callback = function ( id, cursor ) {
 		if (typeof(id) == 'undefined') {
 			$("#cMenuTabs").tabs('select',1);
