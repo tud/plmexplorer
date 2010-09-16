@@ -508,45 +508,6 @@ class BrecordsController < ApplicationController
     brecord.modify(session[:user][:buser])
     render :layout => false
   end
-  
-  def fill(brecord)
-    brecord[:brectype] = params[:rectype]
-    params[:brecord].each do |key, value|
-      downkey = key.downcase
-      case downkey
-      when /^rec_(.+)/
-        brecord[$1] = value
-      when /^uda_t_(.+)/
-        uda_t = $1
-        table_size = brecord.uda_t_size(uda_t)
-        first_empty = 1
-        # Split text area in righe da max 80 caratteri l'una
-        word_wrap(value).split(/\n/).each_with_index do |line, index|
-          if index <= table_size
-            brecord.set_uda(uda_t + '_' + '%02d' % (index+1), line.rstrip)
-            first_empty += 1
-          end
-        end
-        # Le restanti righe sono vuote
-        (first_empty..table_size).each do |index|
-          brecord.set_uda(uda_t + '_' + '%02d' % index, '')
-        end
-      when /^uda_(.+)/
-        brecord.set_uda($1, value)
-      when /^file_(.+)/
-        # Se non carico nessun file, value è una stringa vuota,
-        # altrimenti è un'istanza di Tempfile.
-        if value.class == Tempfile
-          file = Bfile.new
-          file[:upload] = value
-          brecord.bfiles << file
-        end
-      else
-        raise "Illegal field name: #{key}"
-      end
-    end
-    brecord[:brectype].upcase!
-  end
 
   def get_status_list rectypes
     @statusList = Blevel.find(:all,
@@ -639,6 +600,46 @@ private
 
   def autonumber?
     params[:autonumber] == '1'
+  end
+  
+  def fill(brecord)
+    brecord[:brectype] = params[:rectype]
+    params[:brecord].each do |key, value|
+      downkey = key.downcase
+      case downkey
+      when /^rec_(.+)/
+        brecord[$1] = value
+      when /^uda_t_(.+)/
+        uda_t = $1
+        table_size = brecord.uda_t_size(uda_t)
+        first_empty = 1
+        # Split text area in righe da max 80 caratteri l'una
+        word_wrap(value).split(/\n/).each_with_index do |line, index|
+          if index <= table_size
+            brecord.set_uda(uda_t + '_' + '%02d' % (index+1), line.rstrip)
+            first_empty += 1
+          end
+        end
+        # Le restanti righe sono vuote
+        (first_empty..table_size).each do |index|
+          brecord.set_uda(uda_t + '_' + '%02d' % index, '')
+        end
+      when /^uda_(.+)/
+        brecord.set_uda($1, value)
+      when /^file_(.+)/
+        # Se non carico nessun file, value è una stringa vuota,
+        # altrimenti è un'istanza di Tempfile.
+        if value.class == Tempfile
+          file = Bfile.new
+          file[:upload] = value
+          brecord.bfiles << file
+        end
+      else
+        raise "Illegal field name: #{key}"
+      end
+    end
+    brecord[:brectype].upcase!
+    brecord[:brecname].upcase!
   end
 
 end

@@ -158,6 +158,11 @@ class Brecord < ActiveRecord::Base
       dms_script.add_files
     end
     dms_script.run
+    # Se non ci sono errori, carico l'id del record appena creato 
+    if (!dms_errorlog)
+      self[:id] = Brecord.find_by_brectype_and_brecname_and_brecalt(brectype, brecname, brecalt).id
+      Rails.logger.info("recspec: #{recspec} => id: #{id}")
+    end
   end
 
   def modify(user)
