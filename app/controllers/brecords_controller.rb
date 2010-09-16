@@ -497,19 +497,19 @@ class BrecordsController < ApplicationController
   
   def create
     brecord = Brecord.new
-    brecord[:new] = true
-    save brecord
+    fill brecord
+    brecord.create(session[:user][:buser], autonumber?)
     render :layout => false
   end
 
   def modify
     brecord = Brecord.new
-    brecord[:new] = false
-    save brecord
+    fill brecord
+    brecord.modify(session[:user][:buser])
     render :layout => false
   end
   
-  def save(brecord)
+  def fill(brecord)
     brecord[:brectype] = params[:rectype]
     params[:brecord].each do |key, value|
       downkey = key.downcase
@@ -545,11 +545,7 @@ class BrecordsController < ApplicationController
         raise "Illegal field name: #{key}"
       end
     end
-    if params[:autonumber] == "1"
-      brecord.autonumber
-    end
-    brecord[:bcreateuser] = session[:user][:buser]
-    brecord.save
+    brecord[:brectype].upcase!
   end
 
   def get_status_list rectypes
@@ -639,6 +635,10 @@ private
     # Construct a hash from the ActiveRecord result
     @return_data[:total] = total_pages
     @return_data[:records] = count
+  end
+
+  def autonumber?
+    params[:autonumber] == '1'
   end
 
 end

@@ -6,11 +6,19 @@ SHERPA_SERVER:
   development: taurus2k
   test: es40pdm
   production: es40pdm
-SHERPA_TMP:
-  development: /var/tmp
+SHERPA_USER:
+  development: sherpa
+  test: sherpa_t
+  production: sherpa
+LOCAL_SHARE:
+  development: /sherpa/dms/tmp
+  test: /sherpa_t/dms/tmp
+  production: /sherpa/dms/tmp
+REMOTE_SHARE:
+  development: C:/sherpa/dms/tmp
   test: /sherpa_t/dms/tmp
   production: /sherpa/dms/tmp
 STORAGE_PATH:
-  development: C:/sherpa/storages/pdm_otomelara
+  development: /sherpa/storages/pdm_otomelara
   test: /sherpa_t/storages/oto_test
   production: /sherpa/storages/pdm_otomelara

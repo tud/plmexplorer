@@ -41,57 +41,61 @@
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_rec_bproject"><em>*</em>Project :</label>
-				<%= f.select :rec_bproject, PROJECT_LIST, {:include_blank => true}, {:tabindex => "5", :class => "required"} %>
+				<%= f.select :rec_bproject, ACTIVE_PROJECTS, {:include_blank => true}, {:tabindex => "5", :class => "required"} %>
+			</div>
+			<div class='ctrlHolder'>
+				<label for="brecord_rec_brelproc"><em>*</em>LifeCycle :</label>
+				<%= f.text_field :rec_brelproc, :value => "CHANGE_REQUEST02", :maxlength => "20", :tabindex => "6", :readonly => true %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_rec_bname4"><em>*</em>Short Description :</label>
-				<%= f.text_field :rec_bname4, :maxlength => "32", :tabindex => "6", :class => "required uppercase" %>
+				<%= f.text_field :rec_bname4, :maxlength => "32", :tabindex => "7", :class => "required uppercase" %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_rec_bdesc"><em>*</em>Description :</label>
-				<%= f.text_field :rec_bdesc, :maxlength => "80", :tabindex => "7", :class => "required uppercase" %>
+				<%= f.text_field :rec_bdesc, :maxlength => "80", :tabindex => "8", :class => "required uppercase" %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_proprietary"><em>*</em>Proprietary :</label>
- 				<%= f.select :uda_proprietary, grouped_options_for_select(PROPRIETARY_LEVELS), {:tabindex => "8"} %>
+ 				<%= f.select :uda_proprietary, grouped_options_for_select(PROPRIETARY_LEVELS), {:tabindex => "9"} %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_sec_class"><em>*</em>Security Class :</label>
-				<%= f.select :uda_sec_class, grouped_options_for_select(SECURITY_CLASSES), {:tabindex => "9"} %>
+				<%= f.select :uda_sec_class, grouped_options_for_select(SECURITY_CLASSES), {:tabindex => "10"} %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_wa_req_author"><em>*</em>Request Author :</label>
-				<%= f.text_field :uda_wa_req_author, :maxlength => "40", :tabindex => "10", :class => "required" %>
+                                <%= f.text_field :uda_wa_req_author, :maxlength => "40", :tabindex => "11", :class => "required uppercase" %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_rec_bname3">Reason for Change :</label>
-				<%= f.select :rec_bname3, grouped_options_for_select(REASONS_FOR_CHANGE), {:include_blank => true}, {:tabindex => "11"} %>
+				<%= f.select :rec_bname3, grouped_options_for_select(REASONS_FOR_CHANGE), {:include_blank => true}, {:tabindex => "12"} %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_rec_btype3">Change Class :</label>
-				<%= f.select :rec_btype3, option_groups_from_collection_for_select(CHANGE_CLASSES, :options, :label, :value, :key), {:include_blank => true}, {:tabindex => "12"} %>
+				<%= f.select :rec_btype3, option_groups_from_collection_for_select(CHANGE_CLASSES, :options, :label, :value, :key), {:include_blank => true}, {:tabindex => "13"} %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_change_subclass">Sub-Class :</label>
-				<%= f.select :uda_change_subclass, option_groups_from_collection_for_select(CHANGE_SUBCLASSES, :options, :label, :value, :key), {:include_blank => true}, {:tabindex => "13"} %>
+				<%= f.select :uda_change_subclass, option_groups_from_collection_for_select(CHANGE_SUBCLASSES, :options, :label, :value, :key), {:include_blank => true}, {:tabindex => "14"} %>
 			</div>
 		</div>
 		<div id="step2" class="step">
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_t_desc_of_chng">Description of Change :</label>
-				<%= f.text_area :uda_t_desc_of_chng, :cols => "80", :rows => "15", :tabindex => "14" %>
+				<%= f.text_area :uda_t_desc_of_chng, :cols => "80", :rows => "15", :tabindex => "15" %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_t_comment">Comments :</label>
-				<%= f.text_area :uda_t_comment, :cols => "80", :rows => "15", :tabindex => "15" %>
+				<%= f.text_area :uda_t_comment, :cols => "80", :rows => "15", :tabindex => "16" %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_t_solution">Solution :</label>
-				<%= f.text_area :uda_t_solution, :cols => "80", :rows => "10", :tabindex => "16" %>
+				<%= f.text_area :uda_t_solution, :cols => "80", :rows => "10", :tabindex => "17" %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_file_upload">File :</label>
-				<%= f.file_field :file_upload, :tabindex => "17" %>
+				<%= f.file_field :file_upload, :tabindex => "18" %>
 			</div>
 		</div>
 		<div class="buttonHolder" id="wizard_navigation">
@@ -142,7 +146,7 @@
 			next : '#submit_button',
 			back : '#back_button',
 			formOptions: {
-				success: 	success_function
+				success:	success_function
 			},
 			validationOptions: {
 				errorClass: 'invalid'
@@ -176,5 +180,8 @@
 			$('#brecord_rec_bname1').attr('disabled', 'disabled');
 			$('#brecord_rec_brecalt').attr('disabled', 'disabled');
 		}
+
+                $('.uppercase').bestupper();
 	});
+        
 </script>

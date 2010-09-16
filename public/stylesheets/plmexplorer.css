@@ -37,6 +37,10 @@ select {
 	padding:0;
 }
 
+.uppercase {
+    text-transform:uppercase;
+}
+
 #login_dialog .uniForm .inlineLabels label, #login_dialog .uniForm .inlineLabels .label {
 	width:8em;
 }

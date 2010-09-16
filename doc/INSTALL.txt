@@ -1,0 +1,12 @@
+01. Scaricare il SW da github, ad es. con:
+
+	git clone git@github.com:tud/plmexplorer.git
+
+02. Creare il file config/database.yml, a partire da uno dei templates config/database_*.yml
+
+03. Creare il file config/settings/preferences.yml, a partire da uno dei templates config/settings/preferences_*.yml
+
+04. Creare nel DB, ove non esista gia', la tabella "sessions" per la gestione dei cookies:
+
+	rake db:sessions:create
+
