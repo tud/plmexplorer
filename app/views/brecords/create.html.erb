@@ -1,1 +1,5 @@
-<div></div>
+<% if @brecord.dms_errorlog %>
+	<%=@brecord.dms_errorlog.collect! { |line| line.gsub(/\n/, "<br/>") } -%>
+<% else %>
+	<%=@brecord.id-%>
+<% end %>

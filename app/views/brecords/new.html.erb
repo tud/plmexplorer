@@ -57,7 +57,7 @@
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_proprietary"><em>*</em>Proprietary :</label>
- 				<%= f.select :uda_proprietary, grouped_options_for_select(PROPRIETARY_LEVELS), {:tabindex => "9"} %>
+				<%= f.select :uda_proprietary, grouped_options_for_select(PROPRIETARY_LEVELS), {:tabindex => "9"} %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_sec_class"><em>*</em>Security Class :</label>
@@ -65,7 +65,7 @@
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_wa_req_author"><em>*</em>Request Author :</label>
-                                <%= f.text_field :uda_wa_req_author, :maxlength => "40", :tabindex => "11", :class => "required uppercase" %>
+				<%= f.text_field :uda_wa_req_author, :maxlength => "40", :tabindex => "11", :class => "required uppercase" %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_rec_bname3">Reason for Change :</label>
@@ -107,6 +107,10 @@
 	</fieldset>
 <% end %>
 <% end %>
+
+<div id="dialog_error" title="Error" class='ui-widget'>
+	<div class='ui-state-error ui-corner-all' style='padding:0pt 0.7em;display:none;' id="dialog_error_content"></div>
+</div>
 
 <script type="text/javascript">
 	$(function() {
@@ -152,13 +156,24 @@
 				errorClass: 'invalid'
 			}
 		});
+		
+		$('#dialog_error').dialog({
+			width: 500,
+			modal: true,
+			autoOpen: false
+		});
 
 		function success_function(responseText, statusText, xhr, $form) {
-			var id = "21765";
-			$.history(id);
-			$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
-			$('#cMenuTabs').tabs('select',2);
-			$('#dialog_new_modify').dialog('close');
+			var id = responseText;
+			if (id.indexOf("Sherpa") == -1) {
+				$.history(id);
+				$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
+				$('#cMenuTabs').tabs('select',2);
+			} else {
+				$('#dialog_error_content').html(id);
+				$('#dialog_error').dialog("open");
+			}
+			$('#dialog_new_modify').dialog('close'); 
 		}
 		
 		$('#brecord_rec_brecname').attr('disabled', 'disabled');
@@ -181,7 +196,7 @@
 			$('#brecord_rec_brecalt').attr('disabled', 'disabled');
 		}
 
-                $('.uppercase').bestupper();
+		$('.uppercase').bestupper();
 	});
         
 </script>

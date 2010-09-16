@@ -496,9 +496,9 @@ class BrecordsController < ApplicationController
   end
   
   def create
-    brecord = Brecord.new
-    fill brecord
-    brecord.create(session[:user][:buser], autonumber?)
+    @brecord = Brecord.new
+    fill @brecord
+    @brecord.create(session[:user][:buser], autonumber?)
     render :layout => false
   end
 
