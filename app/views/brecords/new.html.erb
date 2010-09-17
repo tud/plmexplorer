@@ -109,6 +109,9 @@
 <% end %>
 <% end %>
 
+<div id="dialog_ajax_loader" title="Loading..." class="ui-tabs-hide">
+	<img src="/images/ajax-loader.gif"/>Saving data...
+</div>
 <div id="dialog_error" title="Error" class='ui-widget'></div>
 
 <script type="text/javascript">
@@ -116,13 +119,13 @@
 		var rectype = "<%= @rectype %>".toLowerCase();
 		var legend = "<%=@action_type %>"+' '+rectype.toUpperCase();
 		var dialog_title = rectype.toUpperCase();
-		
+
 		$('#legend_new_record').html(legend);
 		$('#dialog_new_modify').attr('title', dialog_title);
 		$('#brecord_rec_brectype').val(rectype);
-	
+
 		$('.editableCombobox').jec();
-	
+
 		$('#dialog_new_modify').dialog({
 			width: 770,
 			modal: true,
@@ -136,27 +139,14 @@
 			$('#dialog_new_modify').dialog('close');
 			return false;
 		});
-		
-		$('#brecord_uda_desc_of_chng').maxLength(1200);
-		$('#brecord_uda_comments').maxLength(1200);
-		$('#brecord_uda_solution').maxLength(800);
-		
-		$('form.uniForm').uniform();
 
-		$('#new_record').formwizard({
-			formPluginEnabled : true,
-			validationEnabled : true,
-			focusFirstInput : true,
-			next : '#submit_button',
-			back : '#back_button',
-			formOptions: {
-				success:	success_function
-			},
-			validationOptions: {
-				errorClass: 'invalid'
-			}
+		$('#dialog_ajax_loader').dialog({
+			width: 400,
+			modal: true,
+			autoOpen: false
 		});
-		
+		$('#dialog_ajax_loader').dialog("destroy");
+
 		$('#dialog_error').dialog({
 			width: 500,
 			modal: true,
@@ -165,6 +155,8 @@
 
 		function success_function(responseText, statusText, xhr, $form) {
 			var id = responseText;
+			$('#dialog_ajax_loader').dialog("close");
+			//$('#dialog_ajax_loader').dialog("destroy");
 			if (id.indexOf("ui-state-error") == -1) {
 				$.history(id);
 				$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
@@ -175,7 +167,26 @@
 			}
 			$('#dialog_new_modify').dialog('close'); 
 		}
-		
+
+		$('#new_record').formwizard({
+			formPluginEnabled : true,
+			validationEnabled : true,
+			focusFirstInput : true,
+			next : '#submit_button',
+			back : '#back_button',
+			formOptions: {
+				success:	success_function,
+				beforeSubmit: function(){ $('#dialog_ajax_loader').dialog("open");},
+			},
+			validationOptions: {
+				errorClass: 'invalid'
+			}
+		});
+
+		$('#brecord_uda_desc_of_chng').maxLength(1200);
+		$('#brecord_uda_comments').maxLength(1200);
+		$('#brecord_uda_solution').maxLength(800);
+
 		$('#brecord_rec_brecname').attr('disabled', 'disabled');
 		$('#autonumber').click(function() {
 			if ($('#autonumber').is(':checked')) {
@@ -189,7 +200,7 @@
 				$('#autonumber').val('');
 			}
 		});
-		
+
 		if ("<%=@action_type%>" == 'modify') {
 			$('#brecord_rec_brecname').attr('disabled', 'disabled');
 			$('#brecord_rec_bname1').attr('disabled', 'disabled');
@@ -197,6 +208,8 @@
 		}
 
 		$('.uppercase').bestupper();
+
+		$('form.uniForm').uniform();
 	});
         
 </script>

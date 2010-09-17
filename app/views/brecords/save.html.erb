@@ -3,9 +3,5 @@
 		<%=@brecord.dms_errorlog.collect { |line| line.gsub(/\n/, "<br/>") } -%>
 	</div>
 <% else %>
-	<% if @brecord.id %>
-		<%=@brecord.id-%>
-	<% else %>
-	pino
-	<% end %>
+	<%=@brecord.id-%>
 <% end %>
