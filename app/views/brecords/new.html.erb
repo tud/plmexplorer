@@ -2,6 +2,7 @@
 <% if @rectype == "WORKAUTH" %>
 	<fieldset class='inlineLabels'>
 		<legend id="legend_new_record"></legend>
+		<%= f.hidden_field :rec_id, :value => @id %>
 		<%= f.hidden_field :rec_brectype, :value => @rectype %>
 		<div id="step1" class="step">
 			<% if @action_type == 'create' %>
@@ -108,17 +109,16 @@
 <% end %>
 <% end %>
 
-<div id="dialog_error" title="Error" class='ui-widget'>
-	<div class='ui-state-error ui-corner-all' id="dialog_error_content"></div>
-</div>
+<div id="dialog_error" title="Error" class='ui-widget'></div>
 
 <script type="text/javascript">
 	$(function() {
 		var rectype = "<%= @rectype %>".toLowerCase();
-		var title = "<%=@action_type %>"+' '+rectype.toUpperCase();
+		var legend = "<%=@action_type %>"+' '+rectype.toUpperCase();
+		var dialog_title = rectype.toUpperCase();
 		
-		$('#legend_new_record').html(title);
-		$('#dialog_new_modify').attr('title', title);
+		$('#legend_new_record').html(legend);
+		$('#dialog_new_modify').attr('title', dialog_title);
 		$('#brecord_rec_brectype').val(rectype);
 	
 		$('.editableCombobox').jec();
@@ -165,13 +165,13 @@
 
 		function success_function(responseText, statusText, xhr, $form) {
 			var id = responseText;
-			if (id.indexOf("Sherpa") == -1) {
+			if (id.indexOf("ui-state-error") == -1) {
 				$.history(id);
 				$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
 				$('#cMenuTabs').tabs('select',2);
 			} else {
-				$('#dialog_error_content').html(id);
-				$('#dialog_error').dialog("open");
+				id = $.trim(id);
+				$('#dialog_error').html(id).dialog("open");
 			}
 			$('#dialog_new_modify').dialog('close'); 
 		}

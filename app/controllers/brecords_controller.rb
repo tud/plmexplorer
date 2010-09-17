@@ -499,14 +499,14 @@ class BrecordsController < ApplicationController
     @brecord = Brecord.new
     fill @brecord
     @brecord.create(session[:user][:buser], autonumber?)
-    render :layout => false
+    render :save, :layout => false
   end
 
   def modify
-    brecord = Brecord.new
-    fill brecord
-    brecord.modify(session[:user][:buser])
-    render :layout => false
+    @brecord = Brecord.new
+    fill @brecord
+    @brecord.modify(session[:user][:buser])
+    render :save, :layout => false
   end
 
   def get_status_list rectypes

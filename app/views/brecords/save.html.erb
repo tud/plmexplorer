@@ -1,0 +1,11 @@
+<% if @brecord.dms_errorlog %>
+	<div class='ui-state-error ui-corner-all' id="dialog_error_content">
+		<%=@brecord.dms_errorlog.collect { |line| line.gsub(/\n/, "<br/>") } -%>
+	</div>
+<% else %>
+	<% if @brecord.id %>
+		<%=@brecord.id-%>
+	<% else %>
+	pino
+	<% end %>
+<% end %>
