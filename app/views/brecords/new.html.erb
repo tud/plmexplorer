@@ -140,12 +140,11 @@
 			return false;
 		});
 
-		$('#dialog_ajax_loader').dialog({
+		var dal = $('#dialog_ajax_loader').dialog({
 			width: 400,
 			modal: true,
 			autoOpen: false
 		});
-		$('#dialog_ajax_loader').dialog("destroy");
 
 		$('#dialog_error').dialog({
 			width: 500,
@@ -155,8 +154,9 @@
 
 		function success_function(responseText, statusText, xhr, $form) {
 			var id = responseText;
-			$('#dialog_ajax_loader').dialog("close");
-			//$('#dialog_ajax_loader').dialog("destroy");
+			if (dal.length>0) {
+				dal.dialog("close");
+			}
 			if (id.indexOf("ui-state-error") == -1) {
 				$.history(id);
 				$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
@@ -175,8 +175,8 @@
 			next : '#submit_button',
 			back : '#back_button',
 			formOptions: {
-				success:	success_function,
-				beforeSubmit: function(){ $('#dialog_ajax_loader').dialog("open");},
+				beforeSubmit: function(data){ dal.dialog("open");},
+				success:	success_function
 			},
 			validationOptions: {
 				errorClass: 'invalid'
