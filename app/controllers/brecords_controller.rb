@@ -480,18 +480,15 @@ class BrecordsController < ApplicationController
   end
   
   def new
-    @rectype = params[:rectype].upcase
-    rectypes = [ @rectype ]
+    @brecord = Brecord.new
+    @brecord[:brectype] = params[:rectype].upcase
     @action_type = 'create'
-
     render :layout => false
   end
 
   def show_modify
-    @brecord = Brecord.find(params[:id])
-    @rectype = params[:rectype].upcase
+    @brecord = session[:curr_record]
     @action_type = 'modify'
-
     render :action => 'new', :layout => false
   end
   

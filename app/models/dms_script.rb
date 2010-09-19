@@ -58,7 +58,7 @@ class DmsScript < Tempfile
 
   def add_files
     @brecord.bfiles.each do |file|
-      file_alias = File.basename(file[:upload].original_filename)[0..31]
+      file_alias = File.basename(file[:upload].original_filename).gsub(/ /,'_')[0..31]
       upload_name = File.basename(file[:upload].path)
       FileUtils.copy(file[:upload].path, PREF['LOCAL_SHARE'][ENV['RAILS_ENV']])
       remote_dest = File.join(PREF['REMOTE_SHARE'][ENV['RAILS_ENV']], upload_name)
@@ -76,7 +76,8 @@ class DmsScript < Tempfile
     command = "rsh #{PREF['SHERPA_SERVER'][ENV['RAILS_ENV']]} -n -l #{PREF['SHERPA_USER'][ENV['RAILS_ENV']]} dms #{remote_path}"
     pipe = IO.popen(command, "w+")
     pipe.close_write
-    log = pipe.readlines
+    # Scarta intestazione Sherpa/DMS ed "exit" finale dal log
+    log = pipe.readlines[7..-2]
     pipe.close_read
 
     Rails.logger.info log

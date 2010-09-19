@@ -1,9 +1,9 @@
 <% form_for :brecord, :url => "/rectype/WORKAUTH/"+@action_type, :html => {:id => 'new_record', :class => 'uniForm', :multipart => true} do |f| %>
-<% if @rectype == "WORKAUTH" %>
+<% if @brecord.brectype == "WORKAUTH" %>
 	<fieldset class='inlineLabels'>
 		<legend id="legend_new_record"></legend>
 		<%= f.hidden_field :rec_id, :value => @id %>
-		<%= f.hidden_field :rec_brectype, :value => @rectype %>
+		<%= f.hidden_field :rec_brectype, :value => @brecord.brectype %>
 		<div id="step1" class="step">
 			<% if @action_type == 'create' %>
 				<div class='ctrlHolder'>
@@ -58,11 +58,11 @@
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_proprietary"><em>*</em>Proprietary :</label>
-				<%= f.select :uda_proprietary, grouped_options_for_select(PROPRIETARY_LEVELS), {:tabindex => "9"} %>
+				<%= f.select :uda_proprietary, grouped_options_for_select(PROPRIETARY_LEVELS, @brecord.uda('proprietary')), {:tabindex => "9"} %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_sec_class"><em>*</em>Security Class :</label>
-				<%= f.select :uda_sec_class, grouped_options_for_select(SECURITY_CLASSES), {:tabindex => "10"} %>
+				<%= f.select :uda_sec_class, grouped_options_for_select(SECURITY_CLASSES, @brecord.uda('sec_class')), {:tabindex => "10"} %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_wa_req_author"><em>*</em>Request Author :</label>
@@ -70,15 +70,15 @@
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_rec_bname3">Reason for Change :</label>
-				<%= f.select :rec_bname3, grouped_options_for_select(REASONS_FOR_CHANGE), {:include_blank => true}, {:tabindex => "12"} %>
+				<%= f.select :rec_bname3, grouped_options_for_select(REASONS_FOR_CHANGE, @brecord.bname3), {:include_blank => true}, {:tabindex => "12"} %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_rec_btype3">Change Class :</label>
-				<%= f.select :rec_btype3, option_groups_from_collection_for_select(CHANGE_CLASSES, :options, :label, :value, :key), {:include_blank => true}, {:tabindex => "13"} %>
+				<%= f.select :rec_btype3, option_groups_from_collection_for_select(CHANGE_CLASSES, :options, :label, :value, :key, @brecord.btype3), {:include_blank => true}, {:tabindex => "13"} %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_change_subclass">Sub-Class :</label>
-				<%= f.select :uda_change_subclass, option_groups_from_collection_for_select(CHANGE_SUBCLASSES, :options, :label, :value, :key), {:include_blank => true}, {:tabindex => "14"} %>
+				<%= f.select :uda_change_subclass, option_groups_from_collection_for_select(CHANGE_SUBCLASSES, :options, :label, :value, :key, @brecord.uda('change_subclass')), {:include_blank => true}, {:tabindex => "14"} %>
 			</div>
 		</div>
 		<div id="step2" class="step">
@@ -116,7 +116,7 @@
 
 <script type="text/javascript">
 	$(function() {
-		var rectype = "<%= @rectype %>".toLowerCase();
+		var rectype = "<%= @brecord.brectype %>".toLowerCase();
 		var legend = "<%=@action_type %>"+' '+rectype.toUpperCase();
 		var dialog_title = rectype.toUpperCase();
 
@@ -127,7 +127,7 @@
 		$('.editableCombobox').jec();
 
 		$('#dialog_new_modify').dialog({
-			width: 770,
+			width: 850,
 			modal: true,
 			autoOpen: false,
 			closeOnEscape: false
@@ -147,7 +147,8 @@
 		});
 
 		$('#dialog_error').dialog({
-			width: 500,
+			width: 600,
+                        height: 600,
 			modal: true,
 			autoOpen: false
 		});
