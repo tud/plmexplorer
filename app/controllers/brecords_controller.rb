@@ -145,7 +145,7 @@ class BrecordsController < ApplicationController
 
     record = session[:curr_record] || Brecord.find(params[:id])
     reftypes = params[:reftypes]
-    count = record.brefs.of_type(reftypes).count
+    count = record.brefs.of_type(reftypes).size
     children = record.children(reftypes, @order, @limit, @offset)
       
     prep_return_data(count)

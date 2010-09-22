@@ -45,6 +45,10 @@ select {
 	width:8em;
 }
 
+#login_dialog legend img {
+    margin:0 !important;
+}
+
 /**************************************
 * Aggiunto da Sergio temporaneamente!
 .uniForm .inlineLabels textarea, .uniForm .inlineLabels .textarea {

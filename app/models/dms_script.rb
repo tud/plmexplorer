@@ -74,16 +74,20 @@ class DmsScript < Tempfile
     close
     remote_path = File.join(PREF['REMOTE_SHARE'][ENV['RAILS_ENV']], File.basename(path))
     command = "rsh #{PREF['SHERPA_SERVER'][ENV['RAILS_ENV']]} -n -l #{PREF['SHERPA_USER'][ENV['RAILS_ENV']]} dms #{remote_path}"
-    pipe = IO.popen(command, "w+")
-    pipe.close_write
-    # Scarta intestazione Sherpa/DMS ed "exit" finale dal log
-    log = pipe.readlines[7..-2]
-    pipe.close_read
+    begin
+      pipe = IO.popen(command, "w+")
+      pipe.close_write
+      # Scarta intestazione Sherpa/DMS ed "exit" finale dal log
+      log = pipe.readlines[7..-2]
+      pipe.close_read
 
-    Rails.logger.info log
-    errors = log.collect { |line| line[/^%DMS-E-.*/] }.compact
-    if !errors.empty?
-      @brecord.dms_errorlog = log
+      Rails.logger.info log
+      errors = log.collect { |line| line[/^%DMS-E-.*/] }.compact
+      if !errors.empty?
+        @brecord.dms_errorlog = log
+      end
+    rescue
+      @brecord.dms_errorlog = MSG['CONN_KO']
     end
   end
 

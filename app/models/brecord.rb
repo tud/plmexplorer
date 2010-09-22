@@ -1,9 +1,10 @@
 class Brecord < ActiveRecord::Base
   has_many   :budas,         :foreign_key => 'bobjid'
-  has_many   :bfiles,        :foreign_key => 'bobjid'
-  has_many   :bpromotions,   :foreign_key => 'bobjid'
+  has_many   :bchks,         :foreign_key => 'bobjid'
   has_many   :bchkhistories, :foreign_key => 'bobjid'
   has_many   :brefs,         :foreign_key => 'bobjid'
+  has_many   :bfiles,        :foreign_key => 'bobjid'
+  has_many   :bpromotions,   :foreign_key => 'bobjid'
 
   attr_accessor :dms_errorlog
 
@@ -185,8 +186,8 @@ class Brecord < ActiveRecord::Base
     when /^uda_(.+)/
       uda($1)
     when /^file_(.+)/
-      if bfiles.count > 0
-        bfiles[0].balias
+      if files.size > 0
+        files[0].name
       else
         ""
       end
