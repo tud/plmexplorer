@@ -163,9 +163,9 @@ class ReportsController < ApplicationController
       # e creo una pipe verso una sessione DMS remota, cui sottometto
       # lo script di lancio del report
       logfile.close
-      script = IO.popen("rsh #{PREF['SHERPA_SERVER']} dms > #{logfile.path}", "w")
+      script = IO.popen("rsh #{PREF['SHERPA_SERVER'][ENV['RAILS_ENV']]} dms > #{logfile.path}", "w")
     end
-    script.puts("set db #{PREF['SHERPA_DB']}")
+    script.puts("set db #{PREF['SHERPA_DB'][ENV['RAILS_ENV']]}")
     script.puts("set user #{session[:user][:buser]}")
     script.puts("set project PIM")
     script.puts("update record EDM_REPORT\\#{edm_report[:report]};1")

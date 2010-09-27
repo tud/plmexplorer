@@ -1,3 +1,5 @@
+ACTIVE_PROJECTS = Bproject.find(:all).map { |prj| prj.bname if (!prj.migrated? && !prj.obsolete?) }.compact.sort
+
 ALTERNATE_LANGUAGE = [
   [ 'Default',                       '0' ],
   [ 'English Alternate Description', '1' ]

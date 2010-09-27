@@ -11,6 +11,7 @@ class SessionController < ApplicationController
     if request.post?
       user = Bdbuser.authenticate(params[:username], params[:password])
       if user[:logged_in]
+        logger.info("\n========== User #{params[:username]} logged in")
         session[:user] = user
         uri = session[:original_uri]
         session[:original_uri] = nil

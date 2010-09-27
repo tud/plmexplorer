@@ -1,6 +1,0 @@
-SHERPA_DB: PDM_OTOMELARA
-SHERPA_SERVER: es40pdm
-SHERPA_TMP:
-  development: /tmp
-  production: /sherpa/dms/tmp
-STORAGE_PATH: /sherpa/storages/pdm_otomelara

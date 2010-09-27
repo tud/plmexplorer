@@ -1,21 +1,23 @@
 class Brecord < ActiveRecord::Base
   has_many   :budas,         :foreign_key => 'bobjid'
-  has_many   :bfiles,        :foreign_key => 'bobjid'
-  has_many   :bpromotions,   :foreign_key => 'bobjid'
+  has_many   :bchks,         :foreign_key => 'bobjid'
   has_many   :bchkhistories, :foreign_key => 'bobjid'
   has_many   :brefs,         :foreign_key => 'bobjid'
+  has_many   :bfiles,        :foreign_key => 'bobjid'
+  has_many   :bpromotions,   :foreign_key => 'bobjid'
 
-  require 'ftools'
-  require 'tempfile'
+  attr_accessor :dms_errorlog
 
-  CHANGE_ATTRIBUTES = [ :bdesc, :bowner, :bproject, :brelproc, :btype1, :btype2, :btype3, :btype4, :bname1, :bname2, :bname3, :bname4, :bdate1, :bdate2, :bdate3, :bdate4, :blong1, :blong2, :blong3, :blong4, :bdouble1, :bdouble2, :bdouble3, :bdouble4, :bdouble5, :bdouble6, :bdouble7, :bdouble8, :bcost, :bfamily, :bbegindate, :benddate, :bmeasure ]
+  def recspec
+    brectype + '\\' + brecname + '\\' + brecalt.to_s
+  end
 
   def name
-    self[:brecname].split('&')[0]
+    brecname.split('&')[0]
   end
 
   def cage_code
-    self[:brecname].split('&')[1] || ''
+    brecname.split('&')[1] || ''
   end
 
   def title
@@ -23,7 +25,7 @@ class Brecord < ActiveRecord::Base
   end
 
   def promdate
-    self[:bpromdate].to_s(:db) if self[:bpromdate]
+    bpromdate.to_s(:db) if bpromdate
   end
 
   def project
@@ -34,12 +36,20 @@ class Brecord < ActiveRecord::Base
     @relproc ||= Brelproc.find_by_bname(brelproc)
   end
 
+  def blevel(level = breclevel)
+    relproc.blevel(level)
+  end
+
+  def bchk(name, level)
+    bchks.detect { |chk| chk.bname == name && chk.blevel == level }
+  end
+
   def migrated?
-    project.migrated?
+    project.migrated? if project
   end
 
   def obsolete?
-    project.obsolete?
+    project.obsolete? if project
   end
 
   def modifiable?(by_user)
@@ -99,7 +109,7 @@ class Brecord < ActiveRecord::Base
 
   def uda(name)
     @udas ||= budas
-    @udas.map { |uda| uda.bvalue if uda.bname == name.upcase }.compact.to_s
+    @udas.map { |uda| uda.bvalue if uda.bname == name.upcase }.compact.at(0).to_s
   end
 
   def uda_t(name)
@@ -112,7 +122,7 @@ class Brecord < ActiveRecord::Base
   end
 
   def uda_t_size(name)
-    Batt.find(:all, :conditions => [ "BRECTYPE = ? and BNAME like ?", self[:brectype].upcase, name.upcase+'_%' ]).size
+    Batt.find(:all, :conditions => [ "BRECTYPE = ? and BNAME like ?", brectype.upcase, name.upcase+'_%' ]).size
   end
 
   def files
@@ -121,8 +131,9 @@ class Brecord < ActiveRecord::Base
 
   def file(name)
     for file in files
-      return file if file.balias == name.upcase
+      return file if file.balias == name.upcase[0..31]
     end
+    nil
   end
 
   def children(reftypes = '', order = nil, limit = nil, offset = 0)
@@ -142,72 +153,6 @@ class Brecord < ActiveRecord::Base
     }
   end
 
-  def save
-    self[:brectype].upcase!
-    self[:brecname].upcase!
-    recalt = self[:brecalt].to_s.upcase
-    recalt = ' ' if recalt.empty?
-    recspec = self[:brectype] + '\\' + self[:brecname] + '\\' + recalt
-
-    logfile = Tempfile.new(self[:brecname])
-    if ENV['RAILS_ENV'] == 'development'
-      # In sviluppo creo lo script DMS di lancio del report
-      # in un file temporaneo
-      @script = logfile
-    else
-      # In produzione uso il file temporaneo come file di log
-      # e creo una pipe verso una sessione DMS remota, cui sottometto
-      # lo script di lancio del report
-      logfile.close
-      @script = IO.popen("rsh #{PREF['SHERPA_SERVER']} dms > #{logfile.path}", "w")
-    end
-    @script.puts("set db #{PREF['SHERPA_DB']}")
-    @script.puts("set user #{self[:bcreateuser]}")
-
-    # Incremento campo Autonumber, su usato
-    if @autonumber
-      @script.puts("modify record PIM_AUTONUM\\#{self[:brectype]}")
-      @script.puts "  change attribute DESC \"#{self[:brecname].to_i + 1}\""
-      @script.puts("end modify")
-    end
-
-    if self[:new]
-      @script.puts "create record #{recspec}"
-      @curr_rec = Brecord.new
-    else
-      @script.puts "modify record #{recspec}"
-      @curr_rec = Brecord.find_by_brectype_and_brecname_and_brecalt(self[:brectype], self[:brecname], recalt,
-                                                                    :conditions => "id = blatest")
-    end
-
-    CHANGE_ATTRIBUTES.each do |attr|
-      if self[attr]
-        @script.puts "  change attribute #{attr.to_s.upcase[1..-1]} \"#{self[attr]}\""
-      end
-    end
-    budas.each do |uda|
-      puts_uda(uda[:bname], uda[:bvalue])
-    end
-    bfiles.each do |file|
-      if @curr_rec.bfiles.count > 0
-        @script.puts "  remove file *"
-      end
-      orig_name = File.basename(file[:upload].original_filename)
-      upload_name = File.basename(file[:upload].path)
-      dest_path = PREF['SHERPA_TMP'][ENV['RAILS_ENV']] + '/' + upload_name
-      File.copy(file[:upload].path, dest_path)
-      @script.puts "  add file /secure \"#{dest_path}\" #{orig_name}"
-    end
-
-    if self[:new]
-      @script.puts "end create"
-    else
-      @script.puts "end modify"
-    end
-    @script.puts("exit")
-    @script.close
-  end
-
   def set_uda(name, value)
     buda = Buda.new
     buda[:bname] = name
@@ -215,9 +160,27 @@ class Brecord < ActiveRecord::Base
     budas << buda
   end
 
-  def autonumber
-    @autonumber = true
-    self[:brecname] = Brecord.find_by_brectype_and_brecname('PIM_AUTONUM', self[:brectype].upcase).bdesc
+  def create(user, autonumber)
+    dms_script = DmsScript.new(user, self)
+    dms_script.create_record(autonumber) do
+      dms_script.change_attributes
+      dms_script.add_files
+    end
+    dms_script.run
+    # Se non ci sono errori, carico l'id del record appena creato 
+    if (!dms_errorlog)
+      self[:id] = Brecord.find_by_brectype_and_brecname_and_brecalt(brectype, brecname, brecalt).id
+      Rails.logger.info("\n========== Created: #{recspec} => id: #{id}")
+    end
+  end
+
+  def modify(user)
+    dms_script = DmsScript.new(user, self)
+    dms_script.modify_record do
+      dms_script.change_attributes
+      dms_script.add_files
+    end
+    dms_script.run
   end
 
   alias :original_method_missing :method_missing
@@ -231,8 +194,8 @@ class Brecord < ActiveRecord::Base
     when /^uda_(.+)/
       uda($1)
     when /^file_(.+)/
-      if bfiles.count > 0
-        bfiles[0].balias
+      if files.size > 0
+        files[0].name
       else
         ""
       end
@@ -256,12 +219,6 @@ class Brecord < ActiveRecord::Base
                                                :order => order,
                                                :limit => limit,
                                                :offset => offset)
-  end
-
-  def puts_uda(name, value)
-    if @curr_rec.uda(name).strip != value
-       @script.puts "  change attribute #{name.upcase} \"#{value}\""
-    end
   end
 
 end
