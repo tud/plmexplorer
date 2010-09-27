@@ -36,6 +36,14 @@ class Brecord < ActiveRecord::Base
     @relproc ||= Brelproc.find_by_bname(brelproc)
   end
 
+  def blevel(level = breclevel)
+    relproc.blevel(level)
+  end
+
+  def bchk(name, level)
+    bchks.detect { |chk| chk.bname == name && chk.blevel == level }
+  end
+
   def migrated?
     project.migrated? if project
   end
