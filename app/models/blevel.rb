@@ -1,4 +1,5 @@
 class Blevel < ActiveRecord::Base
+  include Comparable
   belongs_to :brelproc, :foreign_key => 'bobjid'
 
   # Confronto fra livelli

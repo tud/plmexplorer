@@ -1,64 +1,72 @@
 <div id="workflow">
-	<h3><a href="#">CREATED</a></h3>
-	<div>
-		<em>Promoted to CREATED level on 05-MAY-2004 16:44:05 by UFFDOC</em><br><br>
-		<input type="checkbox" id="check_01" checked="checked"/><label for="check_01">OWNER_CK</label> MARTINA on 04-JUL-2007 15:150:04
-	</div>
-	<h3><a href="#">&rArr; REVIEW </a></h3>
-	<div>
-		<em>Promoted to REVIEW level on 06-JUL-2004 01:17:05 by SHERPA</em><br><br>
-		<input type="checkbox" id="check_11" class="approvable"/><label for="check_11">UFF_DOC_CK</label><br>
-		<input type="checkbox" id="check_12" class="approvable"/><label for="check_12">CAPO_SETTORE_OK_CK</label><br>
-		<input type="checkbox" id="check_13" class="approvable"/><label for="check_13">OVERRIDE</label>
-	</div>
-	<h3><a href="#">RELEASED</a></h3>
-	<div>
-		<em></em><br><br>
-	</div>
+	<% chk_label_id= 0; level_id = 0 %>
+	<% @record.relproc.blevels.each do |level| %>
+		<h3>
+			<% if level == @current_level %>
+				<a href="#" id="current_level" data-level="<%=level_id%>">&rArr; 
+			<% else %>
+				<a href="#"> 
+			<% end %>
+			<%=level.bname%></a>
+		</h3>
+		<% level_id += 1 %>
+		<div>
+			<% promotion = @record.bpromotions.find_by_blevel(level.bname) %>
+			<% if promotion && level <= @current_level %>
+				<em>Promoted to <%=level.bname%> level on <%=promotion.bpromdate.asctime%> by <%=promotion.buser%></em><br><br>
+			<% end %>
+			<% if level.next %>
+				<% @record.blevel(level.next.bname).bpromchks.each do |chk| %>
+					<% checked = @record.bchk(chk.bname,level.next.bname) %>
+					<% if checked && checked.bchkdate %>
+						<input type="checkbox" id="chk_<%=chk_label_id%>" checked="checked"/><label for="chk_<%=chk_label_id%>"><%=chk.bname%></label> <em>Approved on <%=checked.bchkdate.asctime%> by <%=checked.buser%></em><br/>
+					<% else %>
+						<input type="checkbox" id="chk_<%=chk_label_id%>" class="<%=level==@current_level ? 'approvable' : 'future_check'%>"/><label for="chk_<%=chk_label_id%>"><%=chk.bname%></label><br/>
+					<% end %>
+					<% chk_label_id += 1 %>
+				<% end %>
+			<% end %>
+		</div>
+	<% end %>
 </div>
 
 <div id="dialog_approve" title="Approve / Reject">
 	<form action="workflow_approve_submit">
 		<fieldset class='inlineLabels'>
-		<div class="ctrlHolder">
-			Why? <input type="text" size="40"/>
-		</div>
-		<div id="radio">
-			<input type="radio" id="radio1" name="radio" checked="checked"/><label for="radio1">Approve Check</label>
-			<input type="radio" id="radio2" name="radio" /><label for="radio2">Reject Check</label>
-		</div>
-		<br>
-		<div class="buttonHolder">
-			<label>&nbsp;</label>
-			<input class="navigation_button ui-wizard-content ui-helper-reset ui-state-default ui-formwizard-button ui-state-active ui-corner-all" value="OK" type="submit"/>
-			<input class="navigation_button ui-wizard-content ui-helper-reset ui-state-default ui-formwizard-button ui-state-active ui-corner-all" value="Cancel" type="button"/>
-		</div>
+			<div class="ctrlHolder">
+				Why? <input type="text" size="40"/>
+			</div>
+			<div id="radio">
+				<input type="radio" id="radio_approve" name="radio" checked="checked"/><label for="radio_approve">Approve Check</label>
+				<input type="radio" id="radio_cancel" name="radio" /><label for="radio_cancel">Cancel</label>
+			</div>
 		</fieldset>
 	</form>
 </div>
+
 <script>
 $(function(){
 	$('#workflow').accordion({
 		header: "h3"
 	,	autoHeight:false
 	});
-	$('#workflow').accordion("activate", 1);
+	
+	var level_id = $('#current_level').attr("data-level");
+	
+	$('#workflow').accordion("activate", parseInt(level_id));
 	
 	$("#radio").buttonset();
 	
-	$("#check_01").button({ 
+	$("#workflow input:checked").button({ 
 		disabled: true
 	,	icons: {
 			primary:'ui-icon-arrowthick-1-n'
 		}
 	});
-	$("#check_11").button({
-		disabled: false
+	$("#workflow .future_check").button({
+		disabled: true
 	});
-	$("#check_12").button({
-		disabled: false
-	});
-	$("#check_13").button({
+	$("#workflow .approvable").button({
 		disabled: false
 	});
 
@@ -69,8 +77,13 @@ $(function(){
 	,	autoOpen: false
 	});
 
-	$('.approvable').click(function() {
+	$('#workflow .approvable').click(function() {
 		$('#dialog_approve').dialog("open");
+		return false;
+	});
+	
+	$('#radio_cancel').click(function() {
+		$('#dialog_approve').dialog("close");
 		return false;
 	});
 });

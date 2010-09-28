@@ -438,7 +438,8 @@ class BrecordsController < ApplicationController
   end
   
   def load_record_workflow
-    @id = params[:id]
+    @record = session[:curr_record] || Brecord.find(params[:id])
+    @current_level = @record.blevel
     render :layout => false
   end
   
