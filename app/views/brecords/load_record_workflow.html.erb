@@ -21,7 +21,11 @@
 					<% if checked && checked.bchkdate %>
 						<input type="checkbox" id="chk_<%=chk_label_id%>" checked="checked"/><label for="chk_<%=chk_label_id%>"><%=chk.bname%></label> <em>Approved on <%=checked.bchkdate.asctime%> by <%=checked.buser%></em><br/>
 					<% else %>
-						<input type="checkbox" id="chk_<%=chk_label_id%>" class="<%=level==@current_level ? 'approvable' : 'future_check'%>"/><label for="chk_<%=chk_label_id%>"><%=chk.bname%></label><br/>
+						<% if session[:user].can_sign?(@record, chk) && level == @current_level %>
+							<input type="checkbox" id="chk_<%=chk_label_id%>" class="approvable" data-checkname="<%=chk.bname%>"/><label for="chk_<%=chk_label_id%>"><%=chk.bname%></label><br/>
+						<% else %>
+							<input type="checkbox" id="chk_<%=chk_label_id%>" class="future_check"/><label for="chk_<%=chk_label_id%>"><%=chk.bname%></label><br/>
+						<% end %>
 					<% end %>
 					<% chk_label_id += 1 %>
 				<% end %>
@@ -30,14 +34,17 @@
 	<% end %>
 </div>
 
-<div id="dialog_approve" title="Approve / Reject">
-	<form action="workflow_approve_submit">
+<div id="dialog_approve" title="Approve">
+	<form id="form_approve" method="post">
+		<input type="hidden" id="chk_bname" name="chk_bname"/>
 		<fieldset class='inlineLabels'>
-			<div class="ctrlHolder">
-				Why? <input type="text" size="40"/>
+			<div class="ctrlHolder centered" id="dialog_approve_chkname">
 			</div>
-			<div id="radio">
-				<input type="radio" id="radio_approve" name="radio" checked="checked"/><label for="radio_approve">Approve Check</label>
+			<div class="ctrlHolder">
+				Comment? <input type="text" size="40" id="chk_bchkdesc" name="chk_bchkdesc"/>
+			</div>
+			<div id="radio" class="ctrlHolder centered">
+				<input type="radio" id="radio_approve" name="radio" checked="checked"/><label for="radio_approve">Approve</label>
 				<input type="radio" id="radio_cancel" name="radio" /><label for="radio_cancel">Cancel</label>
 			</div>
 		</fieldset>
@@ -78,6 +85,9 @@ $(function(){
 	});
 
 	$('#workflow .approvable').click(function() {
+		var chkname = $(this).attr("data-checkname");
+		$('#dialog_approve_chkname').html(chkname);
+		$('#chk_bname').val(chkname);
 		$('#dialog_approve').dialog("open");
 		return false;
 	});
@@ -86,5 +96,19 @@ $(function(){
 		$('#dialog_approve').dialog("close");
 		return false;
 	});
+	
+	function success_approve(responseText, statusText, xhr, $form)  {
+		$('#dialog_approve').dialog("close");
+	}
+	
+	$('#radio_approve').click(function() {
+		$('#form_approve').ajaxSubmit({
+			target: 	'#ui-tabs-4'
+		,	url: 		'/brecords/approve'
+		,	success: 	success_approve
+		});
+		return false;
+	});
+
 });
 </script>

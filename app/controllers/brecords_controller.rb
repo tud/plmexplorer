@@ -513,9 +513,12 @@ class BrecordsController < ApplicationController
   end
 
   def approve
-
+    @record = session[:curr_record]
+    @current_level = @record.blevel
+    @chk_bname = params[:chk_bname]
+    @chk_bchkdesc = params[:chk_bchkdesc]
+    render :load_record_workflow, :layout => false
   end
-
 
 private
 

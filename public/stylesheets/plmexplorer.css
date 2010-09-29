@@ -41,6 +41,10 @@ select {
     text-transform:uppercase;
 }
 
+.centered {
+	text-align: center;
+}
+
 #login_dialog .uniForm .inlineLabels label, #login_dialog .uniForm .inlineLabels .label {
 	width:8em;
 }
@@ -306,6 +310,11 @@ hr {
 #dialog_error_content {
 	padding:0pt 0.7em;
 	text-align:left;
+}
+
+#dialog_approve_chkname {
+	color:#1C94C4;
+	font-weight:bold;
 }
 /**************************************/
 /*              EAST                  */
