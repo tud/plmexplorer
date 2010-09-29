@@ -512,11 +512,10 @@ class BrecordsController < ApplicationController
     render :save, :layout => false
   end
 
-  def get_status_list rectypes
-    @statusList = Blevel.find(:all,
-                              :conditions => [ "blevels.bobjid = brelprocs.id and brelprocs.id = brelrectypes.bobjid and brelrectypes.bname in (?)", rectypes ],
-                              :joins => ',brelprocs,brelrectypes').map { |level| level.bname }.sort.uniq
+  def approve
+
   end
+
 
 private
 

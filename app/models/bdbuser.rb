@@ -41,4 +41,15 @@ class Bdbuser < ActiveRecord::Base
     buser[0..5] == 'SHERPA' || Bdba.find_by_buser(buser) != nil
   end
 
+  def can_sign?(record, check)
+    next_level = record.blevel.next
+    # Posso firmare solo per il livello successivo a quello corrente
+    next_level && next_level.bid == check.blevelid && (
+      admin? ||
+      check.buclass == 'DBUSER' ||
+      check.buclass == 'OWNER' && buser == record.bowner ||
+      record.project.bprjusers.detect { |prju| prju.buclass == check.buclass && prju.buser == buser } != nil
+    )
+  end
+
 end
