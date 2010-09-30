@@ -439,7 +439,6 @@ class BrecordsController < ApplicationController
   
   def load_record_workflow
     @record = session[:curr_record] || Brecord.find(params[:id])
-    @current_level = @record.blevel
     render :layout => false
   end
   
@@ -514,9 +513,12 @@ class BrecordsController < ApplicationController
 
   def approve
     @record = session[:curr_record]
-    @current_level = @record.blevel
-    @chk_bname = params[:chk_bname]
-    @chk_bchkdesc = params[:chk_bchkdesc]
+    level_name = @record.blevel.next.bname
+    chk_name = params[:chk_name]
+    chk_comment = params[:chk_comment]
+    @record.approve(session[:user][:buser], level_name, chk_bname, chk_comment)
+    # refresh del record dopo approvazione
+    @record = Brecord.find(@record.id)
     render :load_record_workflow, :layout => false
   end
 

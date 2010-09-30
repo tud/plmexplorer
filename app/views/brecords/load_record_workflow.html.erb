@@ -2,7 +2,7 @@
 	<% chk_label_id= 0; level_id = 0 %>
 	<% @record.relproc.blevels.each do |level| %>
 		<h3>
-			<% if level == @current_level %>
+			<% if level == @record.blevel %>
 				<a href="#" id="current_level" data-level="<%=level_id%>">&rArr; 
 			<% else %>
 				<a href="#"> 
@@ -12,16 +12,16 @@
 		<% level_id += 1 %>
 		<div>
 			<% promotion = @record.bpromotions.find_by_blevel(level.bname) %>
-			<% if promotion && level <= @current_level %>
+			<% if promotion && level <= @record.blevel %>
 				<em>Promoted to <%=level.bname%> level on <%=promotion.bpromdate.asctime%> by <%=promotion.buser%></em><br><br>
 			<% end %>
 			<% if level.next %>
 				<% @record.blevel(level.next.bname).bpromchks.each do |chk| %>
-					<% checked = @record.bchk(chk.bname,level.next.bname) %>
-					<% if checked && checked.bchkdate %>
+					<% checked = @record.signoff(chk.bname,level.next.bname) %>
+					<% if checked %>
 						<input type="checkbox" id="chk_<%=chk_label_id%>" checked="checked"/><label for="chk_<%=chk_label_id%>"><%=chk.bname%></label> <em>Approved on <%=checked.bchkdate.asctime%> by <%=checked.buser%></em><br/>
 					<% else %>
-						<% if session[:user].can_sign?(@record, chk) && level == @current_level %>
+						<% if session[:user].can_sign?(@record, chk) && level == @record.blevel %>
 							<input type="checkbox" id="chk_<%=chk_label_id%>" class="approvable" data-checkname="<%=chk.bname%>"/><label for="chk_<%=chk_label_id%>"><%=chk.bname%></label><br/>
 						<% else %>
 							<input type="checkbox" id="chk_<%=chk_label_id%>" class="future_check"/><label for="chk_<%=chk_label_id%>"><%=chk.bname%></label><br/>
@@ -36,12 +36,12 @@
 
 <div id="dialog_approve" title="Approve">
 	<form id="form_approve" method="post">
-		<input type="hidden" id="chk_bname" name="chk_bname"/>
+		<input type="hidden" id="chk_name" name="chk_name"/>
 		<fieldset class='inlineLabels'>
 			<div class="ctrlHolder centered" id="dialog_approve_chkname">
 			</div>
 			<div class="ctrlHolder">
-				Comment? <input type="text" size="40" id="chk_bchkdesc" name="chk_bchkdesc"/>
+				Comment? <input type="text" size="40" maxlength="80" id="chk_comment" name="chk_comment"/>
 			</div>
 			<div id="radio" class="ctrlHolder centered">
 				<input type="radio" id="radio_approve" name="radio" checked="checked"/><label for="radio_approve">Approve</label>
@@ -87,7 +87,7 @@ $(function(){
 	$('#workflow .approvable').click(function() {
 		var chkname = $(this).attr("data-checkname");
 		$('#dialog_approve_chkname').html(chkname);
-		$('#chk_bname').val(chkname);
+		$('#chk_name').val(chkname);
 		$('#dialog_approve').dialog("open");
 		return false;
 	});

@@ -45,6 +45,17 @@ class DmsScript < Tempfile
     puts "end modify"
   end
 
+  def approve_record(level_name, chk_name, comment = '')
+    puts "mark record #{@brecord.recspec} #{level_name} #{chk_name} \"#{comment}\""
+    if @brecord.autopromote?
+      promote_record(level_name)
+    end
+  end
+
+  def promote_record(level_name, comment = '')
+    puts "promote record #{@brecord.recspec} #{level_name} \"#{comment}\""
+  end
+
   def change_attributes
     CHANGE_ATTRIBUTES.each do |attr|
       if @brecord[attr]

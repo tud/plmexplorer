@@ -40,8 +40,8 @@ class Brecord < ActiveRecord::Base
     relproc.blevel(level)
   end
 
-  def bchk(name, level)
-    bchks.detect { |chk| chk.bname == name && chk.blevel == level }
+  def signoff(name, level)
+    bchks.detect { |chk| chk.bname == name && chk.blevel == level && chk.bstatus == 'ON'}
   end
 
   def migrated?
@@ -181,6 +181,29 @@ class Brecord < ActiveRecord::Base
       dms_script.add_files
     end
     dms_script.run
+  end
+
+  def approve(user, level_name, chk_name, chk_comment)
+    dms_script = DmsScript.new(user, self)
+    dms_script.approve_record(level_name, chk_name, chk_comment)
+    dms_script.run
+  end
+
+  def autopromote?
+    fully_checked = true
+    override = false
+    next_level = blevel.next
+    next_level.check_list.each do |chk_name|
+      checked = signoff(chk_name, next_level.bname)
+      if checked
+        if checked.bname == 'OVERRIDE'
+          override = true
+        end
+      else
+        fully_checked = false
+      end
+    end
+    fully_checked || override
   end
 
   alias :original_method_missing :method_missing
