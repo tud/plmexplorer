@@ -516,9 +516,7 @@ class BrecordsController < ApplicationController
     level_name = @record.blevel.next.bname
     chk_name = params[:chk_name]
     chk_comment = params[:chk_comment]
-    @record.approve(session[:user][:buser], level_name, chk_bname, chk_comment)
-    # refresh del record dopo approvazione
-    @record = Brecord.find(@record.id)
+    @record.approve(session[:user][:buser], level_name, chk_name, chk_comment)
     render :load_record_workflow, :layout => false
   end
 

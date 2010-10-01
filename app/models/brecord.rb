@@ -183,9 +183,18 @@ class Brecord < ActiveRecord::Base
     dms_script.run
   end
 
-  def approve(user, level_name, chk_name, chk_comment)
+  def approve(user, level_name, chk_name, comment = '')
     dms_script = DmsScript.new(user, self)
-    dms_script.approve_record(level_name, chk_name, chk_comment)
+    dms_script.approve_record(level_name, chk_name, comment)
+    dms_script.run
+    if autopromote?
+      promote(user, level_name)
+    end
+  end
+
+  def promote(user, level_name, comment = '')
+    dms_script = DmsScript.new(user, self)
+    dms_script.promote_record(level_name, comment)
     dms_script.run
   end
 

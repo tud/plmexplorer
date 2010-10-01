@@ -46,20 +46,17 @@ class DmsScript < Tempfile
   end
 
   def approve_record(level_name, chk_name, comment = '')
-    puts "mark record #{@brecord.recspec} #{level_name} #{chk_name} \"#{comment}\""
-    if @brecord.autopromote?
-      promote_record(level_name)
-    end
+    puts "mark record #{@brecord.recspec} #{level_name} #{chk_name} \"#{escape(comment)}\""
   end
 
   def promote_record(level_name, comment = '')
-    puts "promote record #{@brecord.recspec} #{level_name} \"#{comment}\""
+    puts "promote record #{@brecord.recspec} #{level_name} \"#{escape(comment)}\""
   end
 
   def change_attributes
     CHANGE_ATTRIBUTES.each do |attr|
       if @brecord[attr]
-        puts "  change attribute #{attr.to_s.upcase[1..-1]} \"#{@brecord[attr]}\""
+        puts "  change attribute #{attr.to_s.upcase[1..-1]} \"#{escape(@brecord[attr])}\""
       end
     end
     @brecord.budas.each do |uda|
@@ -91,6 +88,8 @@ class DmsScript < Tempfile
       # Scarta intestazione Sherpa/DMS ed "exit" finale dal log
       log = pipe.readlines[7..-2]
       pipe.close_read
+      # Aggiorna il record, che puo' essere stato modificato!
+      @brecord.reload if @brecord.id
 
       Rails.logger.info log
       errors = log.collect { |line| line[/^%DMS-E-.*/] }.compact
@@ -109,6 +108,11 @@ class DmsScript < Tempfile
     if @curr_brecord.uda(name).strip != value
        puts "  change attribute #{name.upcase} \"#{value}\""
     end
+  end
+
+  # Raddoppio del doppio apice per le stringhe di Sherpa/DMS
+  def escape(value)
+    value.gsub(/"/,'""')
   end
 
 end
