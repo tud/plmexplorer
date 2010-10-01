@@ -22,7 +22,7 @@
 						<input type="checkbox" id="chk_<%=chk_label_id%>" checked="checked"/><label for="chk_<%=chk_label_id%>"><%=chk.bname%></label> <em>Approved on <%=checked.bchkdate.asctime%> by <%=checked.buser%></em><br/>
 					<% else %>
 						<% if session[:user].can_sign?(@record, chk) && level == @record.blevel %>
-							<input type="checkbox" id="chk_<%=chk_label_id%>" class="approvable" data-checkname="<%=chk.bname%>"/><label for="chk_<%=chk_label_id%>"><%=chk.bname%></label><br/>
+							<input type="checkbox" id="chk_<%=chk_label_id%>" class="approvable" data-level="<%=level.next.bname%>" data-checkname="<%=chk.bname%>"/><label for="chk_<%=chk_label_id%>"><%=chk.bname%></label><br/>
 						<% else %>
 							<input type="checkbox" id="chk_<%=chk_label_id%>" class="future_check"/><label for="chk_<%=chk_label_id%>"><%=chk.bname%></label><br/>
 						<% end %>
@@ -35,11 +35,11 @@
 </div>
 
 <div id="dialog_approve" title="Approve">
-	<form id="form_approve" method="post">
+	<form id="form_approve" method="post" action="/brecords/approve">
 		<input type="hidden" id="chk_name" name="chk_name"/>
+		<input type="hidden" id="chk_level" name="chk_level"/>
 		<fieldset class='inlineLabels'>
-			<div class="ctrlHolder centered" id="dialog_approve_chkname">
-			</div>
+			<div class="ctrlHolder centered" id="dialog_approve_chkname"></div>
 			<div class="ctrlHolder">
 				Comment? <input type="text" size="40" maxlength="80" id="chk_comment" name="chk_comment"/>
 			</div>
@@ -51,7 +51,12 @@
 	</form>
 </div>
 
-<script>
+<div id="dialog_ajax_loader" title="Loading..." class="ui-tabs-hide">
+	<img src="/images/ajax-loader.gif"/>Approving record...
+</div>
+<div id="dialog_error" title="Error" class='ui-widget'></div>
+
+<script type="text/javascript">
 $(function(){
 	$('#workflow').accordion({
 		header: "h3"
@@ -77,37 +82,74 @@ $(function(){
 		disabled: false
 	});
 
-	$("#dialog_approve").dialog({
+	var dappr = $("#dialog_approve").dialog({
 		height: 250
 	,	width: 360
 	,	modal: true
 	,	autoOpen: false
 	});
+	
+	var dal = $('#dialog_ajax_loader').dialog({
+		width: 400,
+		modal: true,
+		autoOpen: false
+	});
+	
+	var derror = $('#dialog_error').dialog({
+		width: 600,
+		height: 600,
+		modal: true,
+		autoOpen: false
+	});
 
 	$('#workflow .approvable').click(function() {
 		var chkname = $(this).attr("data-checkname");
+		var chklevel = $(this).attr("data-level");
 		$('#dialog_approve_chkname').html(chkname);
 		$('#chk_name').val(chkname);
-		$('#dialog_approve').dialog("open");
+		$('#chk_level').val(chklevel);
+		dappr.dialog("open");
 		return false;
 	});
 	
 	$('#radio_cancel').click(function() {
-		$('#dialog_approve').dialog("close");
+		dappr.dialog("close");
+		dappr.remove();
 		return false;
 	});
 	
 	function success_approve(responseText, statusText, xhr, $form)  {
-		$('#dialog_approve').dialog("close");
-	}
+		if (dal.length>0) {
+			dal.dialog("close");
+		}
+		if (responseText.indexOf("ui-state-error") == -1) {
+			var id = "<%=@record.id%>";
+			$('#ui-tabs-4').load('/brecords/load_record_workflow', {id:id});
+		} else {
+			responseText = $.trim(responseText);
+			derror.html(responseText).dialog("open");
+		}
+		if (dappr.length>0) {
+			dappr.dialog("close");
+			dappr.remove();
+		}
+	};
 	
 	$('#radio_approve').click(function() {
 		$('#form_approve').ajaxSubmit({
-			target: 	'#ui-tabs-4'
-		,	url: 		'/brecords/approve'
-		,	success: 	success_approve
+			success: 	success_approve
+		,	beforeSubmit: function(data){
+				console.log(data);
+				dal.dialog("open");
+			},
 		});
 		return false;
+	});
+	
+	$('#dialog_approve').bind('keydown', function(event) {
+		if (event.keyCode == $.ui.keyCode.ENTER) {
+			return false;
+		}
 	});
 
 });

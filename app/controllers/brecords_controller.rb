@@ -438,7 +438,7 @@ class BrecordsController < ApplicationController
   end
   
   def load_record_workflow
-    @record = session[:curr_record] || Brecord.find(params[:id])
+    @record = Brecord.find(params[:id])
     render :layout => false
   end
   
@@ -513,11 +513,12 @@ class BrecordsController < ApplicationController
 
   def approve
     @record = session[:curr_record]
-    level_name = @record.blevel.next.bname
+    #level_name = @record.blevel.next.bname
+    level_name = params[:chk_level]
     chk_name = params[:chk_name]
     chk_comment = params[:chk_comment]
     @record.approve(session[:user][:buser], level_name, chk_name, chk_comment)
-    render :load_record_workflow, :layout => false
+    render :layout => false
   end
 
 private
