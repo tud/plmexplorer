@@ -34,7 +34,7 @@
 	<% end %>
 </div>
 
-<div id="dialog_approve" title="Approve">
+<div id="dialog_approve" class="dialog_approve" title="Approve">
 	<form id="form_approve" method="post" action="/brecords/approve">
 		<input type="hidden" id="chk_name" name="chk_name"/>
 		<input type="hidden" id="chk_level" name="chk_level"/>
@@ -63,9 +63,13 @@ $(function(){
 	,	autoHeight:false
 	});
 	
-	var level_id = $('#current_level').attr("data-level");
+	// se ci sono + dialog_approve ne deve rimanere una sola!
+	if ($(".dialog_approve").length > 1 ) {
+		$(".dialog_approve").last().remove();
+	}
 	
-	$('#workflow').accordion("activate", parseInt(level_id));
+	var level_id = $('#current_level').attr("data-level");
+	$('#workflow').accordion("activate", parseInt(level_id, 10));
 	
 	$("#radio").buttonset();
 	
@@ -114,7 +118,6 @@ $(function(){
 	
 	$('#radio_cancel').click(function() {
 		dappr.dialog("close");
-		dappr.remove();
 		return false;
 	});
 	
@@ -122,26 +125,23 @@ $(function(){
 		if (dal.length>0) {
 			dal.dialog("close");
 		}
+		responseText = $.trim(responseText);
 		if (responseText.indexOf("ui-state-error") == -1) {
-			var id = "<%=@record.id%>";
-			$('#ui-tabs-4').load('/brecords/load_record_workflow', {id:id});
+			$('#workflow').parent().load('/brecords/load_record_workflow', {'id':responseText});
 		} else {
-			responseText = $.trim(responseText);
 			derror.html(responseText).dialog("open");
 		}
 		if (dappr.length>0) {
 			dappr.dialog("close");
-			dappr.remove();
 		}
 	};
 	
 	$('#radio_approve').click(function() {
 		$('#form_approve').ajaxSubmit({
-			success: 	success_approve
+			success: 		success_approve
 		,	beforeSubmit: function(data){
-				console.log(data);
 				dal.dialog("open");
-			},
+			}
 		});
 		return false;
 	});
