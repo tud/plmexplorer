@@ -203,7 +203,7 @@ class Brecord < ActiveRecord::Base
     fully_checked = true
     next_level = blevel.next
     next_level.check_list.each do |chk_name|
-      if chk_name != curr_check && !signoff(chk_name, next_level.bname)
+      if chk_name != curr_check && chk_name != 'OVERRIDE' && !signoff(chk_name, next_level.bname)
         fully_checked = false
       end
     end
