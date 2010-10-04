@@ -42,7 +42,7 @@ class Blevel < ActiveRecord::Base
     bpromchks.map { |chk| chk.bname }
   end
 
-  # Firma avente dato nome
+  # Firma relproc avente dato nome
   def bpromchk(name)
     brelproc.bpromchks.detect { |chk| chk.bname == name }
   end

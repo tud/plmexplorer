@@ -517,7 +517,8 @@ class BrecordsController < ApplicationController
     level_name = params[:chk_level]
     chk_name = params[:chk_name]
     chk_comment = params[:chk_comment]
-    @record.approve(session[:user][:buser], level_name, chk_name, chk_comment)
+    @record.approve(session[:user][:buser], chk_name, level_name, chk_comment)
+    session[:curr_record] = @record
     render :layout => false
   end
 

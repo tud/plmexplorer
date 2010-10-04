@@ -45,7 +45,7 @@ class DmsScript < Tempfile
     puts "end modify"
   end
 
-  def approve_record(level_name, chk_name, comment = '')
+  def approve_record(chk_name, level_name, comment = '')
     puts "mark record #{@brecord.recspec} #{level_name} #{chk_name} \"#{escape(comment)}\""
   end
 

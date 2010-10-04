@@ -39,9 +39,9 @@ class Brecord < ActiveRecord::Base
   def blevel(level = breclevel)
     relproc.blevel(level)
   end
-
+  
   def signoff(name, level)
-    bchks.detect { |chk| chk.bname == name && chk.blevel == level && chk.bstatus == 'ON'}
+    bchks.detect { |chk| chk.bname == name && chk.blevel == level && chk.bstatus == 'ON' }
   end
 
   def migrated?
@@ -183,13 +183,13 @@ class Brecord < ActiveRecord::Base
     dms_script.run
   end
 
-  def approve(user, level_name, chk_name, comment = '')
+  def approve(user, chk_name, level_name, comment = '')
     dms_script = DmsScript.new(user, self)
-    dms_script.approve_record(level_name, chk_name, comment)
-    dms_script.run
-    if autopromote?
-      promote(user, level_name)
+    dms_script.approve_record(chk_name, level_name, comment)
+    if autopromote?(chk_name)
+      dms_script.promote_record(level_name, MSG['AUTOPROMOTE'])
     end
+    dms_script.run
   end
 
   def promote(user, level_name, comment = '')
@@ -198,21 +198,16 @@ class Brecord < ActiveRecord::Base
     dms_script.run
   end
 
-  def autopromote?
+  def autopromote?(curr_check)
+    # Si assume che il check corrente vada a buon fine!
     fully_checked = true
-    override = false
     next_level = blevel.next
     next_level.check_list.each do |chk_name|
-      checked = signoff(chk_name, next_level.bname)
-      if checked
-        if checked.bname == 'OVERRIDE'
-          override = true
-        end
-      else
+      if chk_name != curr_check && !signoff(chk_name, next_level.bname)
         fully_checked = false
       end
     end
-    fully_checked || override
+    fully_checked || curr_check == 'OVERRIDE'
   end
 
   alias :original_method_missing :method_missing
