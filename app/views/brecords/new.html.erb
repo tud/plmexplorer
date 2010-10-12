@@ -42,7 +42,7 @@
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_rec_bproject"><em>*</em>Project :</label>
-				<%= f.select :rec_bproject, ACTIVE_PROJECTS, {:include_blank => true}, {:tabindex => "5", :class => "required"} %>
+				<%= f.select :rec_bproject, [ @brecord.bproject ] | ACTIVE_PROJECTS, {:tabindex => "5", :class => "required"} %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_rec_brelproc"><em>*</em>LifeCycle :</label>
