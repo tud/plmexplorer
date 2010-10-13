@@ -249,3 +249,81 @@ class Brecord < ActiveRecord::Base
   end
 
 end
+
+# == Schema Information
+#
+# Table name: brecords
+#
+#  btype1         :string(16)
+#  btype2         :string(16)
+#  btype3         :string(16)
+#  btype4         :string(16)
+#  bname1         :string(32)
+#  bname2         :string(32)
+#  bname3         :string(32)
+#  bname4         :string(32)
+#  blong1         :integer(10)
+#  blong2         :integer(10)
+#  blong3         :integer(10)
+#  blong4         :integer(10)
+#  bdate1         :datetime
+#  bdate2         :datetime
+#  bdate3         :datetime
+#  bdate4         :datetime
+#  bdouble1       :decimal(, )
+#  bdouble2       :decimal(, )
+#  bdouble3       :decimal(, )
+#  bdouble4       :decimal(, )
+#  bdouble5       :decimal(, )
+#  bdouble6       :decimal(, )
+#  bdouble7       :decimal(, )
+#  bdouble8       :decimal(, )
+#  bfilecount     :integer(10)
+#  brefcount      :integer(10)
+#  bdictversion   :integer(5)
+#  bsuffix1       :string(12)
+#  btimestamp     :datetime
+#  bmdtid         :integer(10)
+#  bsubclusterid  :integer(5)
+#  brevisionid    :integer(10)
+#  bpromuser      :string(16)
+#  bcanceldesc    :string(80)
+#  bcancelrelproc :string(16)
+#  baffcount      :integer(10)
+#  brecusercount  :integer(10)
+#  brectype       :string(16)
+#  brecname       :string(32)
+#  brecalt        :string(32)
+#  brecver        :integer(5)
+#  breclevel      :string(16)
+#  id             :integer(10)     primary key
+#  bid            :integer(10)
+#  blatest        :integer(10)
+#  blevelid       :integer(5)
+#  bowner         :string(16)
+#  bcost          :decimal(, )
+#  bmeasure       :string(16)
+#  bcreateuser    :string(16)
+#  created_at     :datetime
+#  bcanceluser    :string(16)
+#  bcanceldate    :datetime
+#  bmodifyuser    :string(16)
+#  bmodifydate    :datetime
+#  bupdateuser    :string(16)
+#  updated_at     :datetime
+#  bbegindate     :datetime
+#  benddate       :datetime
+#  bfamily        :string(16)
+#  bdesc          :string(80)
+#  bpromdate      :datetime
+#  bgroupflag     :string(3)
+#  bproject       :string(16)
+#  bprjobjid      :integer(10)
+#  brelproc       :string(16)
+#  brelobjid      :integer(10)
+#  barcdate       :datetime
+#  barclabel      :string(6)
+#  barcset        :string(32)
+#  breloaddate    :datetime
+#
+

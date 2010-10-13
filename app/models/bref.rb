@@ -60,3 +60,69 @@ class Bref < ActiveRecord::Base
   end
 
 end
+
+# == Schema Information
+#
+# Table name: brefs
+#
+#  bdate1        :datetime
+#  bdate2        :datetime
+#  bdouble1      :decimal(, )
+#  bdouble2      :decimal(, )
+#  bdouble3      :decimal(, )
+#  bdouble4      :decimal(, )
+#  bdouble5      :decimal(, )
+#  bdouble6      :decimal(, )
+#  bdouble7      :decimal(, )
+#  bdouble8      :decimal(, )
+#  bdouble9      :decimal(, )
+#  bdouble10     :decimal(, )
+#  bdouble11     :decimal(, )
+#  bdouble12     :decimal(, )
+#  bdouble13     :decimal(, )
+#  bdouble14     :decimal(, )
+#  btext1        :string(1024)
+#  bsuffix1      :string(12)
+#  bsee_suffix1  :string(12)
+#  btimestamp    :datetime
+#  bmdtid        :integer(10)
+#  bsubclusterid :integer(5)
+#  brectype      :string(16)
+#  brecname      :string(32)
+#  brecalt       :string(32)
+#  brecver       :integer(5)
+#  breclevel     :string(16)
+#  bobjid        :integer(10)
+#  blevelid      :integer(5)
+#  brellevel     :string(16)
+#  bitem         :string(32)
+#  bline         :string(32)
+#  bquantity     :decimal(, )
+#  bcreateuser   :string(16)
+#  created_at    :datetime
+#  bstartdate    :datetime
+#  bstopdate     :datetime
+#  bstartserial  :string(32)
+#  bstopserial   :string(32)
+#  bweight       :integer(5)
+#  brefoption    :string(11)
+#  breftype      :string(16)
+#  brecobjid     :integer(10)
+#  bsee_rectype  :string(16)
+#  bsee_recname  :string(32)
+#  bsee_recalt   :string(32)
+#  bsee_recver   :integer(5)
+#  bsee_reclevel :string(16)
+#  bsee_rule     :string(16)
+#  bsee_reftype  :string(16)
+#  bsee_item     :string(32)
+#  bsee_line     :string(32)
+#  bdesc         :string(80)
+#  btype1        :string(16)
+#  btype2        :string(16)
+#  bname1        :string(32)
+#  bname2        :string(32)
+#  blong1        :integer(10)
+#  blong2        :integer(10)
+#
+

@@ -48,3 +48,17 @@ class Blevel < ActiveRecord::Base
   end
 
 end
+
+# == Schema Information
+#
+# Table name: blevels
+#
+#  bobjid        :integer(10)
+#  bid           :integer(5)
+#  bname         :string(16)
+#  bdesc         :string(80)
+#  btimestamp    :datetime
+#  bmdtid        :integer(10)
+#  bsubclusterid :integer(5)
+#
+

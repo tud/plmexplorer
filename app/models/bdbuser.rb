@@ -53,3 +53,18 @@ class Bdbuser < ActiveRecord::Base
   end
 
 end
+
+# == Schema Information
+#
+# Table name: bdbusers
+#
+#  bobjid     :integer(10)
+#  buser      :string(16)
+#  bnode      :string(33)
+#  balert     :string(3)
+#  bstatus    :string(5)
+#  bdesc      :string(80)
+#  btimestamp :datetime
+#  bmdtid     :integer(10)
+#
+
