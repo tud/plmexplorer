@@ -390,9 +390,9 @@ class BrecordsController < ApplicationController
 
     prep_return_data(count)
     @return_data[:rows] = files.collect{|u| {
-      :id => u.id,
+      :id => u.balias,
       :cell => [
-        u.id,
+        u.balias,
         format_icon_files(u.format),
         u.name,
         u.size,
