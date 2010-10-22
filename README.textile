@@ -38,3 +38,5 @@ h4(. "UniForm _1.4_":http://sprawsm.com/uni-form/
 
 h4(. "FamFamFam Silk Icons _1.3_":http://www.famfamfam.com/lab/icons/silk/
 
+h4(. "public/.htaccess":http://github.com/paulirish/html5-boilerplate.git
+
