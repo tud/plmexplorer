@@ -23,7 +23,7 @@ class DmsScript < Tempfile
     if autonumber
       @brecord[:brecname] = Brecord.find_by_brectype_and_brecname('PIM_AUTONUM', @brecord[:brectype]).bdesc
       puts("modify record PIM_AUTONUM\\#{@brecord[:brectype]}")
-      puts "  change attribute DESC \"#{@brecord[:brecname].to_i + 1}\""
+      puts "  change attribute DESC \"#{@brecord[:brecname].next}\""
       puts("end modify")
     end
 
