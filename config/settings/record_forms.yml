@@ -22,6 +22,12 @@ PART:
     - label: Description
       id:    record_bdesc
       size:  80
+    - label: Alternate Short Description
+      id:    uda_alt_part_s1desc
+      size:  32
+    - label: Alternate Description
+      id:    uda_alt_part_l1desc
+      size:  80
     - label: Secondary ID
       id:    uda_snd_part_recname
       size:  26
@@ -30,7 +36,7 @@ PART:
       size:  5
     - label: Secondary Rev.
       id:    uda_snd_part_recalt
-      size:  4
+      size:  6
   - label: Mngmt Info
     fields:
     - label: Assigned Project
@@ -108,6 +114,12 @@ DOCUMENT:
     - label: Description
       id:    record_bdesc
       size:  80
+    - label: Alternate Short Description
+      id:    uda_alt_doc_s1desc
+      size:  32
+    - label: Alternate Description
+      id:    uda_alt_doc_l1desc
+      size:  80
     - label: Secondary ID
       id:    uda_snd_doc_recname
       size:  26
@@ -116,7 +128,7 @@ DOCUMENT:
       size:  5
     - label: Secondary Rev.
       id:    uda_snd_doc_recalt
-      size:  4
+      size:  6
   - label: Mngmt Info
     fields:
     - label: Assigned Project
