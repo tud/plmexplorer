@@ -2,7 +2,7 @@
 .DS\_Store
 *.sw?
 tmp/**/*
-log/*.log
+log/*.log*
 ~*.*
 *.tmp
 config/database.yml
