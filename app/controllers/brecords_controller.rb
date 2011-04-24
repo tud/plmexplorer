@@ -480,7 +480,7 @@ class BrecordsController < ApplicationController
   end
   
   def clear_workspace
-    session[:workspace].clear
+    session[:workspace].clear if session[:workspace]
     redirect_to(:action => 'show_workspace')
   end
   
