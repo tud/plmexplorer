@@ -8,7 +8,7 @@ h4((. *0.1 - _visualizzatore dati Sherpa_*
 
 h2. Software utilizzato
 
-h4(. "Ruby on Rails _2.3.8_":http://rubyonrails.org/
+h4(. "Ruby on Rails _2.3.11_":http://rubyonrails.org/
 
 * gems:
 ** "activerecord-oracle_enhanced-adapter _1.2.1_":Version must be <= 1.2.1
