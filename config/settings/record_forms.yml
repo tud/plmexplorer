@@ -237,6 +237,47 @@ WORKAUTH:
       id:    uda_comment
       size:  80
       type:  multi_15
+  - label: Logistic Page
+    fields:
+    - label: Cataloghi illustrati
+      id:    uda_lp_catill
+      size:  1
+    - label: Commento
+      id:    uda_lp_comment@1-2
+      size:  80
+      type:  multi_2
+    - label: Manuali
+      id:    uda_lp_manuali
+      size:  1
+    - label: Commento
+      id:    uda_lp_comment@3-4
+      size:  80
+      type:  multi_2
+    - label: Attrezzature
+      id:    uda_lp_attrezzature
+      size:  1
+    - label: Commento
+      id:    uda_lp_comment@5-6
+      size:  80
+      type:  multi_2
+    - label: Lista Ricambi
+      id:    uda_lp_ricambi
+      size:  1
+    - label: Commento
+      id:    uda_lp_comment@7-8
+      size:  80
+      type:  multi_2
+    - label: Ausili didattici / C.B.T.
+      id:    uda_lp_cbt
+      size:  1
+    - label: Commento
+      id:    uda_lp_comment@9-10
+      size:  80
+      type:  multi_2
+    - label: Note
+      id:    uda_lp_note
+      size:  80
+      type:  multi_4
   - label: Sec Info
     fields:
     - label: Proprietary

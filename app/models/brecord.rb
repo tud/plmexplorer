@@ -112,17 +112,19 @@ class Brecord < ActiveRecord::Base
     @udas.map { |uda| uda.bvalue if uda.bname == name.upcase }.compact.at(0).to_s
   end
 
-  def uda_t(name)
+  def uda_t(block)
     text = ""
-    (1..uda_t_size(name)).each do |index|
-      value = uda(name + '_' + '%02d' % index)
+    name, first_row, last_row = split_block(block)
+    (first_row..last_row).each do |row|
+      value = uda(name + '_' + '%02d' % row)
       text += value + "\n" if not value.empty?
     end
     text
   end
 
-  def uda_t_size(name)
-    Batt.find(:all, :conditions => [ "BRECTYPE = ? and BNAME like ?", brectype.upcase, name.upcase+'_%' ]).size
+  def uda_t_size(block)
+    name, first_row, last_row = split_block(block)
+    last_row - first_row + 1
   end
 
   def files
@@ -246,6 +248,17 @@ class Brecord < ActiveRecord::Base
                                                :order => order,
                                                :limit => limit,
                                                :offset => offset)
+  end
+
+  def split_block(block)
+    name, range = block.split('@')
+    if range
+      first_row, last_row = range.split('-')
+    else
+      first_row = 1
+      last_row = Batt.find(:all, :conditions => [ "BRECTYPE = ? and BNAME like ?", brectype.upcase, name.upcase+'_%' ]).size
+    end
+    [name, first_row.to_i, last_row.to_i]
   end
 
 end
