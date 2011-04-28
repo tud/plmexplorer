@@ -121,6 +121,20 @@ class ReportsController < ApplicationController
     end
     render :layout => false
   end
+
+  def record_exists?
+    brecord = params[:brecord]
+    brectype = brecord[:report_rec_brectype]
+    brecname = "#{brecord[:report_rec_name]}&#{brecord[:report_rec_bname1]}"
+    brecalt = brecord[:report_rec_brecalt]
+    level = brecord[:report_depth].to_i
+    if level > 1
+      Brecord.exist?(brectype, brecname, brecalt)
+    else
+      breclevel = (brecord[:report_data_maturity] == 'CURRENT') ? nil : brecord[:report_data_maturity]
+      Brecord.exist?(brectype, brecname, brecalt, breclevel)
+    end
+  end
   
 
   private

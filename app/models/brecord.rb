@@ -97,6 +97,17 @@ class Brecord < ActiveRecord::Base
     latest_rev = self.find(:first, :conditions => conditions, :order => 'brecalt DESC')
   end
 
+  def self.exist?(brectype, brecname, brecalt = nil, breclevel = nil)
+    conditions = "brectype = '#{brectype}' AND brecname = '#{brecname}'"
+    if brecalt && brecalt != '' && brecalt != '*' && brecalt != '#'
+      conditions += " AND brecalt = '#{brecalt.upcase}'"
+    end
+    if breclevel && breclevel != '' && breclevel != '*'
+      conditions += " AND breclevel = '#{breclevel.upcase}'"
+    end
+    self.find(:all, :conditions => conditions).size > 0
+  end
+
   def ext_rev
     if brectype == 'PART'
       uda('EXT_PART_RECALT')
