@@ -225,6 +225,18 @@ WORKAUTH:
     - label: Request Author
       id:    uda_wa_req_author
       size:  32
+    - label: Priority
+      id:    uda_wa_priority
+      size:  9
+    - label: Increase in Cost
+      id:    uda_increase_cost
+      size:  1
+    - label: Interchangeability Impact
+      id:    uda_inter_impact
+      size:  1
+    - label: Impact Logistic Aspect
+      id:    uda_aff_spare_parts
+      size:  1
     - label: Description of Change
       id:    uda_desc_of_chng
       size:  80
