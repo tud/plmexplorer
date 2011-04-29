@@ -84,15 +84,15 @@
 		<div id="step2" class="step">
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_t_desc_of_chng">Description of Change :</label>
-				<%= f.text_area :uda_t_desc_of_chng, :cols => "80", :rows => "15", :tabindex => "15" %>
+				<%= f.text_area :uda_t_desc_of_chng, :cols => "80", :rows => "15", :onfocus => "limitTextarea(this,15,80)", :wrap => "hard", :tabindex => "15" %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_t_comment">Comments :</label>
-				<%= f.text_area :uda_t_comment, :cols => "80", :rows => "15", :tabindex => "16" %>
+				<%= f.text_area :uda_t_comment, :cols => "80", :rows => "15", :onfocus => "limitTextarea(this,15,80)", :wrap => "hard", :tabindex => "16" %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_uda_t_solution">Solution :</label>
-				<%= f.text_area :uda_t_solution, :cols => "80", :rows => "10", :tabindex => "17" %>
+				<%= f.text_area :uda_t_solution, :cols => "80", :rows => "10", :onfocus => "limitTextarea(this,10,80)", :wrap => "hard", :tabindex => "17" %>
 			</div>
 			<div class='ctrlHolder'>
 				<label for="brecord_file_upload">File :</label>
@@ -212,5 +212,5 @@
 
 		$('form.uniForm').uniform();
 	});
-        
+
 </script>
