@@ -154,17 +154,17 @@
 		});
 
 		function success_function(responseText, statusText, xhr, $form) {
-			var id = responseText;
+			var rec_id = responseText;
 			if (dal.length>0) {
 				dal.dialog("close");
 			}
-			if (id.indexOf("ui-state-error") == -1) {
-				$.history(id);
-				$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
+			if (rec_id.indexOf("ui-state-error") == -1) {
+				$.history(rec_id);
+				$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id: rec_id});
 				$('#cMenuTabs').tabs('select',2);
 			} else {
-				id = $.trim(id);
-				$('#dialog_error').html(id).dialog("open");
+				rec_id = $.trim(rec_id);
+				$('#dialog_error').html(rec_id).dialog("open");
 			}
 			$('#dialog_new_modify').dialog('close');
 		}

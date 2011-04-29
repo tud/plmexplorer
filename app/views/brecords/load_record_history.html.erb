@@ -61,10 +61,10 @@ $(function(){
 		height: 'auto',
 		width: centerWidth,
 		pager: 'revisionsPager',
-		ondblClickRow: function(id) {	
-			if (id!=null) {
-				$.history(id);
-				$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
+		ondblClickRow: function(rec_id) {	
+			if (rec_id!=null) {
+				$.history(rec_id);
+				$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id: rec_id});
 				$('#record_content').tabs('select', 0);
 			}
 			return false;

@@ -62,12 +62,12 @@ $(function() {
 
 	// gestione history
 	$.history._cache = 'blank.html';
-	$.history.callback = function ( id, cursor ) {
-		if (typeof(id) == 'undefined') {
+	$.history.callback = function ( rec_id, cursor ) {
+		if (typeof(rec_id) == 'undefined') {
 			$("#cMenuTabs").tabs('select',1);
 		} else {
 			$("#cMenuTabs").tabs('select',2);
-			$('#cRecord').load("/brecords/load_record_base",{id:id});
+			$('#cRecord').load("/brecords/load_record_base",{id: rec_id});
 		}
 	};
 });

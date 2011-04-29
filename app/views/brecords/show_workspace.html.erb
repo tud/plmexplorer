@@ -11,9 +11,9 @@
 <script type="text/javascript">
 $(function () {
 	$('.wrksp_records').dblclick(function() {
-		var id = $(this).parent().attr('id').substring(2);
-		$.history(id);
-		$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id:id});
+		var rec_id = $(this).parent().attr('id').substring(2);
+		$.history(rec_id);
+		$('#cRecord').load("<%= url_for(:controller => 'brecords', :action => 'load_record_base') %>",{id: rec_id});
 		$('#cMenuTabs').tabs('select',2);
 		return false;
 	});
