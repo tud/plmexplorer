@@ -113,7 +113,7 @@
 %>
 							<div class='ctrlHolder'>
 								<label><%=field['label']%> :</label>
-								<textarea readonly="readonly" cols="<%=field['size']%>" rows="<%=@record.uda_t_size(attrname)%>"><%= h(@record.uda_t(attrname)) %></textarea>
+								<textarea readonly="readonly" cols="<%=field['size']%>" rows="<%=@record.uda_t_size(attrname)%>" style="height:<%=@record.uda_t_size(attrname)%>em"><%= h(@record.uda_t(attrname)) %></textarea>
 							</div>
 <%
 						end
