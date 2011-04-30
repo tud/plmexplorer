@@ -5,5 +5,5 @@ CONN_KO: Connection to server failed
 LOGGED_OUT: Logged out
 NO_FILE: File not available
 REPORT_SUBMITTED: Report submitted
-REPORT_ERROR: Record doesn't exist!
+REPORT_ERROR: PART does not exist or is not RELEASED.
 STARS: "****************************** "
