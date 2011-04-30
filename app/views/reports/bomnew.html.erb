@@ -1,5 +1,9 @@
 <%= render :partial => 'title' %>
-
+<% if @error == MSG['REPORT_ERROR'] %>
+<div class="hidden_error">
+<%= MSG['REPORT_ERROR'] %>
+</div>
+<% end %>
 <% form_for :brecord, :html => {:id => controller.action_name, :class => 'uniForm'} do |f| %>
 	<fieldset class='inlineLabels'>
 		<legend id="legend_report_record"></legend>

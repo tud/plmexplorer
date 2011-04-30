@@ -25,10 +25,23 @@
 	<div>&nbsp;</div>
 	<img src="/images/logo_button.gif" alt="PlmExplorer"/>
 </div>
+<div id="dialog_report_error" title="Plm Explorer">
+	<div>&nbsp;</div>
+	<div class="ui-state-highlight ui-corner-all centered">
+		<span class="ui-icon ui-icon-alert" style="float: left;"></span>
+		<%= MSG['REPORT_ERROR'] %>
+	</div>
+	<div>&nbsp;</div>
+	<img src="/images/logo_button.gif" alt="PlmExplorer"/>
+</div>
 
 <script type="text/javascript">
 	$(function() {
 		$('#dialog_report_submitted').dialog({
+			modal: true,
+			autoOpen: false
+		});
+		$('#dialog_report_error').dialog({
 			modal: true,
 			autoOpen: false
 		});
@@ -37,10 +50,16 @@
 		$('#'+idname).validate({
 			errorClass: 'invalid',
 			submitHandler: function(form) {
-				$('#dialog_report_submitted').dialog('open');
 				$(form).ajaxSubmit({
 					target: 	'#cReport'
 				,	url: 		'/reports/'+idname
+				,	success: 	function(responseText, statusText, xhr, $form){
+						if (responseText.match(/hidden_error/g).length == 1) {
+							$('#dialog_report_submitted').dialog('open');
+						} else {
+							$('#dialog_report_error').dialog('open');
+						}
+					} 
 				});
 			}
 		});

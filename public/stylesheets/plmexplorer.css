@@ -14,6 +14,10 @@
 /*              GLOBALS               */
 /**************************************/
 
+.hidden_error {
+	display:none;
+	visibility:hidden;
+}
 .hint {
 	font-style:italic;
 	font-size:.8em;
