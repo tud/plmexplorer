@@ -138,6 +138,10 @@ class Brecord < ActiveRecord::Base
     last_row - first_row + 1
   end
 
+  def uda_t_lines(block)
+    [1, uda_t(block).lines.count].max
+  end
+
   def files
     (bfiles + parents('IMAGE_FOR').map { |image| image.bfiles }.flatten).sort { |f1,f2| f1.name <=> f2.name }
   end
