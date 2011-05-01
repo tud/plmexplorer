@@ -130,7 +130,7 @@ class Brecord < ActiveRecord::Base
       value = uda(name + '_' + '%02d' % row)
       text += value + "\n" if not value.empty?
     end
-    text
+    text.rstrip
   end
 
   def uda_t_size(block)
