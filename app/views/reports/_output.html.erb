@@ -53,12 +53,23 @@
 				$(form).ajaxSubmit({
 					target: 	'#cReport'
 				,	url: 		'/reports/'+idname
-				,	success: 	function(responseText, statusText, xhr, $form){
-						if (responseText.match(/hidden_error/g).length == 1) {
-							$('#dialog_report_submitted').dialog('open');
-						} else {
-							$('#dialog_report_error').dialog('open');
+				,	beforeSubmit: function(formData, jqform, options){
+						if (idname == "bomnew") {
+							var result = $.ajax({
+								url: '/reports/check_record_exists?'
+								, async: false
+								, type: "POST"
+								, data: $.param(formData)
+							}).responseText;
+							result = $.trim(result);
+							if (result == "error") {
+								$('#dialog_report_error').dialog('open');
+								return false;
+							}
 						}
+					}
+				,	success: 	function(responseText, statusText, xhr, $form){
+						$('#dialog_report_submitted').dialog('open');
 					} 
 				});
 			}

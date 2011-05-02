@@ -6,24 +6,20 @@ class ReportsController < ApplicationController
 
   def bomnew
     if request.post?
-      if record_exists?
-        brecord = params[:brecord]
-        blank2star(brecord)
-        brecname = "#{brecord[:report_rec_name]}&#{brecord[:report_rec_bname1]}"
-        edm_report = Hash.new
-        edm_report[:report] = 'OTO-BOMNEW'
-        edm_report[:edm_p01] = "#{brecord[:report_rec_brectype]}\\#{brecname}\\#{brecord[:report_rec_brecalt]}"
-        edm_report[:edm_p02] = brecord[:report_depth]
-        edm_report[:edm_p03] = brecord[:report_data_maturity]
-        edm_report[:edm_p04] = brecord[:report_alternate_language]
-        edm_report[:edm_p05] = brecord[:report_record_type]
-        edm_report[:edm_p06] = brecord[:report_print_header]
-        edm_report[:edm_p07] = brecord[:report_separating_char]
-        edm_report[:edm_p08] = ''
-        submit edm_report
-      else
-        @error = MSG['REPORT_ERROR']
-      end
+      brecord = params[:brecord]
+      blank2star(brecord)
+      brecname = "#{brecord[:report_rec_name]}&#{brecord[:report_rec_bname1]}"
+      edm_report = Hash.new
+      edm_report[:report] = 'OTO-BOMNEW'
+      edm_report[:edm_p01] = "#{brecord[:report_rec_brectype]}\\#{brecname}\\#{brecord[:report_rec_brecalt]}"
+      edm_report[:edm_p02] = brecord[:report_depth]
+      edm_report[:edm_p03] = brecord[:report_data_maturity]
+      edm_report[:edm_p04] = brecord[:report_alternate_language]
+      edm_report[:edm_p05] = brecord[:report_record_type]
+      edm_report[:edm_p06] = brecord[:report_print_header]
+      edm_report[:edm_p07] = brecord[:report_separating_char]
+      edm_report[:edm_p08] = ''
+      submit edm_report
     end
     render :layout => false
   end
@@ -125,6 +121,16 @@ class ReportsController < ApplicationController
     end
     render :layout => false
   end
+  
+  def check_record_exists
+    if record_exists?
+      @result = "success"
+    else
+      @result = "error"
+    end
+    
+    render :layout => false
+  end
 
   def record_exists?
     brecord = params[:brecord]
@@ -140,7 +146,6 @@ class ReportsController < ApplicationController
     end
   end
   
-
   private
 
   def blank2star(brecord)
