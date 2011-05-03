@@ -54,7 +54,7 @@
 					target: 	'#cReport'
 				,	url: 		'/reports/'+idname
 				,	beforeSubmit: function(formData, jqform, options){
-						if (idname == "bomnew") {
+						if (idname == "bomnew" || idname == "bomvalnew") {
 							var result = $.ajax({
 								url: '/reports/check_record_exists?'
 								, async: false
