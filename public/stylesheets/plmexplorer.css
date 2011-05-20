@@ -53,6 +53,10 @@ select {
 	width:8em;
 }
 
+#login_dialog .uniForm fieldset {
+    margin-top: 4%;
+}
+
 #login_dialog legend img {
     margin:0 !important;
 }

@@ -9,8 +9,8 @@
 			<%= f.text_field :report_rec_name, :maxlength => "26", :tabindex => "1", :class => "required uppercase" %>
 		</div>
 		<div class='ctrlHolder'>
-			<label for="brecord_report_rec_bname1">Cage Code :</label>
-			<select id="brecord_report_rec_bname1" name="brecord[report_rec_bname1]" tabindex="2">
+			<label for="brecord_report_rec_bname1"><em>*</em>Cage Code :</label>
+			<select id="brecord_report_rec_bname1" name="brecord[report_rec_bname1]" tabindex="2" class="required">
 				<option value="" />
 				<%= option_groups_from_collection_for_select(CAGE_CODES, :options, :label, :value, :key) %>
 			</select>
