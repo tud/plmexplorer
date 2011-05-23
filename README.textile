@@ -16,7 +16,7 @@ h4(. "Ruby on Rails _2.3.11_":http://rubyonrails.org/
 * plugins:
 ** "jRails _0.4_":http://ennerchi.com/projects/jrails/
 
-h4(. "jQuery _1.4.4_":http://jquery.com/
+h4(. "jQuery _1.4.2_":http://jquery.com/
 
 * plugins:
 ** "jQuery UI _1.8.4_":http://ui.jquery.com/
