@@ -1,8 +1,16 @@
+/.bundle
+/db/*.sqlite3
+/log/*.log*
+/tmp
+/data
+
+/.rspec
+/.powenv
+/.set_environment.sh
+
 .DS_Store
 .DS\_Store
 *.sw?
-tmp/**/*
-log/*.log*
 ~*.*
 *.tmp
 config/database.yml
@@ -16,7 +24,6 @@ doc/api
 doc/app
 doc/plugins
 coverage/*
-db/*.sqlite3
 *.tmproj
 Capfile
 doc/*.dot
